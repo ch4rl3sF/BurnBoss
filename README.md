@@ -14,3 +14,22 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+Steps to develop burnBoss on a new machine:
+1. Install Git
+2. Install Android Studio
+   a. Install Flutter and its dart dependancy
+3. Use git clone [https]
+4. Open projects in android studio
+5. Install Dart sdk
+   a. Install Chocolatey
+   b. Install Dart sdk
+   c. enable dart sdk for project (will be found in C:/tools)
+6. Install flutter from the internet
+   a. Extract into C:/src/ (create it)
+   b. follow the steps in the flutter download page to add the env path (Path > edit > New > C:/src/flutter/bin > Move up to 2nd pos)
+7. In android studio, install command line tools (latest) in SDK manager > SDK tools
+8. Run flutter doctor --android-licenses and accept them
+
+   
