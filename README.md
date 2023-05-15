@@ -32,4 +32,19 @@ Steps to develop burnBoss on a new machine:
 7. In android studio, install command line tools (latest) in SDK manager > SDK tools
 8. Run flutter doctor --android-licenses and accept them
 
+
+
+Colors:
+Surface: #121212
+   Surface Dim: #0c0c0c
+   Surface Container: #292929
+
+Primary: #FF2c14
+   Primary Container: #FFA48C
+   On Primary Container: #D70000
+
+Secondary: #1DE6C9
+   Secondary Container: #D6F9F3
+   On Secondary Container: #006D3F
+
    
