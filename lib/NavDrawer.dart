@@ -12,7 +12,7 @@ class NavDrawerWidget extends StatelessWidget {
       backgroundColor: Color(0xff121212),
       child: ListView(
         children: [
-          UserAccountsDrawerHeader(
+          const UserAccountsDrawerHeader(
             decoration: BoxDecoration(color: Color(0xff292929)),
             accountName: Text(
               'ch4rl3sF',
@@ -22,16 +22,66 @@ class NavDrawerWidget extends StatelessWidget {
               'charlesfellows16@gmail.com',
               style: TextStyle(color: Colors.white),
             ),
-          ),
-          buildMenuItem(
-            label: 'home',
-            icon: Icons.home_outlined,
-            onTap: Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => Home(),
-              ),
+            currentAccountPicture: CircleAvatar(
+              backgroundImage: NetworkImage(
+                  "https://sm.askmen.com/t/askmen_in/article/f/facebook-p/facebook-profile-picture-affects-chances-of-gettin_fr3n.1200.jpg"),
             ),
           ),
+          buildMenuItem(
+              label: 'Home',
+              icon: Icons.home_outlined,
+              action: () {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => const Home()));
+              }),
+          buildMenuItem(
+              label: 'Player',
+              icon: Icons.play_arrow_outlined,
+              action: () {
+                print("Player menu button pushed");
+              }),
+          buildMenuItem(
+              label: 'Editor',
+              icon: Icons.edit_outlined,
+              action: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const EditorPage()));
+              }),
+          buildMenuItem(
+              label: 'Calendar',
+              icon: Icons.calendar_month_outlined,
+              action: () {
+                print("Calendar menu button pushed");
+              }),
+          const Divider(
+            thickness: 1,
+            color: Colors.grey,
+            indent: 20,
+            endIndent: 20,
+          ),
+          buildMenuItem(
+              label: 'Settings', icon: Icons.settings_outlined, action: () {}),
+          SizedBox(
+            height: 20,
+          ),
+          InkWell(
+            borderRadius: BorderRadius.circular(500),
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: const CircleAvatar(
+              radius: 20,
+              backgroundColor: Color(0xff1DE6C9),
+              child: CircleAvatar(
+                radius: 19,
+                backgroundColor: Color(0xff292929),
+                child: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
@@ -40,7 +90,7 @@ class NavDrawerWidget extends StatelessWidget {
   Widget buildMenuItem({
     required String label,
     required IconData icon,
-    required onTap,
+    required GestureTapCallback action,
   }) {
     return ListTile(
       leading: Icon(icon, color: Colors.white),
@@ -48,7 +98,7 @@ class NavDrawerWidget extends StatelessWidget {
         label,
         style: TextStyle(color: Colors.white),
       ),
-      onTap: () {},
+      onTap: action,
     );
   }
 }

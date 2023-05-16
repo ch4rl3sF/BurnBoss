@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'NavigationDrawer.dart';
+import 'NavDrawer.dart';
 
 class EditorPage extends StatelessWidget {
   const EditorPage({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class EditorPage extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.add),
       ),
-      drawer: NavigationDrawerWidget(),
+      drawer: NavDrawerWidget(),
     );
   }
 }
