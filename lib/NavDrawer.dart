@@ -29,27 +29,27 @@ class NavDrawerWidget extends StatelessWidget {
           ),
           buildMenuItem(
               label: 'Home',
-              icon: Icons.home_outlined,
+              featureIcon: Icons.home_outlined,
               action: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const Home()));
               }),
           buildMenuItem(
               label: 'Player',
-              icon: Icons.play_arrow_outlined,
+              featureIcon: Icons.play_arrow_outlined,
               action: () {
                 print("Player menu button pushed");
               }),
           buildMenuItem(
               label: 'Editor',
-              icon: Icons.edit_outlined,
+              featureIcon: Icons.edit_outlined,
               action: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => const EditorPage()));
               }),
           buildMenuItem(
               label: 'Calendar',
-              icon: Icons.calendar_month_outlined,
+              featureIcon: Icons.calendar_month_outlined,
               action: () {
                 print("Calendar menu button pushed");
               }),
@@ -60,7 +60,11 @@ class NavDrawerWidget extends StatelessWidget {
             endIndent: 20,
           ),
           buildMenuItem(
-              label: 'Settings', icon: Icons.settings_outlined, action: () {}),
+              label: 'Settings',
+              featureIcon: Icons.settings_outlined,
+              action: () {
+                print("Settings menu button pushed");
+              }),
           SizedBox(
             height: 20,
           ),
@@ -89,11 +93,11 @@ class NavDrawerWidget extends StatelessWidget {
 
   Widget buildMenuItem({
     required String label,
-    required IconData icon,
+    required IconData featureIcon,
     required GestureTapCallback action,
   }) {
     return ListTile(
-      leading: Icon(icon, color: Colors.white),
+      leading: Icon(featureIcon, color: Colors.white),
       title: Text(
         label,
         style: TextStyle(color: Colors.white),
