@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'NavigationDrawer.dart';
 
 void main() => runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Home(),
     ));
 
@@ -12,31 +15,34 @@ class Home extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Color(0xff292929),
-        toolbarHeight: 100,
+        toolbarHeight: 150,
         title: const Text(
           'BurnBoss',
           style: TextStyle(
-            fontSize: 50,
+            fontSize: 55,
             fontWeight: FontWeight.bold,
             letterSpacing: 2.0,
-            fontFamily: 'Babas',
+            fontFamily: 'Bebas',
           ),
         ),
         leading: Builder(
           builder: (context) => IconButton(
+            padding: EdgeInsets.fromLTRB(20.0,0,0,0),
             color: Color(0xffFF2c14),
             icon: Icon(Icons.menu_rounded),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
       ),
-      drawer: Drawer(),
+      drawer: NavigationDrawerWidget(),
+
       body: const Center(
         child: Text('Workout now'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        child: const Text('Start workout'),
+        child: const Text('workout'),
+        backgroundColor: Color(0xff1DE6C9),
       ),
     );
   }
