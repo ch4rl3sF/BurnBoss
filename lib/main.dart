@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'NavigationDrawer.dart';
-
-// void main() => runApp(MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: Home(),
-//     ));
+import 'NavDrawer.dart';
 
 void main() {
   runApp(BurnBoss());
@@ -14,8 +9,10 @@ void main() {
   ));
 }
 
+enum DrawerSelection {home, player, editor, calendar}
+
 class BurnBoss extends StatelessWidget {
-  const BurnBoss({Key? key}) : super(key: key);
+  DrawerSelection _drawerSelection = DrawerSelection.home;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +53,7 @@ class Home extends StatelessWidget {
           ),
         ),
       ),
-      drawer: NavigationDrawerWidget(),
+      drawer: NavDrawerWidget(),
 
       body: const Center(
         child: Text('Workout now'),
