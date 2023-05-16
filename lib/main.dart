@@ -2,12 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'NavigationDrawer.dart';
 
-void main() => runApp(MaterialApp(
+// void main() => runApp(MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: Home(),
+//     ));
+
+void main() {
+  runApp(BurnBoss());
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.black,
+  ));
+}
+
+class BurnBoss extends StatelessWidget {
+  const BurnBoss({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
+      title: 'BurnBoss',
       home: Home(),
-    ));
+    );
+  }
+}
 
 class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
