@@ -69,7 +69,7 @@ class Home extends StatelessWidget {
               primary: false,
               children: [
                 buildCard(
-                    pageIcon: Icons.play_arrow,
+                    pageIcon: Icons.mouse_outlined,
                     label: 'Select',
                     action: () {
                       print('Player button pressed');
@@ -88,7 +88,7 @@ class Home extends StatelessWidget {
                       print('Calendar button pressed');
                     }),
                 buildCard(
-                    pageIcon: Icons.edit,
+                    pageIcon: Icons.accessible_forward,
                     label: 'Go!',
                     action: () {
                       print('Go button pressed');
