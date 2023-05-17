@@ -1,3 +1,4 @@
+import 'package:burnboss/Calendar.dart';
 import 'package:burnboss/Editor.dart';
 import 'package:burnboss/main.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,11 @@ class NavDrawerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Color(0xff121212),
+      // backgroundColor: Color(0xff121212),
       child: ListView(
         children: [
           const UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: Color(0xff292929)),
+            // decoration: BoxDecoration(color: Color(0xff292929)),
             accountName: Text(
               'ch4rl3sF',
               style: TextStyle(color: Colors.white),
@@ -29,7 +30,7 @@ class NavDrawerWidget extends StatelessWidget {
           ),
           buildMenuItem(
               label: 'Home',
-              featureIcon: Icons.home_outlined,
+              featureIcon: Icons.home_filled,
               action: () {
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => const Home()));
@@ -51,7 +52,8 @@ class NavDrawerWidget extends StatelessWidget {
               label: 'Calendar',
               featureIcon: Icons.calendar_month_outlined,
               action: () {
-                print("Calendar menu button pushed");
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => const CalendarPage()));
               }),
           const Divider(
             thickness: 1,
@@ -97,10 +99,13 @@ class NavDrawerWidget extends StatelessWidget {
     required GestureTapCallback action,
   }) {
     return ListTile(
-      leading: Icon(featureIcon, color: Colors.white),
+      leading: Icon(featureIcon, color: Colors.white, size: 30,),
       title: Text(
         label,
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
       ),
       onTap: action,
     );
