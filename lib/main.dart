@@ -13,9 +13,15 @@ void main() {
   // ));
 }
 
-ThemeManager _themeManager = ThemeManager();
+class BurnBoss extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => _BurnBossState();
+}
 
-class BurnBoss extends StatelessWidget {
+class _BurnBossState extends State<BurnBoss> {
+  final ThemeManager _themeManager = ThemeManager();
+  late bool themeIsDark;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,36 +30,63 @@ class BurnBoss extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      home: Home(),
+      home: Home(_themeManager),
     );
+  }
+
+  @override
+  void dispose() {
+    _themeManager.removeListener(themeChangeListener);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    themeIsDark = _themeManager.themeModeIsDark;
+    _themeManager.addListener(themeChangeListener);
+  }
+
+  themeChangeListener() {
+    if (mounted) {
+      setState(() {
+        print("themeListener called");
+        themeIsDark = _themeManager.themeModeIsDark;
+      });
+    }
   }
 }
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  ThemeManager themeManager;
+
+  Home(this.themeManager, {Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  @override
-  void dispose() {
-    _themeManager.removeListener(themeListener);
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    _themeManager.addListener(themeListener);
-    super.initState();
-  }
-
-  themeListener() {
-    if (mounted) {
-      setState(() {});
-    }
-  }
+  //
+  // @override
+  // void dispose() {
+  //   widget.themeManager.removeListener(themeListener);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void initState() {
+  //   _themeManager.addListener(themeListener);
+  //   super.initState();
+  // }
+  //
+  // themeListener() {
+  //   if (mounted) {
+  //     setState(() {
+  //       print("themeListener called");
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -74,11 +107,11 @@ class _HomeState extends State<Home> {
         ),
         actions: [
           Switch(
-              value: _themeManager.themeMode == ThemeMode.dark,
-              onChanged: (bool newValue) {
+              value: widget.themeManager.themeModeIsDark,
+              onChanged: (bool switchIsOn) {
                 setState(() {
-                  _themeManager.toggleTheme(newValue);
-                  print('Switch changed');
+                  print('Switch changed to $switchIsOn');
+                  widget.themeManager.setThemeToDark(switchIsOn);
                 });
               })
         ],

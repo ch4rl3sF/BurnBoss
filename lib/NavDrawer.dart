@@ -28,13 +28,13 @@ class NavDrawerWidget extends StatelessWidget {
                   "https://sm.askmen.com/t/askmen_in/article/f/facebook-p/facebook-profile-picture-affects-chances-of-gettin_fr3n.1200.jpg"),
             ),
           ),
-          buildMenuItem(
-              label: 'Home',
-              featureIcon: Icons.home_filled,
-              action: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => const Home()));
-              }),
+          // buildMenuItem(
+          //     label: 'Home',
+          //     featureIcon: Icons.home_filled,
+          //     action: () {
+          //       Navigator.of(context).pushReplacement(
+          //           MaterialPageRoute(builder: (context) => const Home()));
+          //     }),
           buildMenuItem(
               label: 'Player',
               featureIcon: Icons.play_arrow_outlined,
