@@ -28,32 +28,29 @@ class NavDrawerWidget extends StatelessWidget {
                   "https://sm.askmen.com/t/askmen_in/article/f/facebook-p/facebook-profile-picture-affects-chances-of-gettin_fr3n.1200.jpg"),
             ),
           ),
-          // buildMenuItem(
-          //     label: 'Home',
-          //     featureIcon: Icons.home_filled,
-          //     action: () {
-          //       Navigator.of(context).pushReplacement(
-          //           MaterialPageRoute(builder: (context) => const Home()));
-          //     }),
           buildMenuItem(
-              label: 'Player',
+              label: 'Home',
+              featureIcon: Icons.home_filled,
+              action: () {
+                Navigator.pushNamed(context, '/');
+              }),
+          buildMenuItem(
+              label: 'Select',
               featureIcon: Icons.play_arrow_outlined,
               action: () {
-                print("Player menu button pushed");
+                Navigator.pushNamed(context, '/Select');
               }),
           buildMenuItem(
               label: 'Editor',
               featureIcon: Icons.edit_outlined,
               action: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const EditorPage()));
+                Navigator.pushNamed(context, '/Editor');
               }),
           buildMenuItem(
               label: 'Calendar',
               featureIcon: Icons.calendar_month_outlined,
               action: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => const CalendarPage()));
+                Navigator.pushNamed(context, '/Calendar');
               }),
           const Divider(
             thickness: 1,
@@ -103,7 +100,6 @@ class NavDrawerWidget extends StatelessWidget {
       title: Text(
         label,
         style: const TextStyle(
-          color: Colors.white,
           fontSize: 18,
         ),
       ),

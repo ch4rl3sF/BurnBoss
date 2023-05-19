@@ -1,5 +1,6 @@
 import 'package:burnboss/Calendar.dart';
 import 'package:burnboss/Editor.dart';
+import 'package:burnboss/Select.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,13 @@ class _BurnBossState extends State<BurnBoss> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: _themeManager.themeMode,
-      home: Home(_themeManager),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => Home(_themeManager),
+        '/calendar': (context) => CalendarPage(),
+        '/editor': (context) => EditorPage(),
+        '/select': (context) => SelectPage(),
+      },
     );
   }
 
@@ -67,26 +74,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  //
-  // @override
-  // void dispose() {
-  //   widget.themeManager.removeListener(themeListener);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void initState() {
-  //   _themeManager.addListener(themeListener);
-  //   super.initState();
-  // }
-  //
-  // themeListener() {
-  //   if (mounted) {
-  //     setState(() {
-  //       print("themeListener called");
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +105,7 @@ class _HomeState extends State<Home> {
         leading: Builder(
           builder: (context) => IconButton(
             padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            color: Color(0xffFF2c14),
+            color: Colors.white,
             icon: Icon(Icons.menu_rounded),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
@@ -144,23 +131,19 @@ class _HomeState extends State<Home> {
                         pageIcon: Icons.mouse_outlined,
                         label: 'Select',
                         action: () {
-                          print('Player button pressed');
+                          Navigator.pushNamed(context, '/select');
                         }),
                     buildCard(
                         pageIcon: Icons.edit,
                         label: 'Editor',
                         action: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => EditorPage()));
+                          Navigator.pushNamed(context, '/editor');
                         }),
                     buildCard(
                         pageIcon: Icons.calendar_month,
                         label: 'Calendar',
                         action: () {
-                          Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                  builder: (context) => const CalendarPage()));
+                          Navigator.pushNamed(context, '/calendar');
                         }),
                     buildCard(
                         pageIcon: Icons.access_alarm,
