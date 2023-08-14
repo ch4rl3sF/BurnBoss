@@ -28,16 +28,16 @@ class _BurnBossState extends State<BurnBoss> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BurnBoss',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: _themeManager.themeMode,
-      initialRoute: '/',
+      theme: lightTheme, //sets the default light theme to the created lightTheme
+      darkTheme: darkTheme, //does the same for darkTheme
+      themeMode: _themeManager.themeMode, //sets default themeMode to the created themeMode
+      initialRoute: '/', //sets the initial page to be this home page
       routes: {
         '/': (context) => Home(_themeManager),
-        '/calendar': (context) => CalendarPage(),
-        '/editor': (context) => EditorPage(),
-        '/select': (context) => SelectPage(),
-      },
+        '/Calendar': (context) => CalendarPage(),
+        '/Editor': (context) => EditorPage(),
+        '/Select': (context) => SelectPage(),
+      }, //sets the routes to the different pages
     );
   }
 
@@ -45,20 +45,20 @@ class _BurnBossState extends State<BurnBoss> {
   void dispose() {
     _themeManager.removeListener(themeChangeListener);
     super.dispose();
-  }
+  } //removes the listener for changing theme once the function is done
 
   @override
   void initState() {
     super.initState();
     themeIsDark = _themeManager.themeModeIsDark;
     _themeManager.addListener(themeChangeListener);
-  }
+  } //adds the listener for changing theme function
 
   themeChangeListener() {
     if (mounted) {
       setState(() {
-        print("themeListener called");
-        themeIsDark = _themeManager.themeModeIsDark;
+        print("themeListener called"); //shows that the function behind the switch is called
+        themeIsDark = _themeManager.themeModeIsDark; //changes the theme to dark
       });
     }
   }
@@ -97,8 +97,8 @@ class _HomeState extends State<Home> {
               value: widget.themeManager.themeModeIsDark,
               onChanged: (bool switchIsOn) {
                 setState(() {
-                  print('Switch changed to $switchIsOn');
-                  widget.themeManager.setThemeToDark(switchIsOn);
+                  print('Switch changed to $switchIsOn'); //show that the switch is turned on
+                  widget.themeManager.setThemeToDark(switchIsOn); //when the switch is on, change the theme to dark
                 });
               })
         ],
@@ -131,19 +131,19 @@ class _HomeState extends State<Home> {
                         pageIcon: Icons.mouse_outlined,
                         label: 'Select',
                         action: () {
-                          Navigator.pushNamed(context, '/select');
+                          Navigator.pushNamed(context, '/Select'); //follow the route given above
                         }),
                     buildCard(
                         pageIcon: Icons.edit,
                         label: 'Editor',
                         action: () {
-                          Navigator.pushNamed(context, '/editor');
+                          Navigator.pushNamed(context, '/Editor');
                         }),
                     buildCard(
                         pageIcon: Icons.calendar_month,
                         label: 'Calendar',
                         action: () {
-                          Navigator.pushNamed(context, '/calendar');
+                          Navigator.pushNamed(context, '/Calendar');
                         }),
                     buildCard(
                         pageIcon: Icons.access_alarm,

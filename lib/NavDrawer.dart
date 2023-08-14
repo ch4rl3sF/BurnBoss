@@ -96,7 +96,7 @@ class NavDrawerWidget extends StatelessWidget {
     required GestureTapCallback action,
   }) {
     return ListTile(
-      leading: Icon(featureIcon, color: Colors.white, size: 30,),
+      leading: Icon(featureIcon, color: Colors.black, size: 30,),
       title: Text(
         label,
         style: const TextStyle(

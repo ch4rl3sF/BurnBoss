@@ -9,7 +9,18 @@ class SelectPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Select'),
+        centerTitle: true,
+        // backgroundColor: Color(0xff292929),
+        toolbarHeight: 125,
+        title: const Text(
+          'Select',
+          style: TextStyle(
+            fontSize: 55,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            fontFamily: 'Bebas',
+          ),
+        ),
       ),
       body: Container(
         child: Text('Select'),
