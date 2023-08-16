@@ -4,13 +4,19 @@ import 'package:burnboss/Home.dart';
 import 'package:burnboss/Select.dart';
 import 'package:burnboss/Settings.dart';
 import 'package:burnboss/Wrapper.dart';
+import 'package:burnboss/models/user.dart';
+import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(BurnBoss());
   // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
   //   statusBarColor: Colors.black,
@@ -28,24 +34,28 @@ class _BurnBossState extends State<BurnBoss> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'BurnBoss',
-      theme: lightTheme,
-      //sets the default light theme to the created lightTheme
-      darkTheme: darkTheme,
-      //does the same for darkTheme
-      themeMode: _themeManager.themeMode,
-      //sets default themeMode to the created themeMode
-      initialRoute: '/',
-      //sets the initial page to be this home page
-      routes: {
-        '/': (context) => Wrapper(),
-        '/Calendar': (context) => CalendarPage(),
-        '/Creator': (context) => CreatePage(),
-        '/Select': (context) => SelectPage(),
-        '/Settings': (context) => SettingsPage(_themeManager),
-      }, //sets the routes to the different pages
+    return StreamProvider<customUser?>.value(
+      value: AuthService().user,
+      initialData: null,
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'BurnBoss',
+        theme: lightTheme,
+        //sets the default light theme to the created lightTheme
+        darkTheme: darkTheme,
+        //does the same for darkTheme
+        themeMode: _themeManager.themeMode,
+        //sets default themeMode to the created themeMode
+        initialRoute: '/',
+        //sets the initial page to be this home page
+        routes: {
+          '/': (context) => Wrapper(),
+          '/Calendar': (context) => CalendarPage(),
+          '/Creator': (context) => CreatePage(),
+          '/Select': (context) => SelectPage(),
+          '/Settings': (context) => SettingsPage(_themeManager),
+        }, //sets the routes to the different pages
+      ),
     );
   }
 

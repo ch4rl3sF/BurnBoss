@@ -37,6 +37,7 @@ dependencies:
   favorite_button: ^0.0.3
   firebase_auth: ^4.3.0
   cloud_firestore: ^4.4.5
+  provider: ^6.0.5
 
 dev_dependencies:
   flutter_test:

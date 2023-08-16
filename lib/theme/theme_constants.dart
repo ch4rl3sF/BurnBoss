@@ -12,6 +12,7 @@ ThemeData lightTheme = ThemeData(
   cardTheme: CardTheme(color: COLOR_SECONDARY),
   iconTheme: IconThemeData(color: Colors.black),
   tabBarTheme: TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
+  elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: COLOR_PRIMARY, onPrimary: Colors.black),),
 
 );
 

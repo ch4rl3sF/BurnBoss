@@ -47,4 +47,42 @@ Secondary: #1DE6C9
    Secondary Container: #D6F9F3
    On Secondary Container: #006D3F
 
-   
+String email = '';
+String password = '';
+
+Container(
+padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+child: Form(
+child: Column(
+children: [
+SizedBox(
+height: 20,
+),
+TextFormField(
+onChanged: (val) {
+setState(() => email = val);
+},
+),
+SizedBox(
+height: 20,
+),
+TextFormField(
+obscureText: true,
+onChanged: (val) {
+setState(() => password = val);
+},
+),
+SizedBox(
+height: 20,
+),
+ElevatedButton(
+child: Text('Sign in'),
+onPressed: () async {
+print(email);
+print(password);
+},
+)
+],
+),
+),
+),
