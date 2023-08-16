@@ -3,9 +3,12 @@ import 'package:burnboss/Creator.dart';
 import 'package:burnboss/Home.dart';
 import 'package:burnboss/Select.dart';
 import 'package:burnboss/Settings.dart';
+import 'package:burnboss/Wrapper.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 void main() {
   runApp(BurnBoss());
@@ -37,7 +40,7 @@ class _BurnBossState extends State<BurnBoss> {
       initialRoute: '/',
       //sets the initial page to be this home page
       routes: {
-        '/': (context) => Home(),
+        '/': (context) => Wrapper(),
         '/Calendar': (context) => CalendarPage(),
         '/Creator': (context) => CreatePage(),
         '/Select': (context) => SelectPage(),

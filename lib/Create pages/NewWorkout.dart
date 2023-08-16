@@ -10,7 +10,6 @@ class NewWorkoutPage extends StatefulWidget {
 }
 
 class _NewWorkoutPageState extends State<NewWorkoutPage> {
-
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -49,13 +48,29 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               Text('Equipment used: '),
               Text('Days set: '),
             ]),
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Group 1'),
-              Text('Activity 1'),
-              Text('Group 2'),
-            ]),
+            ListView(
+              children: [
+
+              ],
+            )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildOverViewCard({
+    required String label,
+    required GestureTapCallback action,
+  }) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.grey, width: 0.5),
+      ),
+      child: InkWell(
+        onTap: action,
+        child: Text('Add Group'),
       ),
     );
   }
