@@ -97,7 +97,6 @@ class NavDrawerWidget extends StatelessWidget {
     return ListTile(
       leading: Icon(
         featureIcon,
-        color: Colors.black,
         size: 30,
       ),
       title: Text(

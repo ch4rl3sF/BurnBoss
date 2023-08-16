@@ -26,8 +26,7 @@ class Home extends StatelessWidget {
         leading: Builder(
           builder: (context) => IconButton(
             padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            color: Colors.white,
-            icon: Icon(Icons.menu_rounded),
+            icon: Icon(Icons.menu_rounded, size: 30,),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -57,7 +56,7 @@ class Home extends StatelessWidget {
                         }),
                     buildHomeCard(
                         pageIcon: Icons.add,
-                        label: 'Creator',
+                        label: 'Create',
                         action: () {
                           Navigator.pushNamed(context, '/Creator');
                         }),

@@ -29,6 +29,13 @@ class _SettingsPageState extends State<SettingsPage> {
                 });
               })
         ],
+        leading: Builder(
+          builder: (context) => IconButton(
+            padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+            icon: Icon(Icons.menu_rounded, size: 30),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
       ),
       body: Container(
         child: Text('Settings'),
