@@ -8,11 +8,9 @@ class CalendarPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendar'),
+        title: const Text('Calendar'),
       ),
-      body: Container(
-        child: Text('Calendar'),
-      ),
+      body: Text('Calendar'),
       drawer: NavDrawerWidget(),
     );
   }
