@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
 
 class Register extends StatefulWidget {
-
   final Function toggleView;
+
   Register({required this.toggleView});
 
   @override
@@ -12,9 +12,11 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
+  final _formKey = GlobalKey<FormState>();
 
   String email = '';
   String password = '';
+  String error = '';
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +45,17 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-      body: Container(
+        body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
+          key: _formKey, //tracks state of form and helps validate it
           child: Column(
             children: [
-              SizedBox(
-                height: 20,
-              ),
+              // SizedBox(
+              //   height: 20,
+              // ),
               TextFormField(
+                validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
@@ -60,6 +64,8 @@ class _RegisterState extends State<Register> {
                 height: 20,
               ),
               TextFormField(
+                validator: (val) =>
+                    val!.length < 6 ? 'Enter a password 6+ chars long' : null,
                 obscureText: true,
                 onChanged: (val) {
                   setState(() => password = val);
@@ -71,13 +77,20 @@ class _RegisterState extends State<Register> {
               ElevatedButton(
                 child: Text('Register'),
                 onPressed: () async {
-                  print(email);
-                  print(password);
+                  if (_formKey.currentState!.validate()) {
+                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                    if (result == null){
+                      setState(() {
+                        error = 'Please supply valid email';
+                      });
+                    }
+                  } else {
+                    return null;
+                  }
                 },
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 10,),
+              Text(error, style: TextStyle(color: Colors.red),),
               TextButton.icon(
                 icon: Icon(Icons.person),
                 label: Text('Sign in'),
