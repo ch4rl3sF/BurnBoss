@@ -1,5 +1,5 @@
 import 'package:burnboss/Calendar.dart';
-import 'package:burnboss/Editor.dart';
+import 'package:burnboss/Creator.dart';
 import 'package:burnboss/Select.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
@@ -35,7 +35,7 @@ class _BurnBossState extends State<BurnBoss> {
       routes: {
         '/': (context) => Home(_themeManager),
         '/Calendar': (context) => CalendarPage(),
-        '/Editor': (context) => EditorPage(),
+        '/Creator': (context) => CreatePage(),
         '/Select': (context) => SelectPage(),
       }, //sets the routes to the different pages
     );
@@ -127,25 +127,25 @@ class _HomeState extends State<Home> {
                   crossAxisCount: 2,
                   primary: false,
                   children: [
-                    buildCard(
+                    buildHomeCard(
                         pageIcon: Icons.mouse_outlined,
                         label: 'Select',
                         action: () {
                           Navigator.pushNamed(context, '/Select'); //follow the route given above
                         }),
-                    buildCard(
-                        pageIcon: Icons.edit,
-                        label: 'Editor',
+                    buildHomeCard(
+                        pageIcon: Icons.add,
+                        label: 'Creator',
                         action: () {
-                          Navigator.pushNamed(context, '/Editor');
+                          Navigator.pushNamed(context, '/Creator');
                         }),
-                    buildCard(
+                    buildHomeCard(
                         pageIcon: Icons.calendar_month,
                         label: 'Calendar',
                         action: () {
                           Navigator.pushNamed(context, '/Calendar');
                         }),
-                    buildCard(
+                    buildHomeCard(
                         pageIcon: Icons.access_alarm,
                         label: 'Stopwatch',
                         action: () {
@@ -157,7 +157,7 @@ class _HomeState extends State<Home> {
               const SizedBox(
                 height: 20,
               ),
-              buildCard(
+              buildHomeCard(
                   pageIcon: Icons.accessible_forward,
                   label: 'Go!',
                   action: () {
@@ -170,7 +170,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget buildCard({
+  Widget buildHomeCard({
     required IconData pageIcon,
     required String label,
     required GestureTapCallback action,

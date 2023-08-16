@@ -1,5 +1,5 @@
 import 'package:burnboss/Calendar.dart';
-import 'package:burnboss/Editor.dart';
+import 'package:burnboss/Creator.dart';
 import 'package:burnboss/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,25 +28,25 @@ class NavDrawerWidget extends StatelessWidget {
                   "https://sm.askmen.com/t/askmen_in/article/f/facebook-p/facebook-profile-picture-affects-chances-of-gettin_fr3n.1200.jpg"),
             ),
           ),
-          buildMenuItem(
+          buildNavBarItem(
               label: 'Home',
               featureIcon: Icons.home_filled,
               action: () {
                 Navigator.pushNamed(context, '/');
               }),
-          buildMenuItem(
+          buildNavBarItem(
               label: 'Select',
               featureIcon: Icons.play_arrow_outlined,
               action: () {
                 Navigator.pushNamed(context, '/Select');
               }),
-          buildMenuItem(
-              label: 'Editor',
-              featureIcon: Icons.edit_outlined,
+          buildNavBarItem(
+              label: 'Creator',
+              featureIcon: Icons.add,
               action: () {
-                Navigator.pushNamed(context, '/Editor');
+                Navigator.pushNamed(context, '/Creator');
               }),
-          buildMenuItem(
+          buildNavBarItem(
               label: 'Calendar',
               featureIcon: Icons.calendar_month_outlined,
               action: () {
@@ -58,7 +58,7 @@ class NavDrawerWidget extends StatelessWidget {
             indent: 20,
             endIndent: 20,
           ),
-          buildMenuItem(
+          buildNavBarItem(
               label: 'Settings',
               featureIcon: Icons.settings_outlined,
               action: () {
@@ -90,7 +90,7 @@ class NavDrawerWidget extends StatelessWidget {
     );
   }
 
-  Widget buildMenuItem({
+  Widget buildNavBarItem({
     required String label,
     required IconData featureIcon,
     required GestureTapCallback action,

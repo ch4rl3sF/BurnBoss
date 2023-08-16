@@ -1,10 +1,13 @@
+import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'NavDrawer.dart';
 
+class SelectPage extends StatefulWidget {
+  @override
+  _SelectPageState createState() => _SelectPageState();
+}
 
-class SelectPage extends StatelessWidget {
-  const SelectPage({Key? key}) : super(key: key);
-
+class _SelectPageState extends State<SelectPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,10 +25,47 @@ class SelectPage extends StatelessWidget {
           ),
         ),
       ),
-      body: Container(
-        child: Text('Select'),
+      body: Column(
+        children: [
+          const SizedBox(height: 10),
+          buildSelectCard(title: 'Workout 1', muscleGroup: 'Chest'),
+          buildSelectCard(title: 'Workout 2', muscleGroup: 'Legs'),
+          buildSelectCard(title: 'Workout 1', muscleGroup: 'Chest'),
+          buildSelectCard(title: 'Workout 2', muscleGroup: 'Legs'),
+          buildSelectCard(title: 'Workout 1', muscleGroup: 'Chest'),
+          buildSelectCard(title: 'Workout 2', muscleGroup: 'Legs'),
+        ],
       ),
-      drawer: NavDrawerWidget(),
+      drawer: const NavDrawerWidget(),
+    );
+  }
+
+  Widget buildSelectCard({
+    required String title,
+    required String muscleGroup,
+    // required GestureTapCallback action,
+  }) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      color: Colors.white,
+      // color: Color(0xff292929),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: const BorderSide(color: Colors.grey, width: 2),
+      ),
+      child: ListTile(
+        leading: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.menu_rounded),
+            ],
+          ),
+        ),
+        title: Text(title),
+        trailing: Icon(Icons.star_rounded, color: Colors.amber,)
+      ),
     );
   }
 }

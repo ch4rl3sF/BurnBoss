@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'NavDrawer.dart';
 
-class EditorPage extends StatelessWidget {
-  const EditorPage({Key? key}) : super(key: key);
+class CreatePage extends StatelessWidget {
+  const CreatePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Editor'),
+        title: Text('Creator'),
       ),
       body: Container(
-        child: Text('Editor'),
+        child: Text('Creator'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
