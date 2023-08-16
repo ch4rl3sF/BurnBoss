@@ -1,15 +1,16 @@
-import 'package:burnboss/services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:burnboss/services/auth.dart';
 
-class SignIn extends StatefulWidget {
+class Register extends StatefulWidget {
+
   final Function toggleView;
-  SignIn({required this.toggleView});
+  Register({required this.toggleView});
 
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
+class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
 
   String email = '';
@@ -23,9 +24,9 @@ class _SignInState extends State<SignIn> {
         // backgroundColor: Color(0xff292929),
         toolbarHeight: 125,
         title: const Text(
-          'Sign In',
+          'Sign up to BurnBoss',
           style: TextStyle(
-            fontSize: 55,
+            fontSize: 35,
             fontWeight: FontWeight.bold,
             letterSpacing: 2.0,
             fontFamily: 'Bebas',
@@ -68,7 +69,7 @@ class _SignInState extends State<SignIn> {
                 height: 20,
               ),
               ElevatedButton(
-                child: Text('Sign in'),
+                child: Text('Register'),
                 onPressed: () async {
                   print(email);
                   print(password);
@@ -78,12 +79,12 @@ class _SignInState extends State<SignIn> {
                 height: 20,
               ),
               TextButton.icon(
-                icon: Icon(Icons.person_add_alt_1),
-                label: Text('Register'),
+                icon: Icon(Icons.person),
+                label: Text('Sign in'),
                 onPressed: () {
                   widget.toggleView();
                 },
-              ),
+              )
             ],
           ),
         ),
