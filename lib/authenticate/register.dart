@@ -45,24 +45,19 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-        body: Container(
+      body: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
         child: Form(
           key: _formKey, //tracks state of form and helps validate it
           child: Column(
             children: [
-              // SizedBox(
-              //   height: 20,
-              // ),
               TextFormField(
                 validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
                 },
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 10),
               TextFormField(
                 validator: (val) =>
                     val!.length < 6 ? 'Enter a password 6+ chars long' : null,
@@ -71,15 +66,14 @@ class _RegisterState extends State<Register> {
                   setState(() => password = val);
                 },
               ),
-              SizedBox(
-                height: 20,
-              ),
+              SizedBox(height: 20),
               ElevatedButton(
                 child: Text('Register'),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    dynamic result = await _auth.registerWithEmailAndPassword(email, password);
-                    if (result == null){
+                    dynamic result = await _auth.registerWithEmailAndPassword(
+                        email, password);
+                    if (result == null) {
                       setState(() {
                         error = 'Please supply valid email';
                       });
@@ -89,8 +83,10 @@ class _RegisterState extends State<Register> {
                   }
                 },
               ),
-              SizedBox(height: 10,),
-              Text(error, style: TextStyle(color: Colors.red),),
+              Text(
+                error,
+                style: TextStyle(color: Colors.red),
+              ),
               TextButton.icon(
                 icon: Icon(Icons.person),
                 label: Text('Sign in'),
