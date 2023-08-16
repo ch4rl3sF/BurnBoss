@@ -62,7 +62,7 @@ class NavDrawerWidget extends StatelessWidget {
               label: 'Settings',
               featureIcon: Icons.settings_outlined,
               action: () {
-                print("Settings menu button pushed");
+                Navigator.pushNamed(context, '/Settings');
               }),
           SizedBox(
             height: 20,
@@ -96,7 +96,11 @@ class NavDrawerWidget extends StatelessWidget {
     required GestureTapCallback action,
   }) {
     return ListTile(
-      leading: Icon(featureIcon, color: Colors.black, size: 30,),
+      leading: Icon(
+        featureIcon,
+        color: Colors.black,
+        size: 30,
+      ),
       title: Text(
         label,
         style: const TextStyle(

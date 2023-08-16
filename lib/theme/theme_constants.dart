@@ -9,8 +9,6 @@ ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   appBarTheme: const AppBarTheme(color: COLOR_SECONDARY),
   cardTheme: CardTheme(color: COLOR_SECONDARY),
-
-
 );
 
 ThemeData darkTheme = ThemeData(

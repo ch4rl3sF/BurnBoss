@@ -1,11 +1,11 @@
 import 'package:burnboss/Calendar.dart';
 import 'package:burnboss/Creator.dart';
+import 'package:burnboss/Home.dart';
 import 'package:burnboss/Select.dart';
+import 'package:burnboss/Settings.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'NavDrawer.dart';
 
 void main() {
   runApp(BurnBoss());
@@ -28,15 +28,20 @@ class _BurnBossState extends State<BurnBoss> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'BurnBoss',
-      theme: lightTheme, //sets the default light theme to the created lightTheme
-      darkTheme: darkTheme, //does the same for darkTheme
-      themeMode: _themeManager.themeMode, //sets default themeMode to the created themeMode
-      initialRoute: '/', //sets the initial page to be this home page
+      theme: lightTheme,
+      //sets the default light theme to the created lightTheme
+      darkTheme: darkTheme,
+      //does the same for darkTheme
+      themeMode: _themeManager.themeMode,
+      //sets default themeMode to the created themeMode
+      initialRoute: '/',
+      //sets the initial page to be this home page
       routes: {
-        '/': (context) => Home(_themeManager),
+        '/': (context) => Home(),
         '/Calendar': (context) => CalendarPage(),
         '/Creator': (context) => CreatePage(),
         '/Select': (context) => SelectPage(),
+        '/Settings': (context) => SettingsPage(_themeManager),
       }, //sets the routes to the different pages
     );
   }
@@ -57,155 +62,10 @@ class _BurnBossState extends State<BurnBoss> {
   themeChangeListener() {
     if (mounted) {
       setState(() {
-        print("themeListener called"); //shows that the function behind the switch is called
+        print(
+            "themeListener called"); //shows that the function behind the switch is called
         themeIsDark = _themeManager.themeModeIsDark; //changes the theme to dark
       });
     }
-  }
-}
-
-class Home extends StatefulWidget {
-  ThemeManager themeManager;
-
-  Home(this.themeManager, {Key? key}) : super(key: key);
-
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: Color(0xff121212),
-      appBar: AppBar(
-        centerTitle: true,
-        // backgroundColor: Color(0xff292929),
-        toolbarHeight: 125,
-        title: const Text(
-          'BurnBoss',
-          style: TextStyle(
-            fontSize: 55,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
-            fontFamily: 'Bebas',
-          ),
-        ),
-        actions: [
-          Switch(
-              value: widget.themeManager.themeModeIsDark,
-              onChanged: (bool switchIsOn) {
-                setState(() {
-                  print('Switch changed to $switchIsOn'); //show that the switch is turned on
-                  widget.themeManager.setThemeToDark(switchIsOn); //when the switch is on, change the theme to dark
-                });
-              })
-        ],
-        leading: Builder(
-          builder: (context) => IconButton(
-            padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            color: Colors.white,
-            icon: Icon(Icons.menu_rounded),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-          ),
-        ),
-      ),
-      drawer: NavDrawerWidget(),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 70.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: 315,
-                width: 300,
-                child: GridView.count(
-                  mainAxisSpacing: 30,
-                  crossAxisSpacing: 30,
-                  crossAxisCount: 2,
-                  primary: false,
-                  children: [
-                    buildHomeCard(
-                        pageIcon: Icons.mouse_outlined,
-                        label: 'Select',
-                        action: () {
-                          Navigator.pushNamed(context, '/Select'); //follow the route given above
-                        }),
-                    buildHomeCard(
-                        pageIcon: Icons.add,
-                        label: 'Creator',
-                        action: () {
-                          Navigator.pushNamed(context, '/Creator');
-                        }),
-                    buildHomeCard(
-                        pageIcon: Icons.calendar_month,
-                        label: 'Calendar',
-                        action: () {
-                          Navigator.pushNamed(context, '/Calendar');
-                        }),
-                    buildHomeCard(
-                        pageIcon: Icons.access_alarm,
-                        label: 'Stopwatch',
-                        action: () {
-                          print('Stopwatch button pressed');
-                        }),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              buildHomeCard(
-                  pageIcon: Icons.accessible_forward,
-                  label: 'Go!',
-                  action: () {
-                    print('Go button pressed');
-                  }),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildHomeCard({
-    required IconData pageIcon,
-    required String label,
-    required GestureTapCallback action,
-  }) {
-    return Card(
-      // color: Color(0xff292929),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.grey, width: 0.5)),
-      child: InkWell(
-        onTap: action,
-        child: SizedBox(
-          width: 200,
-          height: 125,
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  pageIcon,
-                  size: 40,
-                  color: Colors.white,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  label,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }

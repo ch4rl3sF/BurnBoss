@@ -1,4 +1,3 @@
-import 'package:favorite_button/favorite_button.dart';
 import 'package:flutter/material.dart';
 import 'NavDrawer.dart';
 
@@ -54,18 +53,20 @@ class _SelectPageState extends State<SelectPage> {
         side: const BorderSide(color: Colors.grey, width: 2),
       ),
       child: ListTile(
-        leading: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.menu_rounded),
-            ],
+          leading: Padding(
+            padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.menu_rounded),
+              ],
+            ),
           ),
-        ),
-        title: Text(title),
-        trailing: Icon(Icons.star_rounded, color: Colors.amber,)
-      ),
+          title: Text(title),
+          trailing: Icon(
+            Icons.star_rounded,
+            color: Colors.amber,
+          )),
     );
   }
 }
