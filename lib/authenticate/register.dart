@@ -52,6 +52,9 @@ class _RegisterState extends State<Register> {
           child: Column(
             children: [
               TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Email',
+                ),
                 validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
@@ -59,6 +62,9 @@ class _RegisterState extends State<Register> {
               ),
               SizedBox(height: 10),
               TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                ),
                 validator: (val) =>
                     val!.length < 6 ? 'Enter a password 6+ chars long' : null,
                 obscureText: true,
@@ -83,17 +89,35 @@ class _RegisterState extends State<Register> {
                   }
                 },
               ),
+              SizedBox(height: 10),
               Text(
                 error,
                 style: TextStyle(color: Colors.red),
               ),
-              TextButton.icon(
-                icon: Icon(Icons.person),
-                label: Text('Sign in'),
-                onPressed: () {
-                  widget.toggleView();
-                },
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton.icon(
+                    icon: Icon(Icons.person),
+                    label: Text('Sign in'),
+                    onPressed: () {
+                      widget.toggleView();
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Sign in as Guest?'),
+                    onPressed: () async {
+                      dynamic result = await _auth.signInAnon();
+                      if (result == null) {
+                        print('error signing in');
+                      } else {
+                        print('signed in as guest');
+                        print(result.uid);
+                      }
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         ),

@@ -52,6 +52,9 @@ class _SignInState extends State<SignIn> {
           child: Column(
             children: [
               TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Email',
+                ),
                 validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);
@@ -59,6 +62,9 @@ class _SignInState extends State<SignIn> {
               ),
               SizedBox(height: 10),
               TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Password',
+                ),
                 validator: (val) =>
                     val!.length < 6 ? 'Enter a password 6+ chars long' : null,
                 obscureText: true,
@@ -85,12 +91,29 @@ class _SignInState extends State<SignIn> {
                 error,
                 style: TextStyle(color: Colors.red),
               ),
-              TextButton.icon(
-                icon: Icon(Icons.person_add_alt_1),
-                label: Text('Register'),
-                onPressed: () {
-                  widget.toggleView();
-                },
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  TextButton.icon(
+                    icon: Icon(Icons.person_add_alt_1),
+                    label: Text('Register'),
+                    onPressed: () {
+                      widget.toggleView();
+                    },
+                  ),
+                  TextButton(
+                    child: Text('Sign in as Guest?'),
+                    onPressed: () async {
+                      dynamic result = await _auth.signInAnon();
+                      if (result == null) {
+                        print('error signing in');
+                      } else {
+                        print('signed in as guest');
+                        print(result.uid);
+                      }
+                    },
+                  ),
+                ],
               ),
             ],
           ),

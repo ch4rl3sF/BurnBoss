@@ -1,8 +1,4 @@
-import 'package:burnboss/Calendar.dart';
-import 'package:burnboss/Creator.dart';
-import 'package:burnboss/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class NavDrawerWidget extends StatelessWidget {
   const NavDrawerWidget({Key? key}) : super(key: key);
@@ -20,7 +16,7 @@ class NavDrawerWidget extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             accountEmail: Text(
-              'charlesfellows16@gmail.com',
+              'email',
               style: TextStyle(color: Colors.white),
             ),
             currentAccountPicture: CircleAvatar(

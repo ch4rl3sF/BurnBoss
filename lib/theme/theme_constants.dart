@@ -11,10 +11,18 @@ ThemeData lightTheme = ThemeData(
   appBarTheme: const AppBarTheme(color: COLOR_SECONDARY),
   cardTheme: CardTheme(color: COLOR_SECONDARY),
   iconTheme: IconThemeData(color: Colors.black),
-  tabBarTheme: TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
-  elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: COLOR_PRIMARY, onPrimary: Colors.black),),
-  textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(primary: Colors.black,),)
-
+  tabBarTheme:
+      TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        primary: COLOR_PRIMARY, onPrimary: Colors.white),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      primary: Colors.black,
+      side: BorderSide(width: 0.5, color: Colors.black12 ),
+    ),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -22,5 +30,6 @@ ThemeData darkTheme = ThemeData(
   primaryColor: Color(0xff1DE6C9),
   iconTheme: IconThemeData(color: Colors.white),
   useMaterial3: true,
-  tabBarTheme: TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
+  tabBarTheme:
+      TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
 );
