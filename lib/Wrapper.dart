@@ -1,4 +1,4 @@
-import 'package:burnboss/Home.dart';
+import 'package:burnboss/screens/Home.dart';
 import 'package:burnboss/authenticate/authenticate.dart';
 import 'package:burnboss/models/user.dart';
 import 'package:flutter/material.dart';

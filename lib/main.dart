@@ -1,15 +1,13 @@
-import 'package:burnboss/Calendar.dart';
-import 'package:burnboss/Creator.dart';
-import 'package:burnboss/Home.dart';
-import 'package:burnboss/Select.dart';
-import 'package:burnboss/Settings.dart';
+import 'package:burnboss/screens/Calendar.dart';
+import 'package:burnboss/screens/Creator.dart';
+import 'package:burnboss/screens/Select.dart';
+import 'package:burnboss/screens/Settings.dart';
 import 'package:burnboss/Wrapper.dart';
 import 'package:burnboss/models/user.dart';
 import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 

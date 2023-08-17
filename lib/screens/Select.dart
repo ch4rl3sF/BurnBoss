@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'NavDrawer.dart';
+import 'package:burnboss/screens/NavDrawer.dart';
 
 class SelectPage extends StatefulWidget {
   @override

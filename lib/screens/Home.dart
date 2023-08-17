@@ -1,7 +1,5 @@
-import 'package:burnboss/theme/theme_constants.dart';
-import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
-import 'NavDrawer.dart';
+import 'package:burnboss/screens/NavDrawer.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);

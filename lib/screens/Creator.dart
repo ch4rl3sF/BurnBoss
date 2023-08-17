@@ -1,6 +1,7 @@
 import 'package:burnboss/Create%20pages/NewWorkout.dart';
+import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:flutter/material.dart';
-import 'NavDrawer.dart';
+
 
 class CreatePage extends StatelessWidget {
   const CreatePage({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
-import 'NavDrawer.dart';
+import 'package:burnboss/screens/NavDrawer.dart';
 
 class SettingsPage extends StatefulWidget {
   ThemeManager themeManager;
