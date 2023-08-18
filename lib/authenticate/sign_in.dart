@@ -102,17 +102,37 @@ class _SignInState extends State<SignIn> {
                     },
                   ),
                   TextButton(
-                    child: Text('Sign in as Guest?'),
-                    onPressed: () async {
-                      dynamic result = await _auth.signInAnon();
-                      if (result == null) {
-                        error = ('error signing in');
-                      } else {
-                        print('signed in as guest');
-                        print(result.uid);
-                      }
-                    },
-                  ),
+                      child: Text('Sign in as Guest?'),
+                      onPressed: () {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Warning!'),
+                            content: const Text(
+                                'Singing in as a guest means that your workouts will not be transferred!'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                child: const Text('Proceed'),
+                                onPressed: () async {
+                                  Navigator.pop(context, 'Proceed');
+                                  dynamic result = await _auth.signInAnon();
+                                  if (result == null) {
+                                    error = ('error signing in');
+                                  } else {
+                                    print('signed in as guest');
+                                    print(result.uid);
+                                  }
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
                 ],
               ),
             ],
