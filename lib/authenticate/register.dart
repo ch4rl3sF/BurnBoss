@@ -109,7 +109,7 @@ class _RegisterState extends State<Register> {
                     onPressed: () async {
                       dynamic result = await _auth.signInAnon();
                       if (result == null) {
-                        print('error signing in');
+                        error = ('error signing in');
                       } else {
                         print('signed in as guest');
                         print(result.uid);

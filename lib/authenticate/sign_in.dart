@@ -106,7 +106,7 @@ class _SignInState extends State<SignIn> {
                     onPressed: () async {
                       dynamic result = await _auth.signInAnon();
                       if (result == null) {
-                        print('error signing in');
+                        error = ('error signing in');
                       } else {
                         print('signed in as guest');
                         print(result.uid);
