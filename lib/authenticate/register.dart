@@ -1,3 +1,4 @@
+import 'package:burnboss/shared/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
 
@@ -13,6 +14,7 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   String email = '';
   String password = '';
@@ -20,7 +22,7 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       appBar: AppBar(
         centerTitle: true,
         // backgroundColor: Color(0xff292929),
@@ -77,11 +79,15 @@ class _RegisterState extends State<Register> {
                 child: Text('Register'),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+                    setState(() {
+                      loading = true;
+                    });
                     dynamic result = await _auth.registerWithEmailAndPassword(
                         email, password);
                     if (result == null) {
                       setState(() {
                         error = 'Please supply valid email';
+                        loading = false;
                       });
                     }
                   } else {
@@ -123,9 +129,13 @@ class _RegisterState extends State<Register> {
                                 child: const Text('Proceed'),
                                 onPressed: () async {
                                   Navigator.pop(context, 'Proceed');
+                                  setState(() {
+                                    loading = true;
+                                  });
                                   dynamic result = await _auth.signInAnon();
                                   if (result == null) {
                                     error = ('error signing in');
+                                    loading = false;
                                   } else {
                                     print('signed in as guest');
                                     print(result.uid);

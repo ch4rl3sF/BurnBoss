@@ -3,6 +3,7 @@ import 'package:burnboss/theme/theme_constants.dart';
 
 const COLOR_PRIMARY = Color(0xffFF2c14);
 const COLOR_SECONDARY = Color(0xffFF2c14);
+const DARK_COLOR_PRIMARY = Color(0xff1DE6C9);
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,

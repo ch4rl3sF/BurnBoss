@@ -12,6 +12,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -75,7 +76,8 @@ class _BurnBossState extends State<BurnBoss> {
       setState(() {
         print(
             "themeListener called"); //shows that the function behind the switch is called
-        themeIsDark = _themeManager.themeModeIsDark; //changes the theme to dark
+        themeIsDark = _themeManager.themeModeIsDark; //changes the theme
+
       });
     }
   }

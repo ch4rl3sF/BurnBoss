@@ -1,4 +1,5 @@
 import 'package:burnboss/models/user.dart';
+import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:burnboss/models/user.dart' as UserModel;
 
@@ -49,6 +50,9 @@ class AuthService{
     try{
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
+
+      //create a new document for the user with the uid
+      await DatabaseService(uid: user!.uid).updateUserData('new burnboss member');
       return _userFromFirebaseUser(user);
     } catch(e) {
       print(e.toString());

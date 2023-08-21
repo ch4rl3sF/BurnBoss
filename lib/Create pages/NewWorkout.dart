@@ -1,6 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-var workoutName = 'New Workout';
 
 class NewWorkoutPage extends StatefulWidget {
   const NewWorkoutPage({Key? key}) : super(key: key);
@@ -10,6 +9,11 @@ class NewWorkoutPage extends StatefulWidget {
 }
 
 class _NewWorkoutPageState extends State<NewWorkoutPage> {
+  final controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  String workoutName = '';
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -19,15 +23,54 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
           centerTitle: true,
           // backgroundColor: Color(0xff292929),
           toolbarHeight: 125,
-          title: Text(
-            workoutName,
-            style: TextStyle(
-              fontSize: 55,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2.0,
-              fontFamily: 'Bebas',
+          title: Form(
+            key: _formKey,
+            child: TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Workout name',
+              ),
+              controller: controller,
+              validator: (val) => val!.isEmpty ? 'Enter a workout name' : null,
+              onChanged: (val) {
+                setState(() {
+                  workoutName = val;
+                });
+              },
             ),
           ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Update workout name?'),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Cancel'),
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        child: const Text('Save'),
+                        onPressed: () {
+                          Navigator.pop(context, 'Save');
+                          final workoutName = controller.text;
+                          createWorkout(workoutName: workoutName);
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+              icon: Icon(Icons.save),
+            )
+          ],
+          // style: TextStyle(
+          //   fontSize: 55,
+          //   fontWeight: FontWeight.bold,
+          //   letterSpacing: 2.0,
+          //   fontFamily: 'Bebas',
+          // ),
           bottom: TabBar(
               indicatorSize: TabBarIndicatorSize.tab,
               indicator: BoxDecoration(
@@ -49,14 +92,24 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               Text('Days set: '),
             ]),
             ListView(
-              children: [
-
-              ],
+              children: [],
             )
           ],
         ),
       ),
     );
+  }
+
+  Future createWorkout({required String workoutName}) async {
+    //reference to document
+    final WorkoutName =
+        FirebaseFirestore.instance.collection('workouts').doc(workoutName);
+
+    final json = {
+      'workout name': workoutName,
+    };
+
+    await WorkoutName.set(json);
   }
 
   Widget buildOverViewCard({
@@ -65,12 +118,12 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
   }) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(5),
         side: BorderSide(color: Colors.grey, width: 0.5),
       ),
       child: InkWell(
         onTap: action,
-        child: Text('Add Group'),
+        child: Text(label),
       ),
     );
   }

@@ -1,22 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:burnboss/services/auth.dart';
 
 class NavDrawerWidget extends StatelessWidget {
   const NavDrawerWidget({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+    var email = AuthService().user;
     return Drawer(
       // backgroundColor: Color(0xff121212),
       child: ListView(
         children: [
-          const UserAccountsDrawerHeader(
+          UserAccountsDrawerHeader(
             // decoration: BoxDecoration(color: Color(0xff292929)),
             accountName: Text(
               'ch4rl3sF',
               style: TextStyle(color: Colors.white),
             ),
             accountEmail: Text(
-              'email',
+              email.toString(),
               style: TextStyle(color: Colors.white),
             ),
             currentAccountPicture: CircleAvatar(

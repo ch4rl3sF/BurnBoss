@@ -30,15 +30,18 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Column(children: [
         Switch(
-            value: widget.themeManager.themeModeIsDark,
-            onChanged: (bool switchIsOn) {
-              setState(() {
+          value: widget.themeManager.themeModeIsDark,
+          onChanged: (bool switchIsOn) {
+            setState(
+              () {
                 print(
                     'Switch changed to $switchIsOn'); //show that the switch is turned on
                 widget.themeManager.setThemeToDark(
                     switchIsOn); //when the switch is on, change the theme to dark
-              });
-            }),
+              },
+            );
+          },
+        ),
         TextButton.icon(
           icon: Icon(Icons.person),
           label: Text('Sign Out'),
