@@ -15,7 +15,7 @@ class _workoutListState extends State<workoutList> {
     final workouts = Provider.of<Iterable<workout>?>(context);
     workouts?.forEach((workout) {
       print(workout.workoutName);
-      // print(workout.group);
+      print(workout.groupName);
       // print(workout.activity);
     });
 
