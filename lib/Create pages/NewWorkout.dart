@@ -1,14 +1,18 @@
+import 'package:burnboss/models/user.dart';
+import 'package:burnboss/services/database.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 
 class NewWorkoutPage extends StatefulWidget {
-  const NewWorkoutPage({Key? key}) : super(key: key);
-
   @override
   State<NewWorkoutPage> createState() => _NewWorkoutPageState();
 }
 
 class _NewWorkoutPageState extends State<NewWorkoutPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   final controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
@@ -52,10 +56,10 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                       ),
                       TextButton(
                         child: const Text('Save'),
-                        onPressed: () {
+                        onPressed: () async {
                           Navigator.pop(context, 'Save');
                           final workoutName = controller.text;
-                          createWorkout(workoutName: workoutName);
+                          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).createWorkout(workoutName); //calls the create document from database to create the workout with the workout name
                         },
                       ),
                     ],
@@ -98,18 +102,6 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
         ),
       ),
     );
-  }
-
-  Future createWorkout({required String workoutName}) async {
-    //reference to document
-    final WorkoutName =
-        FirebaseFirestore.instance.collection('workouts').doc(workoutName);
-
-    final json = {
-      'workout name': workoutName,
-    };
-
-    await WorkoutName.set(json);
   }
 
   Widget buildOverViewCard({

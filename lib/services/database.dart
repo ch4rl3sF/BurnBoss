@@ -12,5 +12,16 @@ class DatabaseService{
     return await usersCollection.doc(uid).collection('Details').doc('details').set({
       'name': name,
     });
-  } //gets a reference to the document and updates it
+  } //gets a reference to the document and updates it with the user details
+
+  Future createWorkout(String workoutName) async {
+    return await usersCollection.doc(uid).collection('Workouts').doc(workoutName).set({
+      'workoutName': workoutName,
+    });
+  } //gets a reference to the document and updates it with the workout
+
+  //get users stream
+  Stream<QuerySnapshot> get workouts {
+    return usersCollection.doc(uid).collection('Workouts').snapshots();
+  }
 }

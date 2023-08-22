@@ -46,7 +46,7 @@ class CreatePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const NewWorkoutPage()),
+                      builder: (context) => NewWorkoutPage()),
                 );
               },
             ),
