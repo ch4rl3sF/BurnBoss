@@ -1,5 +1,5 @@
+import 'package:burnboss/models/workout.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 class workoutList extends StatefulWidget {
@@ -12,11 +12,12 @@ class workoutList extends StatefulWidget {
 class _workoutListState extends State<workoutList> {
   @override
   Widget build(BuildContext context) {
-    final workouts = Provider.of<QuerySnapshot?>(context);
-    // print(workouts?.docs);
-    for (var doc in workouts!.docs) {
-      print(doc.data());
-    }
+    final workouts = Provider.of<Iterable<workout>?>(context);
+    workouts?.forEach((workout) {
+      print(workout.workoutName);
+      // print(workout.group);
+      // print(workout.activity);
+    });
 
     return const Placeholder();
   }

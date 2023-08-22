@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:burnboss/models/workout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
@@ -15,7 +15,7 @@ class SelectPage extends StatefulWidget {
 class _SelectPageState extends State<SelectPage> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<QuerySnapshot?>.value(
+    return StreamProvider<Iterable<workout>?>.value( //every time we get an update to the stream, we get a list of the objects of workout we have created
       value: DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).workouts, //watch out for the uid: ''
       initialData: null,
       child: Scaffold(
