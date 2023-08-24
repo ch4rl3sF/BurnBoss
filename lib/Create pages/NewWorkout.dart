@@ -1,8 +1,5 @@
-import 'dart:async';
-
-import 'package:burnboss/models/user.dart';
+import 'package:burnboss/models/groupAddDynamicWidget.dart';
 import 'package:burnboss/services/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -14,8 +11,8 @@ class NewWorkoutPage extends StatefulWidget {
 class _NewWorkoutPageState extends State<NewWorkoutPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final workoutNameController = TextEditingController();
-  final groupNameController = TextEditingController();
+  TextEditingController workoutNameAdd = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   String workoutName = '';
@@ -23,8 +20,73 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
 
   bool showGroupTextField = false;
 
+  List<groupAddDynamicWidget> groupList = [];
+
+  List<String> Group = [];
+
+  addGroup() {
+    if (Group.length != 0) {
+      Group = [];
+      groupList = [];
+    }
+    setState(() {});
+    if (groupList.length >= 10) {
+      return;
+    }
+    groupList.add(new groupAddDynamicWidget());
+  }
+
+  submitGroupName() {
+    Group = [];
+    groupList.forEach((widget) => Group.add(Group.toString()));
+    setState(() {});
+    print(Group.length);
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget groupTextField = new Flexible(
+      flex: 2,
+      child: new ListView.builder(
+        itemCount: groupList.length,
+        itemBuilder: (_, index) => groupList[index],
+      ),
+    );
+
+    Widget submitGroupButton = Container(
+      child: ElevatedButton(
+        onPressed: submitGroupName,
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('Submit Data'),
+        ),
+      ),
+    );
+
+    Widget result = Flexible(
+      flex: 1,
+      child: Container(
+        child: ListView.builder(
+          itemCount: Group.length,
+          itemBuilder: (_, index) {
+            return Padding(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    child: Text('${index + 1} : ${Group[index]}'),
+                  ),
+                  Divider(),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
+
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -38,7 +100,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               decoration: InputDecoration(
                 hintText: 'Workout name',
               ),
-              controller: workoutNameController,
+              controller: workoutNameAdd,
               validator: (val) => val!.isEmpty ? 'Enter a workout name' : null,
               onChanged: (val) {
                 setState(() {
@@ -63,7 +125,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                         child: const Text('Save'),
                         onPressed: () async {
                           Navigator.pop(context, 'Save');
-                          final workoutName = workoutNameController.text;
+                          final workoutName = workoutNameAdd.text;
                           await DatabaseService(
                                   uid: FirebaseAuth.instance.currentUser!.uid)
                               .createWorkout(workoutName,
@@ -101,96 +163,25 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                 ]),
             Column(
               children: [
-                if (showGroupTextField == true) ...[
-                  Column(
+                SizedBox(
+                  height: 500,
+                  child: Column(
                     children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-                        child: Container(
-                          color: Colors.black12,
-                          height: 2,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Row(
-                          children: [
-                            SizedBox(
-                              width: 200,
-                              child: TextField(
-                                decoration:
-                                    InputDecoration(hintText: 'Add Group name'),
-                                controller: groupNameController,
-                              ),
-                            ),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    groupName = groupNameController.text;
-                                    showGroupTextField = false;
-                                  });
-                                  print('showGroupTextField changed to $showGroupTextField');
-                                },
-                                icon: Icon(Icons.check))
-                          ],
-                        ),
-                      ),
+                      Group.length == 0 ? groupTextField : result,
+                      Group.length == 0 ? submitGroupButton: new Container(),
 
                     ],
-                  )
-                ],
-                buildGroup(height: 100),
+                  ),
+                ),
+                FloatingActionButton(
+                  onPressed: addGroup,
+                  child: new Icon(Icons.add),
+                ),
               ],
-
             )
           ],
         ),
       ),
     );
   }
-
-  Widget buildGroup({
-    // required ControllerCallback groupNameController,
-    required double height,
-  }) {
-    return ElevatedButton(
-        onPressed: () {
-          setState((){
-            showGroupTextField = true;
-          });
-          print('showGroupTextField changed to $showGroupTextField');
-        },
-        child: const Text('Add Group'));
-  }
 }
-
-// children: [
-//   Padding(
-//     padding:
-//         EdgeInsets.symmetric(vertical: 10, horizontal: 25),
-//     child: Container(
-//       color: Colors.black12,
-//       height: 2,
-//     ),
-//   ),
-//   Row(
-//     children: [
-//       SizedBox(
-//         width: 200,
-//         child: TextField(
-//           decoration:
-//               InputDecoration(hintText: 'Add Group name'),
-//           controller: groupNameController,
-//         ),
-//       ),
-//       IconButton(
-//           onPressed: () {
-//             setState(() {
-//               groupName = groupNameController.text;
-//             });
-//           },
-//           icon: Icon(Icons.check))
-//     ],
-//   ),
-// ], THIS WORKS IN COLUMN IN BODY
