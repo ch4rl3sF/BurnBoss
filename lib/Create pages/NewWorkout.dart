@@ -66,7 +66,8 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                           final workoutName = workoutNameAdd.text;
                           await DatabaseService(
                                   uid: FirebaseAuth.instance.currentUser!.uid)
-                              .createWorkout(workoutName, groupName); //calls the create document from database to create the workout with the workout name
+                              .createWorkout(workoutName,
+                                  groupName); //calls the create document from database to create the workout with the workout name
                         },
                       ),
                     ],
@@ -98,48 +99,73 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                   Text('Equipment used: '),
                   Text('Days set: '),
                 ]),
-            Column(
-              children: [
-                showGroupTextField == true
-                    ? Row(
-                        children: [
-                          Container(
-                            width: 200,
-                            child: TextFormField(
-                              controller: groupNameAdd,
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Group Name',
+            Padding(
+              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      children: groups
+                          .map((group) => Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      color: Colors.black12,
+                                      height: 2,
+                                    ),
+                                    Text(
+                                      group,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 25,
+                                      ),
+                                    ),
+                                  ]))
+                          .toList(),
+                    ),
+                  ),
+                  showGroupTextField == true
+                      ? Row(
+                          children: [
+                            Container(
+                              width: 200,
+                              child: TextFormField(
+                                controller: groupNameAdd,
+                                decoration: const InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  labelText: 'Group Name',
+                                ),
                               ),
                             ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                groupName = groupNameAdd.text;
-                                groups.add(groupName);
-                                showGroupTextField = false;
-                                groupNameAdd.clear();
-                              });
-                            },
-                            icon: Icon(Icons.check),
-                          )
-                        ],
-                      )
-                    : Container(),
-                Column(
-                  children: groups.map((group) => Text(group)).toList(),
-                ),
-                ElevatedButton(
-                  child: Text('Add Group'),
-                  onPressed: () {
-                    setState(() {
-                      showGroupTextField = true;
-                      print('showGroupTextField set to $showGroupTextField');
-                    });
-                  },
-                )
-              ],
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  groupName = groupNameAdd.text;
+                                  groups.add(groupName);
+                                  showGroupTextField = false;
+                                  groupNameAdd.clear();
+                                });
+                              },
+                              icon: Icon(Icons.check),
+                            )
+                          ],
+                        )
+                      : Container(),
+                  ElevatedButton(
+                    child: Text('Add Group'),
+                    onPressed: () {
+                      setState(() {
+                        showGroupTextField = true;
+                        print('showGroupTextField set to $showGroupTextField');
+                      });
+                    },
+                  ),
+                  ElevatedButton(onPressed: () {setState(() {
+                    groups.removeLast();
+                  });}, child: Text('Remove group'))
+                ],
+              ),
             )
           ],
         ),
