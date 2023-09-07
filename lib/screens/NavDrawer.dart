@@ -1,9 +1,9 @@
+import 'package:burnboss/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
 
 class NavDrawerWidget extends StatelessWidget {
   const NavDrawerWidget({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {

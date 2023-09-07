@@ -35,7 +35,7 @@ class DatabaseService {
     await WorkoutsCollection.doc(workoutName).set({
       'workoutName': workoutName,
     });
-    await GroupsCollection.doc(groupName).set({'groupName': groupName, 'groupCreation': DateTime});
+    await GroupsCollection.doc(groupName).set({'groupName': groupName});
   } //gets a reference to the document and updates it with the workout
 
   //workout list from snapshot

@@ -1,4 +1,3 @@
-import 'package:burnboss/models/groupAddDynamicWidget.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -117,10 +116,9 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                                     Text(
                                       group,
                                       style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25,
-                                      ),
-                                    ),
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold),
+                                    )
                                   ]))
                           .toList(),
                     ),
@@ -161,9 +159,13 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                       });
                     },
                   ),
-                  ElevatedButton(onPressed: () {setState(() {
-                    groups.removeLast();
-                  });}, child: Text('Remove group'))
+                  ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          groups.removeLast();
+                        });
+                      },
+                      child: Text('Remove group'))
                 ],
               ),
             )
