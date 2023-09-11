@@ -1,6 +1,9 @@
+import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../models/workout.dart';
 
 class NewWorkoutPage extends StatefulWidget {
   @override
@@ -11,16 +14,12 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   TextEditingController workoutNameAdd = TextEditingController();
-  TextEditingController groupNameAdd = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   String workoutName = '';
-  String groupName = '';
 
   bool showGroupTextField = false;
-
-  List<String> groups = [];
 
   @override
   Widget build(BuildContext context) {
@@ -62,11 +61,14 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                         child: const Text('Save'),
                         onPressed: () async {
                           Navigator.pop(context, 'Save');
-                          final workoutName = workoutNameAdd.text;
-                          await DatabaseService(
-                                  uid: FirebaseAuth.instance.currentUser!.uid)
-                              .createWorkout(workoutName,
-                                  groupName); //calls the create document from database to create the workout with the workout name
+                          Workout sampleWorkout = Workout(
+                            workoutName: workoutNameAdd.text,
+                            activities: [
+                              Activity(activityName: 'plank', reps: 4),
+                              Activity(activityName: 'pushups', reps: 5)
+                            ],
+                          );
+                          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).createWorkout(sampleWorkout);
                         },
                       ),
                     ],
@@ -88,87 +90,17 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                 Tab(text: 'Overview'),
               ]),
         ),
-        body: TabBarView(
+        body: const TabBarView(
           children: [
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text('Muscles Targeted: '),
                   Text('Number of steps: '),
                   Text('Equipment used: '),
                   Text('Days set: '),
                 ]),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Column(
-                      children: groups
-                          .map((group) => Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      color: Colors.black12,
-                                      height: 2,
-                                    ),
-                                    Text(
-                                      group,
-                                      style: TextStyle(
-                                          fontSize: 25,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ]))
-                          .toList(),
-                    ),
-                  ),
-                  showGroupTextField == true
-                      ? Row(
-                          children: [
-                            Container(
-                              width: 200,
-                              child: TextFormField(
-                                controller: groupNameAdd,
-                                decoration: const InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  labelText: 'Group Name',
-                                ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  groupName = groupNameAdd.text;
-                                  groups.add(groupName);
-                                  showGroupTextField = false;
-                                  groupNameAdd.clear();
-                                });
-                              },
-                              icon: Icon(Icons.check),
-                            )
-                          ],
-                        )
-                      : Container(),
-                  ElevatedButton(
-                    child: Text('Add Group'),
-                    onPressed: () {
-                      setState(() {
-                        showGroupTextField = true;
-                        print('showGroupTextField set to $showGroupTextField');
-                      });
-                    },
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          groups.removeLast();
-                        });
-                      },
-                      child: Text('Remove group'))
-                ],
-              ),
-            )
+
           ],
         ),
       ),
