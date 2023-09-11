@@ -15,10 +15,8 @@ class SelectPage extends StatefulWidget {
 class _SelectPageState extends State<SelectPage> {
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<Iterable<workout>?>.value( //every time we get an update to the stream, we get a list of the objects of workout we have created
-      value: DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).workouts, //watch out for the uid: ''
-      initialData: null,
-      child: Scaffold(
+    return
+      Scaffold(
         appBar: AppBar(
           centerTitle: true,
           // backgroundColor: Color(0xff292929),
@@ -43,11 +41,9 @@ class _SelectPageState extends State<SelectPage> {
         body: Column(
           children: [
             const SizedBox(height: 10),
-            workoutList(),
           ],
         ),
         drawer: const NavDrawerWidget(),
-      ),
     );
   }
 

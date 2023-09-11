@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:burnboss/models/workout.dart';
 
-import '../models/activity.dart';
+import 'package:burnboss/models/activity.dart';
 
 class DatabaseService {
   final String uid;

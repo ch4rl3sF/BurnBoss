@@ -3,7 +3,7 @@ import 'package:burnboss/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import '../models/workout.dart';
+import 'package:burnboss/models/workout.dart';
 
 class NewWorkoutPage extends StatefulWidget {
   @override
@@ -61,14 +61,14 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                         child: const Text('Save'),
                         onPressed: () async {
                           Navigator.pop(context, 'Save');
-                          Workout sampleWorkout = Workout(
+                          Workout WorkoutSample = Workout(
                             workoutName: workoutNameAdd.text,
                             activities: [
-                              Activity(activityName: 'plank', reps: 4),
-                              Activity(activityName: 'pushups', reps: 5)
+                              Activity(activityName: 'sample:plank', reps: 4),
+                              Activity(activityName: 'sample:pushups', reps: 5)
                             ],
                           );
-                          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).createWorkout(sampleWorkout);
+                          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).createWorkout(WorkoutSample);
                         },
                       ),
                     ],
@@ -90,7 +90,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                 Tab(text: 'Overview'),
               ]),
         ),
-        body: const TabBarView(
+        body: TabBarView(
           children: [
             Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,7 +100,11 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                   Text('Equipment used: '),
                   Text('Days set: '),
                 ]),
-
+            Column(
+              children: [
+                ElevatedButton(onPressed: () {}, child: Text("does nothing"))
+              ]
+            )
           ],
         ),
       ),
