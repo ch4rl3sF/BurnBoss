@@ -64,12 +64,8 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                         onPressed: () async {
                           Navigator.pop(context, 'Save');
                           Workout workout = Workout(
-                            workoutName: workoutNameAdd.text,
-                            activities: [
-                              Activity(activityName: 'pushups'),
-                              Activity(activityName: 'plank'),
-                            ]
-                          );
+                              workoutName: workoutNameAdd.text,
+                              activities: activities);
                           await DatabaseService(
                                   uid: FirebaseAuth.instance.currentUser!.uid)
                               .createWorkout(workout);
@@ -107,7 +103,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                 height: 5,
               ),
               Expanded(
-                child: ActivityList(),
+                child: ActivityList(activities: activities),
               ),
             ])
           ],
@@ -118,17 +114,20 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
 }
 
 class ActivityList extends StatefulWidget {
+  final List<Activity> activities;
+
+  ActivityList({required this.activities});
+
   @override
   _ActivityListState createState() => _ActivityListState();
 }
 
 class _ActivityListState extends State<ActivityList> {
-  List<Activity> activities = _NewWorkoutPageState().activities;
   TextEditingController activityNameController = TextEditingController();
 
   void addActivity(String activityName) {
     setState(() {
-      activities.add(Activity(activityName: activityName));
+      widget.activities.add(Activity(activityName: activityName));
     });
   }
 
@@ -137,12 +136,12 @@ class _ActivityListState extends State<ActivityList> {
       context,
       MaterialPageRoute(builder: (context) => newActivity()),
     );
-    print(activities);
+    print(widget.activities);
   }
 
   void deleteActivity(int index) {
     setState(() {
-      activities.removeAt(index);
+      widget.activities.removeAt(index);
     });
   }
 
@@ -154,7 +153,8 @@ class _ActivityListState extends State<ActivityList> {
           padding: EdgeInsets.all(10.0),
           child: TextField(
             controller: activityNameController,
-            decoration: InputDecoration(labelText: 'Activity Name', focusColor: Colors.black12),
+            decoration: InputDecoration(
+                labelText: 'Activity Name', focusColor: Colors.black12),
           ),
         ),
         ElevatedButton(
@@ -167,12 +167,15 @@ class _ActivityListState extends State<ActivityList> {
           },
           child: Text('Add activity'),
         ),
+        SizedBox(
+          height: 10,
+        ),
         Expanded(
             child: ListView.builder(
-                itemCount: activities.length,
+                itemCount: widget.activities.length,
                 itemBuilder: (context, index) {
                   return ActivityCard(
-                      activity: activities[index],
+                      activity: widget.activities[index],
                       onEdit: () {
                         editActivity(index);
                       },
