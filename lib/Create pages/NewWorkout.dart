@@ -19,7 +19,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
   final _formKey = GlobalKey<FormState>();
 
   String workoutName = '';
-  List activities = [];
+  List<Activity> activities = [];
 
   bool showGroupTextField = false;
 
@@ -66,9 +66,9 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                           Workout workout = Workout(
                             workoutName: workoutNameAdd.text,
                             activities: [
-                              Activity(activityName: 'sample:plank', reps: 4),
-                              Activity(activityName: 'sample:pushups', reps: 5)
-                            ],
+                              Activity(activityName: 'pushups'),
+                              Activity(activityName: 'plank'),
+                            ]
                           );
                           await DatabaseService(
                                   uid: FirebaseAuth.instance.currentUser!.uid)
@@ -106,29 +106,8 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               SizedBox(
                 height: 5,
               ),
-              activityCard(
-                  activityName: 'Activity',
-                  action: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => newActivity()),
-                    );
-                    print("Activity button pressed");
-                  }),
-              activityCard(
-                  activityName: 'Activity',
-                  action: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => newActivity()),
-                    );
-                    print("Activity button pressed");
-                  }),
-              ElevatedButton(
-                onPressed: () {
-                  print('new activity button pressed');
-                },
-                child: Text("New Activity"),
+              Expanded(
+                child: ActivityList(),
               ),
             ])
           ],
@@ -136,38 +115,72 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
       ),
     );
   }
+}
 
-  Widget activityCard({
-    required String activityName,
-    required GestureTapCallback action,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Colors.black12, width: 0.5),
+class ActivityList extends StatefulWidget {
+  @override
+  _ActivityListState createState() => _ActivityListState();
+}
+
+class _ActivityListState extends State<ActivityList> {
+  List<Activity> activities = _NewWorkoutPageState().activities;
+  TextEditingController activityNameController = TextEditingController();
+
+  void addActivity(String activityName) {
+    setState(() {
+      activities.add(Activity(activityName: activityName));
+    });
+  }
+
+  void editActivity(int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => newActivity()),
+    );
+    print(activities);
+  }
+
+  void deleteActivity(int index) {
+    setState(() {
+      activities.removeAt(index);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.all(10.0),
+          child: TextField(
+            controller: activityNameController,
+            decoration: InputDecoration(labelText: 'Activity Name', focusColor: Colors.black12),
+          ),
         ),
-        child: InkWell(
-            onTap: action,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  leading: Icon(
-                    Icons.directions_run_rounded,
-                    size: 35,
-                  ),
-                  title: Text(activityName),
-                  trailing: IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {},
-                  ),
-                )
-              ],
-            )),
-      ),
+        ElevatedButton(
+          onPressed: () {
+            String newActivityName = activityNameController.text.trim();
+            if (newActivityName.isNotEmpty) {
+              addActivity(newActivityName);
+              activityNameController.clear();
+            }
+          },
+          child: Text('Add activity'),
+        ),
+        Expanded(
+            child: ListView.builder(
+                itemCount: activities.length,
+                itemBuilder: (context, index) {
+                  return ActivityCard(
+                      activity: activities[index],
+                      onEdit: () {
+                        editActivity(index);
+                      },
+                      onDelete: () {
+                        deleteActivity(index);
+                      });
+                }))
+      ],
     );
   }
 }
