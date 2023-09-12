@@ -2,7 +2,6 @@ import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:burnboss/models/workout.dart';
 
 class NewWorkoutPage extends StatefulWidget {
@@ -14,10 +13,12 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   TextEditingController workoutNameAdd = TextEditingController();
+  TextEditingController activitiyNameAdd = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   String workoutName = '';
+  List activities = [];
 
   bool showGroupTextField = false;
 
@@ -68,7 +69,9 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                               Activity(activityName: 'sample:pushups', reps: 5)
                             ],
                           );
-                          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).createWorkout(WorkoutSample);
+                          await DatabaseService(
+                                  uid: FirebaseAuth.instance.currentUser!.uid)
+                              .createWorkout(WorkoutSample);
                         },
                       ),
                     ],
@@ -92,20 +95,38 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
         ),
         body: TabBarView(
           children: [
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Muscles Targeted: '),
-                  Text('Number of steps: '),
-                  Text('Equipment used: '),
-                  Text('Days set: '),
-                ]),
-            Column(
-              children: [
-                ElevatedButton(onPressed: () {}, child: Text("does nothing"))
-              ]
-            )
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('Muscles Targeted: '),
+              Text('Number of steps: '),
+              Text('Equipment used: '),
+              Text('Days set: '),
+            ]),
+            Column(children: [
+              ElevatedButton(
+                  onPressed: () {
+                    actvityCard(activityName: 'Activity');
+                    print('new activity button pressed');
+                  },
+                  child: Text("New Activity"))
+            ])
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget actvityCard({
+    required String activityName,
+  }) {
+    return Card(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Colors.black12, width: 0.5)),
+      child: InkWell(
+        onTap: () {},
+        child: SizedBox(
+          height: 100,
+          child: Text(activityName),
         ),
       ),
     );
