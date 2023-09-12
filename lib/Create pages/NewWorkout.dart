@@ -1,3 +1,4 @@
+import 'package:burnboss/Create%20pages/newActivity.dart';
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                 showDialog<String>(
                   context: context,
                   builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Update workout name?'),
+                    title: const Text('Save workout?'),
                     actions: <Widget>[
                       TextButton(
                         onPressed: () => Navigator.pop(context, 'Cancel'),
@@ -62,7 +63,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                         child: const Text('Save'),
                         onPressed: () async {
                           Navigator.pop(context, 'Save');
-                          Workout WorkoutSample = Workout(
+                          Workout workout = Workout(
                             workoutName: workoutNameAdd.text,
                             activities: [
                               Activity(activityName: 'sample:plank', reps: 4),
@@ -71,7 +72,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                           );
                           await DatabaseService(
                                   uid: FirebaseAuth.instance.currentUser!.uid)
-                              .createWorkout(WorkoutSample);
+                              .createWorkout(workout);
                         },
                       ),
                     ],
@@ -102,12 +103,33 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               Text('Days set: '),
             ]),
             Column(children: [
+              SizedBox(
+                height: 5,
+              ),
+              activityCard(
+                  activityName: 'Activity',
+                  action: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => newActivity()),
+                    );
+                    print("Activity button pressed");
+                  }),
+              activityCard(
+                  activityName: 'Activity',
+                  action: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => newActivity()),
+                    );
+                    print("Activity button pressed");
+                  }),
               ElevatedButton(
-                  onPressed: () {
-                    actvityCard(activityName: 'Activity');
-                    print('new activity button pressed');
-                  },
-                  child: Text("New Activity"))
+                onPressed: () {
+                  print('new activity button pressed');
+                },
+                child: Text("New Activity"),
+              ),
             ])
           ],
         ),
@@ -115,19 +137,36 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
     );
   }
 
-  Widget actvityCard({
+  Widget activityCard({
     required String activityName,
+    required GestureTapCallback action,
   }) {
-    return Card(
-      shape: RoundedRectangleBorder(
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+      child: Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Colors.black12, width: 0.5)),
-      child: InkWell(
-        onTap: () {},
-        child: SizedBox(
-          height: 100,
-          child: Text(activityName),
+          side: BorderSide(color: Colors.black12, width: 0.5),
         ),
+        child: InkWell(
+            onTap: action,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  leading: Icon(
+                    Icons.directions_run_rounded,
+                    size: 35,
+                  ),
+                  title: Text(activityName),
+                  trailing: IconButton(
+                    icon: Icon(Icons.close),
+                    onPressed: () {},
+                  ),
+                )
+              ],
+            )),
       ),
     );
   }
