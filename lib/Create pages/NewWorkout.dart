@@ -20,6 +20,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
 
   String workoutName = '';
   List<Activity> activities = [];
+  String error = '';
 
   bool showGroupTextField = false;
 
@@ -50,30 +51,47 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
           actions: [
             IconButton(
               onPressed: () {
-                showDialog<String>(
-                  context: context,
-                  builder: (BuildContext context) => AlertDialog(
-                    title: const Text('Save workout?'),
-                    actions: <Widget>[
-                      TextButton(
-                        onPressed: () => Navigator.pop(context, 'Cancel'),
-                        child: const Text('Cancel'),
-                      ),
-                      TextButton(
-                        child: const Text('Save'),
-                        onPressed: () async {
-                          Navigator.pop(context, 'Save');
-                          Workout workout = Workout(
-                              workoutName: workoutNameAdd.text,
-                              activities: activities);
-                          await DatabaseService(
-                                  uid: FirebaseAuth.instance.currentUser!.uid)
-                              .createWorkout(workout);
-                        },
-                      ),
-                    ],
-                  ),
-                );
+                if (workoutName == '' || activities.isEmpty) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Error!'),
+                      content: const Text('Error creating workout. Make sure the workout has a name, and that you have activities!'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Return'),
+                          child: const Text(
+                              'Return'),
+                        ),
+                      ],
+                    ),
+                  );
+                } else {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Save workout?'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'Cancel'),
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          child: const Text('Save'),
+                          onPressed: () async {
+                            Navigator.pop(context, 'Save');
+                            Workout workout = Workout(
+                                workoutName: workoutNameAdd.text,
+                                activities: activities);
+                            await DatabaseService(
+                                    uid: FirebaseAuth.instance.currentUser!.uid)
+                                .createWorkout(workout);
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                }
               },
               icon: Icon(Icons.save),
             )

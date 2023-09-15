@@ -33,16 +33,16 @@ class NavDrawerWidget extends StatelessWidget {
                 Navigator.pushNamed(context, '/');
               }),
           buildNavBarItem(
-              label: 'Select',
-              featureIcon: Icons.play_arrow_outlined,
-              action: () {
-                Navigator.pushNamed(context, '/Select');
-              }),
-          buildNavBarItem(
               label: 'Creator',
               featureIcon: Icons.add,
               action: () {
                 Navigator.pushNamed(context, '/Creator');
+              }),
+          buildNavBarItem(
+              label: 'Select',
+              featureIcon: Icons.play_arrow_outlined,
+              action: () {
+                Navigator.pushNamed(context, '/Select');
               }),
           buildNavBarItem(
               label: 'Calendar',

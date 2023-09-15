@@ -1,3 +1,4 @@
+import 'package:burnboss/models/activity.dart';
 import 'package:flutter/material.dart';
 
 class newActivity extends StatelessWidget {
@@ -7,7 +8,7 @@ class newActivity extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('New Activity'),
+        title: Text('new activity'),
       ),
     );
   }

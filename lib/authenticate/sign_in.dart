@@ -115,7 +115,7 @@ class _SignInState extends State<SignIn> {
                           builder: (BuildContext context) => AlertDialog(
                             title: const Text('Warning!'),
                             content: const Text(
-                                'Singing in as a guest means that your workouts will not be transferred!'),
+                                'Signing in as a guest means that your workouts will not be transferred!'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () =>
