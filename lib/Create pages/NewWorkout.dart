@@ -1,4 +1,4 @@
-import 'package:burnboss/Create%20pages/newActivity.dart';
+import 'package:burnboss/Create%20pages/editActivity.dart';
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:flutter/material.dart';
@@ -14,15 +14,12 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   TextEditingController workoutNameAdd = TextEditingController();
-  TextEditingController activitiyNameAdd = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
   String workoutName = '';
   List<Activity> activities = [];
   String error = '';
-
-  bool showGroupTextField = false;
 
   @override
   Widget build(BuildContext context) {
@@ -143,21 +140,29 @@ class ActivityList extends StatefulWidget {
 class _ActivityListState extends State<ActivityList> {
   TextEditingController activityNameController = TextEditingController();
 
-  void addActivity(String activityName) {
+  // void addActivityItem(String activityName, int placeHolderReps) {
+  //   setState(() {
+  //     widget.activities.add(Activity(activityName: activityName, reps: placeHolderReps));
+  //   });
+  // }
+  
+  addActivityItem(String activityName) {
+    int placeholderReps = 0;
+    //ADD IN: record time when workout was created
     setState(() {
-      widget.activities.add(Activity(activityName: activityName));
+      widget.activities.add(new Activity(activityName: activityName, reps: placeholderReps));
     });
   }
 
-  void editActivity(int index) {
+  editActivityItem(int index) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => newActivity()),
-    );
+      MaterialPageRoute(builder: (context) => editActivity(activity: widget.activities[index],),
+    ));
     print(widget.activities);
   }
 
-  void deleteActivity(int index) {
+  void deleteActivityItem(int index) {
     setState(() {
       widget.activities.removeAt(index);
     });
@@ -179,7 +184,7 @@ class _ActivityListState extends State<ActivityList> {
           onPressed: () {
             String newActivityName = activityNameController.text.trim();
             if (newActivityName.isNotEmpty) {
-              addActivity(newActivityName);
+              addActivityItem(newActivityName);
               activityNameController.clear();
             }
           },
@@ -195,10 +200,10 @@ class _ActivityListState extends State<ActivityList> {
                   return ActivityCard(
                       activity: widget.activities[index],
                       onEdit: () {
-                        editActivity(index);
+                        editActivityItem(index);
                       },
                       onDelete: () {
-                        deleteActivity(index);
+                        deleteActivityItem(index);
                       });
                 }))
       ],

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ThemeManager with ChangeNotifier {
+class  ThemeManager with ChangeNotifier {
   ThemeMode _themeMode =
       ThemeMode.light; //set the themeMode to light as default
 

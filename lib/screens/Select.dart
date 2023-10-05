@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:provider/provider.dart';
-import 'package:burnboss/Create pages/workoutList.dart';
 
 
 class SelectPage extends StatefulWidget {
