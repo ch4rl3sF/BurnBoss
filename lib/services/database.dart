@@ -31,9 +31,6 @@ class DatabaseService {
         .doc(uid)
         .collection('Workouts');
 
-    // Convert the Workout object to a map
-    Map<String, dynamic> workoutData = workout.toMap();
-
     // Add the workout to Firestore
     DocumentReference workoutDocument =
         await WorkoutsCollection.doc(workout.workoutName);

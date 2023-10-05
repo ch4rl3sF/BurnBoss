@@ -11,8 +11,6 @@ class NewWorkoutPage extends StatefulWidget {
 }
 
 class _NewWorkoutPageState extends State<NewWorkoutPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-
   TextEditingController workoutNameAdd = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -53,12 +51,12 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
                       title: const Text('Error!'),
-                      content: const Text('Error creating workout. Make sure the workout has a name, and that you have activities!'),
+                      content: const Text(
+                          'Error creating workout. Make sure the workout has a name, and that you have activities!'),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context, 'Return'),
-                          child: const Text(
-                              'Return'),
+                          child: const Text('Return'),
                         ),
                       ],
                     ),
@@ -145,20 +143,24 @@ class _ActivityListState extends State<ActivityList> {
   //     widget.activities.add(Activity(activityName: activityName, reps: placeHolderReps));
   //   });
   // }
-  
+
   addActivityItem(String activityName) {
-    int placeholderReps = 0;
     //ADD IN: record time when workout was created
     setState(() {
-      widget.activities.add(new Activity(activityName: activityName, reps: placeholderReps));
+      int placeholderReps = 0;
+      widget.activities
+          .add(new Activity(activityName: activityName, reps: placeholderReps));
     });
   }
 
   editActivityItem(int index) {
     Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => editActivity(activity: widget.activities[index],),
-    ));
+        context,
+        MaterialPageRoute(
+          builder: (context) => editActivity(
+            activity: widget.activities[index],
+          ),
+        ));
     print(widget.activities);
   }
 
@@ -177,7 +179,9 @@ class _ActivityListState extends State<ActivityList> {
           child: TextField(
             controller: activityNameController,
             decoration: InputDecoration(
-                labelText: 'Activity Name', focusColor: Colors.black12),
+              labelText: 'Activity Name',
+              border: OutlineInputBorder(),
+            ),
           ),
         ),
         ElevatedButton(

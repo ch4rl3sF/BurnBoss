@@ -1,4 +1,3 @@
-import 'package:burnboss/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
 

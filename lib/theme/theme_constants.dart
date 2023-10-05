@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:burnboss/theme/theme_constants.dart';
 
 const COLOR_PRIMARY = Color(0xffFF2c14);
 const COLOR_SECONDARY = Color(0xffFF2c14);
@@ -21,7 +20,7 @@ ThemeData lightTheme = ThemeData(
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       primary: Colors.black,
-      side: BorderSide(width: 0.5, color: Colors.black12 ),
+      side: BorderSide(width: 0.5, color: Colors.black12),
     ),
   ),
 );

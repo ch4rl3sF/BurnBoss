@@ -57,6 +57,7 @@ class _RegisterState extends State<Register> {
                 decoration: InputDecoration(
                   hintText: 'Email',
                 ),
+                keyboardType: TextInputType.emailAddress,
                 validator: (val) => val!.isEmpty ? 'Enter an email' : null,
                 onChanged: (val) {
                   setState(() => email = val);

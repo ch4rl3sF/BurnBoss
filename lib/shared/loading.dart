@@ -1,5 +1,4 @@
 import 'package:burnboss/theme/theme_constants.dart';
-import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 

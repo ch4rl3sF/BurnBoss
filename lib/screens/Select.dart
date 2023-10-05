@@ -1,10 +1,5 @@
-import 'package:burnboss/models/workout.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
-import 'package:burnboss/services/database.dart';
-import 'package:provider/provider.dart';
-
 
 class SelectPage extends StatefulWidget {
   @override

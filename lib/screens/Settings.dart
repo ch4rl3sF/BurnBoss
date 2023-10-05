@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 
 class SettingsPage extends StatefulWidget {
-  ThemeManager themeManager;
+  final ThemeManager themeManager;
 
   SettingsPage(this.themeManager, {Key? key}) : super(key: key);
 
