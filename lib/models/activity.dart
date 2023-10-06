@@ -13,38 +13,11 @@ class Activity {
       // 'reps': reps,
     };
   }
+  void updateReps(int newReps) {
+    reps = newReps;
+  }
 }
 
-// class ActivityCard extends StatelessWidget {
-//   final Activity activity;
-//   final Function() onEdit;
-//   final Function() onDelete;
-//
-//   ActivityCard({
-//     required this.activity,
-//     required this.onEdit,
-//     required this.onDelete,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Card(
-//       color: Colors.white,
-//       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-//       child: ListTile(
-//         title: Text(activity.activityName),
-//         subtitle: Text('Reps: ${activity.reps}'),
-//         trailing: Row(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             IconButton(onPressed: onEdit, icon: Icon(Icons.edit)),
-//             IconButton(onPressed: onDelete, icon: Icon(Icons.delete)),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
 class ActivityCard extends StatefulWidget {
   final Activity activity;
   final VoidCallback onEdit;
@@ -59,8 +32,16 @@ class ActivityCard extends StatefulWidget {
 class _ActivityCardState extends State<ActivityCard> {
   @override
   Widget build(BuildContext context) {
+    // Access the current theme
+    ThemeData theme = Theme.of(context);
+
+    // Determine if the theme is light
+    bool isLightTheme = theme.brightness == Brightness.light;
+
+    // Set the color based on the theme
+    Color cardColor = isLightTheme ? Colors.white : Colors.grey[800]!;
     return Card(
-      color: Colors.white,
+      color: cardColor,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
         title: Text(widget.activity.activityName),

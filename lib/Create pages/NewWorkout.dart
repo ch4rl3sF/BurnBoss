@@ -107,7 +107,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Text('Muscles Targeted: '),
-              Text('Number of steps: '),
+              Text('Number of steps: ${activities.length}'),
               Text('Equipment used: '),
               Text('Days set: '),
             ]),
@@ -148,6 +148,7 @@ class _ActivityListState extends State<ActivityList> {
     //ADD IN: record time when workout was created
     setState(() {
       int placeholderReps = 0;
+
       widget.activities
           .add(new Activity(activityName: activityName, reps: placeholderReps));
     });

@@ -33,10 +33,11 @@ class _editActivityState extends State<editActivity> {
               keyboardType: TextInputType.number, //VALIDATION - shows only numpad
               inputFormatters: [FilteringTextInputFormatter.digitsOnly], //VALIDATION - allows only integers to be entered
               onSubmitted: (reps) {
+
                 try {
                   int parsedReps = int.parse(reps);
                   setState(() {
-                    widget.activity.reps = parsedReps;
+                    widget.activity.updateReps(parsedReps);
                   });
                 } catch (e) {
                   // Handle the case where the input is not a valid integer
