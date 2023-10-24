@@ -138,12 +138,6 @@ class ActivityList extends StatefulWidget {
 class _ActivityListState extends State<ActivityList> {
   TextEditingController activityNameController = TextEditingController();
 
-  // void addActivityItem(String activityName, int placeHolderReps) {
-  //   setState(() {
-  //     widget.activities.add(Activity(activityName: activityName, reps: placeHolderReps));
-  //   });
-  // }
-
   addActivityItem(String activityName) {
     //ADD IN: record time when workout was created
     setState(() {

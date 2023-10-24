@@ -1,3 +1,5 @@
+import 'package:burnboss/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
 
@@ -6,7 +8,7 @@ class NavDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var email = AuthService().user;
+    var email = FirebaseAuth.instance.currentUser!.email.toString();
     return Drawer(
       // backgroundColor: Color(0xff121212),
       child: ListView(
@@ -18,7 +20,7 @@ class NavDrawerWidget extends StatelessWidget {
               style: TextStyle(color: Colors.white),
             ),
             accountEmail: Text(
-              email.toString(),
+              email,
               style: TextStyle(color: Colors.white),
             ),
             currentAccountPicture: CircleAvatar(
@@ -29,6 +31,7 @@ class NavDrawerWidget extends StatelessWidget {
               label: 'Home',
               featureIcon: Icons.home_filled,
               action: () {
+                print(email);
                 Navigator.pushNamed(context, '/');
               }),
           buildNavBarItem(

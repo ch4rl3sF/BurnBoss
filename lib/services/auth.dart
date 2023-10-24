@@ -1,25 +1,22 @@
-import 'package:burnboss/models/user.dart';
+import 'package:burnboss/models/user.dart' as UserModel;
 import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:burnboss/models/user.dart' as UserModel;
+
 
 class AuthService{
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  //create user object based on firebase user
-  UserModel.customUser? _userFromFirebaseUser(User? user)  {
-    // ignore: unnecessary_null_comparison
-    if (user !=null) {
-      return UserModel.customUser(uid: user.uid);
-    }else{
+  UserModel.customUser? _userFromFirebaseUser(User? user) {
+    if (user != null) {
+      return UserModel.customUser(uid: user.uid, email: user.email);
+    } else {
       return null;
     }
   }
   //auth change user stream. Every time a user signs in or signs out, we get a response down this stream
-  Stream<customUser?> get user {
-    return _auth.authStateChanges()
-    .map(_userFromFirebaseUser);
+  Stream<UserModel.customUser?> get user {
+    return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
   //sign in anonymously
