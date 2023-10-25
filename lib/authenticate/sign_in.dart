@@ -15,6 +15,7 @@ class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
   bool loading = false;
+  bool _passwordVisible = false;
 
   String email = '';
   String password = '';
@@ -70,11 +71,19 @@ class _SignInState extends State<SignIn> {
                     TextFormField(
                       decoration: InputDecoration(
                         hintText: 'Password',
+                          suffixIcon: IconButton(
+                            icon: Icon(_passwordVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded),
+                            onPressed: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                          )
                       ),
                       validator: (val) => val!.length < 6
                           ? 'Enter a password 6+ chars long'
                           : null,
-                      obscureText: true,
+                      obscureText: _passwordVisible,
                       onChanged: (val) {
                         setState(() => password = val);
                       },
