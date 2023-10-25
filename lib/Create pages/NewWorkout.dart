@@ -144,18 +144,25 @@ class _ActivityListState extends State<ActivityList> {
       int placeholderReps = 0;
 
       widget.activities
-          .add(new Activity(activityName: activityName, reps: placeholderReps));
+          .add(Activity(activityName: activityName, reps: placeholderReps));
     });
   }
 
-  editActivityItem(int index) {
+  void editActivityItem(int index) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => editActivity(
-            activity: widget.activities[index],
-          ),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => editActivity(
+          activity: widget.activities[index],
+          onUpdateReps: (int newReps) {
+            // Update the reps of the original instance in the ActivityList
+            setState(() {
+              widget.activities[index].updateReps(newReps);
+            });
+          },
+        ),
+      ),
+    );
     print(widget.activities);
   }
 
@@ -196,8 +203,10 @@ class _ActivityListState extends State<ActivityList> {
             child: ListView.builder(
                 itemCount: widget.activities.length,
                 itemBuilder: (context, index) {
+                  Activity activity = widget.activities[index];
                   return ActivityCard(
-                      activity: widget.activities[index],
+                    key: ValueKey(activity.activityName),
+                      activity: activity,
                       onEdit: () {
                         editActivityItem(index);
                       },

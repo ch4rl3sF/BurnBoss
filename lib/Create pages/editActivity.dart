@@ -4,7 +4,10 @@ import 'package:flutter/services.dart';
 
 class editActivity extends StatefulWidget {
   final Activity activity;
-  editActivity({Key? key, required this.activity,}) : super(key: key);
+  final Function(int) onUpdateReps; // Add callback function
+
+  editActivity({Key? key, required this.activity, required this.onUpdateReps})
+      : super(key: key);
 
 
   @override
@@ -33,12 +36,9 @@ class _editActivityState extends State<editActivity> {
               keyboardType: TextInputType.number, //VALIDATION - shows only numpad
               inputFormatters: [FilteringTextInputFormatter.digitsOnly], //VALIDATION - allows only integers to be entered
               onSubmitted: (reps) {
-
                 try {
                   int parsedReps = int.parse(reps);
-                  setState(() {
-                    widget.activity.updateReps(parsedReps);
-                  });
+                  widget.onUpdateReps(parsedReps); // Call the callback to update reps
                 } catch (e) {
                   // Handle the case where the input is not a valid integer
                   print('Invalid input: $reps');

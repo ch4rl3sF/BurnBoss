@@ -23,7 +23,7 @@ class ActivityCard extends StatefulWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  ActivityCard({required this.activity, required this.onEdit, required this.onDelete});
+  ActivityCard({required this.activity, required this.onEdit, required this.onDelete, required ValueKey<String> key});
 
   @override
   _ActivityCardState createState() => _ActivityCardState();
@@ -40,7 +40,10 @@ class _ActivityCardState extends State<ActivityCard> {
 
     // Set the color based on the theme
     Color cardColor = isLightTheme ? Colors.white : Colors.grey[800]!;
+
+
     return Card(
+      key: ValueKey(widget.activity.activityName),
       color: cardColor,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
