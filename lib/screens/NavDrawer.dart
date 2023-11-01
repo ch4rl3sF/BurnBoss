@@ -51,6 +51,12 @@ class NavDrawerWidget extends StatelessWidget {
               action: () {
                 Navigator.pushNamed(context, '/Calendar');
               }),
+          buildNavBarItem(
+              label: 'Stopwatch',
+              featureIcon: Icons.alarm,
+              action: () {
+                Navigator.pushNamed(context, '/Stopwatch');
+              }),
           const Divider(
             thickness: 1,
             color: Colors.grey,

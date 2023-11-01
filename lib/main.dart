@@ -4,7 +4,7 @@ import 'package:burnboss/screens/Select.dart';
 import 'package:burnboss/screens/Settings.dart';
 import 'package:burnboss/Wrapper.dart';
 import 'package:burnboss/models/user.dart';
-import 'package:burnboss/screens/Stopwatch.dart';
+import 'package:burnboss/screens/Stopwatch_page.dart';
 import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
