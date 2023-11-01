@@ -31,7 +31,6 @@ class NavDrawerWidget extends StatelessWidget {
               label: 'Home',
               featureIcon: Icons.home_filled,
               action: () {
-                print(email);
                 Navigator.pushNamed(context, '/');
               }),
           buildNavBarItem(
