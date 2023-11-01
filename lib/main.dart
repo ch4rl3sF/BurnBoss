@@ -4,10 +4,10 @@ import 'package:burnboss/screens/Select.dart';
 import 'package:burnboss/screens/Settings.dart';
 import 'package:burnboss/Wrapper.dart';
 import 'package:burnboss/models/user.dart';
+import 'package:burnboss/screens/Stopwatch.dart';
 import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -51,6 +51,7 @@ class _BurnBossState extends State<BurnBoss> {
           '/Calendar': (context) => CalendarPage(),
           '/Creator': (context) => CreatePage(),
           '/Select': (context) => SelectPage(),
+          '/Stopwatch': (context) => StopwatchPage(),
           '/Settings': (context) => SettingsPage(_themeManager),
         }, //sets the routes to the different pages
       ),

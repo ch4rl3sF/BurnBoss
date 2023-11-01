@@ -68,7 +68,7 @@ class Home extends StatelessWidget {
                         pageIcon: Icons.access_alarm,
                         label: 'Stopwatch',
                         action: () {
-                          print('Stopwatch button pressed');
+                          Navigator.pushNamed(context, '/Stopwatch');
                         }),
                   ],
                 ),
