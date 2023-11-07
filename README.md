@@ -47,3 +47,11 @@ Secondary: #1DE6C9
    Secondary Container: #D6F9F3
    On Secondary Container: #006D3F
 
+
+How to develop the APK to push to production:
+Using cmd:
+ - run: cd C:\src\flutter\bin\flutter.bat
+ - run: --no-color build apk
+
+Using Android Studio:
+ - At the top, go into build, then flutter, then APK

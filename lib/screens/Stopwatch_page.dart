@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:burnboss/screens/NavDrawer.dart';
-import 'package:burnboss/stopwatch_pages/Stopwatch.dart';
 import 'package:flutter/material.dart';
 
 class StopwatchPage extends StatefulWidget {
@@ -11,8 +10,46 @@ class StopwatchPage extends StatefulWidget {
 }
 
 class _StopwatchPageState extends State<StopwatchPage> {
-  //Initialise the function for the stopwatch
-  final _stopwatch = StopwatchFunction();
+  //initialise an instance of Stopwatch
+  final Stopwatch _stopwatch = Stopwatch();
+
+  //Timer
+  late Timer _timer;
+
+  //Displayed initial result
+  String _result = '00:00:00';
+
+  //Start-Stop button configuration
+  bool _StartStopButton = true;
+
+  //function will be called when the user presses the Start button
+  void _start() {
+    //Timer.periodic() will call the callback function every 100 milliseconds
+    _timer = Timer.periodic(Duration(milliseconds: 30), (Timer t) {
+      //Update the UI
+      setState(() {
+        _result = '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMilliseconds % 100).toString().padLeft(2, '0')}';
+      });
+    });
+    _stopwatch.start();
+  }
+
+  //function will be called when the user presses the Pause button
+  void _stop() {
+    _timer.cancel();
+    _stopwatch.stop();
+  }
+
+  //function will be called when the user presses the Reset button
+  void _reset() {
+    _stop();
+    _stopwatch.reset();
+
+    //Update the UI
+    setState(() {
+      _result = '00:00:00';
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +69,15 @@ class _StopwatchPageState extends State<StopwatchPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             //Display the result
-            Text(_stopwatch._result, style: TextStyle(fontSize: 50.0),),
+            Text(_result, style: TextStyle(fontSize: 50.0),),
             SizedBox(height: 20.0,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 //Start button
-                ElevatedButton(onPressed: _start, child: Text('Start')),
+                ElevatedButton(onPressed: _start, child: Text("Start")),
                 //Pause button
-                ElevatedButton(onPressed: _pause, child: Text('Pause')),
+                ElevatedButton(onPressed: _stop, child: Text('Stop')),
                 //Reset button
                 ElevatedButton(onPressed: _reset, child: Text('Reset')),
               ],
