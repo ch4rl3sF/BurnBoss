@@ -18,31 +18,38 @@ class _StopwatchPageState extends State<StopwatchPage> {
 
   //Displayed initial result
   String _result = '00:00:00';
+  bool _isRunning = false;
 
-  //Start-Stop button configuration
-  bool _StartStopButton = true;
-
-  //function will be called when the user presses the Start button
-  void _start() {
-    //Timer.periodic() will call the callback function every 100 milliseconds
-    _timer = Timer.periodic(Duration(milliseconds: 30), (Timer t) {
-      //Update the UI
-      setState(() {
-        _result = '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMilliseconds % 100).toString().padLeft(2, '0')}';
-      });
-    });
-    _stopwatch.start();
+  @override
+  //cancels the timer to avoid memory leaks
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
-  //function will be called when the user presses the Pause button
-  void _stop() {
-    _timer.cancel();
-    _stopwatch.stop();
+  //function to toggle start and stop of the stopwatch
+  void _toggleStartStop() {
+    if (_stopwatch.isRunning) {
+      _timer.cancel();
+      _stopwatch.stop();
+    } else {
+      _timer = Timer.periodic(Duration(milliseconds: 30), (Timer t) {
+        //Update the UI
+        setState(() {
+          _result = '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMilliseconds % 100).toString().padLeft(2, '0')}';
+        });
+      });
+      _stopwatch.start();
+    }
+
+    setState(() {
+      _isRunning = !_isRunning;
+    });
   }
 
   //function will be called when the user presses the Reset button
   void _reset() {
-    _stop();
+    _timer.cancel();
     _stopwatch.reset();
 
     //Update the UI
@@ -51,7 +58,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
     });
   }
 
-  @override
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -75,9 +82,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 //Start button
-                ElevatedButton(onPressed: _start, child: Text("Start")),
-                //Pause button
-                ElevatedButton(onPressed: _stop, child: Text('Stop')),
+                ElevatedButton(onPressed: _toggleStartStop, child: Text(_stopwatch.isRunning ? "Stop" : "Start")),
                 //Reset button
                 ElevatedButton(onPressed: _reset, child: Text('Reset')),
               ],
