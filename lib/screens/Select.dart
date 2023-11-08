@@ -9,8 +9,8 @@ import 'package:provider/provider.dart';
 class SelectPage extends StatefulWidget {
   @override
   _SelectPageState createState() => _SelectPageState();
-
 }
+
 
 class _SelectPageState extends State<SelectPage> {
   @override
@@ -29,26 +29,35 @@ class _SelectPageState extends State<SelectPage> {
             fontFamily: 'Bebas',
           ),
         ),
-        leading: Builder(
-          builder: (context) =>
-              IconButton(
-                padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-                icon: Icon(Icons.menu_rounded, size: 30),
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              ),
-        ),
       ),
-      body: FutureBuilder(
-        future: DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-            .getWorkout(),
+      body: FutureBuilder<dynamic>(
+        future: DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getAllWorkouts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Or some loading indicator
+            return CircularProgressIndicator(); // or a loading indicator
           } else if (snapshot.hasError) {
             return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Text('No workouts available.');
           } else {
-            return snapshot
-                .data as Widget; // Assuming your getWorkout() returns a Widget
+            // Extract workout names
+            List workoutNames = snapshot.data!.map((workout) => workout[workout.id]).toList();
+
+            // Use a ListView.builder to create cards for each workout name
+            return ListView.builder(
+              itemCount: workoutNames.length,
+              itemBuilder: (context, index) {
+                String workoutName = workoutNames[index];
+
+                // Create a card for each workout name
+                return Card(
+                  child: ListTile(
+                    title: Text(workoutName),
+                    // Add other details as needed
+                  ),
+                );
+              },
+            );
           }
         },
       ),
