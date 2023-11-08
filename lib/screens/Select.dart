@@ -1,17 +1,18 @@
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:burnboss/shared/workout_list.dart';
+import 'package:burnboss/theme/theme_constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:provider/provider.dart';
 
 class SelectPage extends StatefulWidget {
   @override
   _SelectPageState createState() => _SelectPageState();
 }
-
 
 class _SelectPageState extends State<SelectPage> {
   @override
@@ -22,9 +23,7 @@ class _SelectPageState extends State<SelectPage> {
     // Determine if the theme is light
     bool isLightTheme = theme.brightness == Brightness.light;
     // Set the color based on the theme
-    Color cardColor
-    = isLightTheme ? Colors.white : Colors.grey[800]!;
-
+    Color cardColor = isLightTheme ? Colors.white : Colors.grey[800]!;
 
     return Scaffold(
       appBar: AppBar(
@@ -46,7 +45,12 @@ class _SelectPageState extends State<SelectPage> {
               .getAllWorkouts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator(); // or a loading indicator
+              return Center(
+                child: SpinKitDualRing(
+                  color: COLOR_PRIMARY,
+                  size: 50.0,
+                ),
+              ); // or a loading indicator
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -58,23 +62,30 @@ class _SelectPageState extends State<SelectPage> {
                 itemBuilder: (context, index) {
                   Workout workout = snapshot.data![index];
 
-                  return Card(
-                    color: cardColor,
-                  child: ListTile(
-                  title: Text(workout.workoutName),
-                  onTap: () {
-                  // Navigate to a new screen or show a dialog to display activities
-                  // For example, you can use Navigator.push to navigate to a new screen
-                  // and pass the activities data.
-                  },
-                  )
-                  ,
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Card(
+                          color: cardColor,
+                          child: ListTile(
+                            title: Text(workout.workoutName),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                IconButton(onPressed: () {}, icon: Icon(Icons.play_arrow_rounded, size: 30,),)
+                              ],
+                            ),
+                            onTap: () {},
+                          ),
+                        ),
+                      ),
+                    ],
                   );
                 },
               );
             }
-          }
-      ),
+          }),
       drawer: const NavDrawerWidget(),
     );
   }
