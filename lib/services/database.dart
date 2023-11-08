@@ -55,26 +55,72 @@ class DatabaseService {
     }
   }
 
-  //function to get all workouts with documents and their fields
-  Future getAllWorkouts() async {
+  // //function to get all workouts with documents and their fields
+  // Future getAllWorkouts() async {
+  //
+  //   // returns the workouts and their fields
+  //   return WorkoutsCollection.get().then((workoutsSnapshot) {
+  //     print('Fetching workouts for UID: $uid');
+  //     print('Successfully completed');
+  //
+  //     //for each workout, take the name of the workout and use that in the path to get activities
+  //     for (var workoutDocSnapshot in workoutsSnapshot.docs) {
+  //       WorkoutsCollection.doc(workoutDocSnapshot.id)
+  //           .collection('activities')
+  //           .get()
+  //           .then((activitiesSnapshot) {
+  //         print('Fetching activities for workout: ${workoutDocSnapshot.id}');
+  //
+  //         //print the data for each activity
+  //         for (var activityDocSnapshot in activitiesSnapshot.docs) {
+  //           print('${activityDocSnapshot.id} => ${activityDocSnapshot.data()}');
+  //         }
+  //       });
+  //     }
+  //     print('documents recieved: ${workoutsSnapshot.docs.length}');
+  //   });
+  // }
 
-    // returns the workouts and their fields
-    return WorkoutsCollection.get().then((workoutsSnapshot) {
+  Future<List<Workout>> getAllWorkouts() async {
+    List<Workout> workouts = [];
+
+    try {
+      //get a workoutsSnapshot from the collection "Workouts"
       print('Fetching workouts for UID: $uid');
+      QuerySnapshot workoutsSnapshot = await WorkoutsCollection.get();
       print('Successfully completed');
-      //for each workout, take the name of the workout and use that in the path to get activities
+
+      //for each document within the "Workouts collection"
       for (var workoutDocSnapshot in workoutsSnapshot.docs) {
-        WorkoutsCollection.doc(workoutDocSnapshot.id)
+        List<Activity> activities = [];
+
+        // Fetch activities for each workout
+        QuerySnapshot activitiesSnapshot =
+        await WorkoutsCollection.doc(workoutDocSnapshot.id)
             .collection('activities')
-            .get()
-            .then((activitiesSnapshot) {
-          print('Fetching activities for workout: ${workoutDocSnapshot.id}');
-          for (var activityDocSnapshot in activitiesSnapshot.docs) {
-            print('${activityDocSnapshot.id} => ${activityDocSnapshot.data()}');
+            .get();
+
+        for (var activityDocSnapshot in activitiesSnapshot.docs) {
+          // Parse activity data and add to activities list
+          Map<String, dynamic>? activityData = activityDocSnapshot.data() as Map<String, dynamic>?;
+          if (activityData != null) {
+            Activity activity = Activity.fromMap(activityData);
+            activities.add(activity);
           }
-        });
+        }
+
+        // Create a workout object with the fetched data
+        Workout workout = Workout(
+          workoutName: workoutDocSnapshot.id,
+          activities: activities,
+        );
+
+        workouts.add(workout);
       }
-      print('documents recieved: ${workoutsSnapshot.docs.length}');
-    });
+    } catch (e) {
+      print('Error getting workouts: $e');
+    }
+
+    return workouts;
   }
 }

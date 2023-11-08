@@ -10,8 +10,11 @@ class Activity {
     return {
       'activityName': activityName,
       'reps': reps,
-      // 'reps': reps,
     };
+  }
+
+  factory Activity.fromMap(Map<String, dynamic> map) {
+    return Activity(activityName: map['activityName'], reps: map['reps']);
   }
   void updateReps(int newReps) {
     reps = newReps;
