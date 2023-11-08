@@ -1,3 +1,4 @@
+import 'package:burnboss/Create%20pages/EditWorkout.dart';
 import 'package:burnboss/Create%20pages/NewWorkout.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,11 @@ class CreatePage extends StatelessWidget {
               pageIcon: Icons.edit,
               label: 'Edit Workout',
               action: () {
-                print('Edit workout pressed');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditWorkoutPage()),
+                );
               },
             ),
           ],
