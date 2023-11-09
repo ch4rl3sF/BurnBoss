@@ -55,32 +55,6 @@ class DatabaseService {
     }
   }
 
-  // //function to get all workouts with documents and their fields
-  // Future getAllWorkouts() async {
-  //
-  //   // returns the workouts and their fields
-  //   return WorkoutsCollection.get().then((workoutsSnapshot) {
-  //     print('Fetching workouts for UID: $uid');
-  //     print('Successfully completed');
-  //
-  //     //for each workout, take the name of the workout and use that in the path to get activities
-  //     for (var workoutDocSnapshot in workoutsSnapshot.docs) {
-  //       WorkoutsCollection.doc(workoutDocSnapshot.id)
-  //           .collection('activities')
-  //           .get()
-  //           .then((activitiesSnapshot) {
-  //         print('Fetching activities for workout: ${workoutDocSnapshot.id}');
-  //
-  //         //print the data for each activity
-  //         for (var activityDocSnapshot in activitiesSnapshot.docs) {
-  //           print('${activityDocSnapshot.id} => ${activityDocSnapshot.data()}');
-  //         }
-  //       });
-  //     }
-  //     print('documents recieved: ${workoutsSnapshot.docs.length}');
-  //   });
-  // }
-
   Future<List<Workout>> getAllWorkouts() async {
     List<Workout> workouts = [];
 
@@ -96,13 +70,14 @@ class DatabaseService {
 
         // Fetch activities for each workout
         QuerySnapshot activitiesSnapshot =
-        await WorkoutsCollection.doc(workoutDocSnapshot.id)
-            .collection('activities')
-            .get();
+            await WorkoutsCollection.doc(workoutDocSnapshot.id)
+                .collection('activities')
+                .get();
 
         for (var activityDocSnapshot in activitiesSnapshot.docs) {
           // Parse activity data and add to activities list
-          Map<String, dynamic>? activityData = activityDocSnapshot.data() as Map<String, dynamic>?;
+          Map<String, dynamic>? activityData =
+              activityDocSnapshot.data() as Map<String, dynamic>?;
           if (activityData != null) {
             Activity activity = Activity.fromMap(activityData);
             activities.add(activity);
@@ -122,5 +97,18 @@ class DatabaseService {
     }
 
     return workouts;
+  }
+
+  //Function to delete a workout
+  Future deleteWorkout(String workoutName) async {
+    return WorkoutsCollection.doc(workoutName).delete().then(
+        (doc) async {
+          QuerySnapshot activitySnapshot = await WorkoutsCollection.doc(workoutName).collection('activities').get();
+          for(var activitySnapshot in activitySnapshot.docs) {
+            WorkoutsCollection.doc(workoutName).collection('activities').doc(activitySnapshot.id).delete();
+          }
+        },
+        onError: (e) =>
+            print('Couldnt delete workout: ${workoutName}'));
   }
 }

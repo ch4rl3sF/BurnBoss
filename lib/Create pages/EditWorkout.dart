@@ -1,14 +1,13 @@
 import 'package:burnboss/Create%20pages/WorkoutEditor.dart';
+import 'package:burnboss/models/workout.dart';
+import 'package:burnboss/services/database.dart';
+import 'package:burnboss/theme/theme_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-import '../models/workout.dart';
-import '../services/database.dart';
-import '../theme/theme_constants.dart';
-
 class EditWorkoutPage extends StatefulWidget {
-  const EditWorkoutPage({Key? key}) : super(key: key);
+  EditWorkoutPage({Key? key}) : super(key: key);
 
   @override
   State<EditWorkoutPage> createState() => _EditWorkoutPageState();
@@ -79,13 +78,34 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                               children: [
                                 IconButton(
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context) => WorkoutEditorPage(workout: snapshot.data![index],)));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                WorkoutEditorPage(
+                                                  workout:
+                                                      snapshot.data![index],
+                                                )));
                                   },
                                   icon: Icon(
                                     Icons.edit_rounded,
                                     size: 30,
                                   ),
-                                )
+                                ),
+                                IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      DatabaseService(
+                                              uid: FirebaseAuth
+                                                  .instance.currentUser!.uid)
+                                          .deleteWorkout(workout.workoutName);
+                                    });
+                                  },
+                                  icon: Icon(
+                                    Icons.delete_rounded,
+                                    size: 30,
+                                  ),
+                                ),
                               ],
                             ),
                             onTap: () {},
