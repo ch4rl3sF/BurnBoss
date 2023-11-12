@@ -66,9 +66,6 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                         child: Card(
                           color: cardColor,
                           shape: RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: COLOR_PRIMARY,
-                            ),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: ListTile(
