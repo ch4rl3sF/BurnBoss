@@ -205,7 +205,7 @@ class _ActivityListState extends State<ActivityList> {
                 itemBuilder: (context, index) {
                   Activity activity = widget.activities[index];
                   return ActivityCard(
-                    key: ValueKey(activity.activityName),
+                      key: ValueKey(activity.activityName),
                       activity: activity,
                       onEdit: () {
                         editActivityItem(index);

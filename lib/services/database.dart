@@ -50,7 +50,8 @@ class DatabaseService {
       CollectionReference activitiesCollection =
           workoutDocument.collection('activities');
       Activity activity = workout.activities[i];
-      Map<String, dynamic> activityData = activity.toMap();
+      // Use the position in the list as the ordering criteria
+      Map<String, dynamic> activityData = {...activity.toMap(), 'position': i};
       await activitiesCollection.doc(activity.activityName).set(activityData);
     }
   }
@@ -72,6 +73,7 @@ class DatabaseService {
         QuerySnapshot activitiesSnapshot =
             await WorkoutsCollection.doc(workoutDocSnapshot.id)
                 .collection('activities')
+                .orderBy('position')
                 .get();
 
         for (var activityDocSnapshot in activitiesSnapshot.docs) {
@@ -101,14 +103,16 @@ class DatabaseService {
 
   //Function to delete a workout
   Future deleteWorkout(String workoutName) async {
-    return WorkoutsCollection.doc(workoutName).delete().then(
-        (doc) async {
-          QuerySnapshot activitySnapshot = await WorkoutsCollection.doc(workoutName).collection('activities').get();
-          for(var activitySnapshot in activitySnapshot.docs) {
-            WorkoutsCollection.doc(workoutName).collection('activities').doc(activitySnapshot.id).delete();
-          }
-        },
-        onError: (e) =>
-            print('Couldnt delete workout: ${workoutName}'));
+    return WorkoutsCollection.doc(workoutName).delete().then((doc) async {
+      QuerySnapshot activitySnapshot = await WorkoutsCollection.doc(workoutName)
+          .collection('activities')
+          .get();
+      for (var activitySnapshot in activitySnapshot.docs) {
+        WorkoutsCollection.doc(workoutName)
+            .collection('activities')
+            .doc(activitySnapshot.id)
+            .delete();
+      }
+    }, onError: (e) => print('Couldnt delete workout: ${workoutName}'));
   }
 }
