@@ -1,4 +1,3 @@
-import 'package:burnboss/Create%20pages/NewWorkout.dart';
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/services/database.dart';
@@ -19,6 +18,7 @@ class WorkoutEditorPage extends StatefulWidget {
 class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
   //set the default value - no changes will be made when the page is loaded
   bool changesMade = false;
+  List activityNamesDeleted = [];
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,8 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
         changesMade = false;
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .createWorkout(widget.workout);
+        DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+            .deleteActivity(widget.workout.workoutName, activityNamesDeleted);
       });
     }
 
@@ -98,6 +100,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                 setState(() {
                                   widget.workout.activities.removeAt(index);
                                   changesMade = true;
+                                  activityNamesDeleted.add(activity.activityName);
                                 });
                               },
                               icon: Icon(Icons.delete_rounded))

@@ -113,6 +113,12 @@ class DatabaseService {
             .doc(activitySnapshot.id)
             .delete();
       }
-    }, onError: (e) => print('Couldnt delete workout: ${workoutName}'));
+    }, onError: (e) => print('Couldnt delete workout: $workoutName'));
+  }
+  
+  Future deleteActivity(String workoutName, List activityNames) async {
+    for(var activity in activityNames) {
+      WorkoutsCollection.doc(workoutName).collection('activities').doc(activity).delete();
+    }
   }
 }
