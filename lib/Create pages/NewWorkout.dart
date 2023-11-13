@@ -74,7 +74,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                         TextButton(
                           child: const Text('Save'),
                           onPressed: () async {
-                            Navigator.pop(context, 'Save');
+                            Navigator.pushNamed(context, '/Creator');
                             Workout workout = Workout(
                                 workoutName: workoutNameAdd.text,
                                 activities: activities);
@@ -99,8 +99,8 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                       topRight: Radius.circular(10)),
                   color: Colors.white),
               tabs: [
-                Tab(text: 'Total Stats'),
                 Tab(text: 'Overview'),
+                Tab(text: 'Total Stats'),
               ]),
         ),
         body: TabBarView(
