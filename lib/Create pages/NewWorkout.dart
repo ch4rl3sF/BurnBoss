@@ -105,12 +105,6 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
         ),
         body: TabBarView(
           children: [
-            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Muscles Targeted: '),
-              Text('Number of steps: ${activities.length}'),
-              Text('Equipment used: '),
-              Text('Days set: '),
-            ]),
             Column(children: [
               SizedBox(
                 height: 5,
@@ -118,7 +112,13 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               Expanded(
                 child: ActivityList(activities: activities),
               ),
-            ])
+            ]),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text('Muscles Targeted: '),
+              Text('Number of steps: ${activities.length}'),
+              Text('Equipment used: '),
+              Text('Days set: '),
+            ]),
           ],
         ),
       ),
