@@ -1,6 +1,8 @@
 import 'package:burnboss/Create%20pages/NewWorkout.dart';
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/models/workout.dart';
+import 'package:burnboss/services/database.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'editActivity.dart';
@@ -15,6 +17,9 @@ class WorkoutEditorPage extends StatefulWidget {
 }
 
 class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
+  //set the default value - no changes will be made when the page is loaded
+  bool changesMade = false;
+
   @override
   Widget build(BuildContext context) {
     // Access the current theme
@@ -25,6 +30,15 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
     // Set the color based on the theme
     Color cardColor = isLightTheme ? Colors.white : Colors.grey[800]!;
+
+    void saveChanges() {
+      print('Changes made');
+      setState(() {
+        changesMade = false;
+        DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+            .createWorkout(widget.workout);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -71,6 +85,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                       setState(() {
                                         widget.workout.activities[index]
                                             .updateReps(newReps);
+                                        changesMade = true;
                                       });
                                     },
                                   ),
@@ -79,9 +94,12 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                             },
                           ),
                           IconButton(
-                              onPressed: () {setState(() {
-                                widget.workout.activities.removeAt(index);
-                              });},
+                              onPressed: () {
+                                setState(() {
+                                  widget.workout.activities.removeAt(index);
+                                  changesMade = true;
+                                });
+                              },
                               icon: Icon(Icons.delete_rounded))
                         ],
                       ),
@@ -89,7 +107,14 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                   ),
                 );
               },
-            )
+            ),
+            if (changesMade)
+              ElevatedButton(
+                onPressed: () {
+                  saveChanges();
+                },
+                child: Text('Save changes'),
+              )
           ],
         ),
       ),
