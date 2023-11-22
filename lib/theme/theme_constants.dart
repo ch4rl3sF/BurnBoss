@@ -15,7 +15,7 @@ ThemeData lightTheme = ThemeData(
       TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-        primary: COLOR_PRIMARY, onPrimary: Colors.white),
+        foregroundColor: Colors.white, backgroundColor: COLOR_PRIMARY),
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
@@ -32,4 +32,8 @@ ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   tabBarTheme:
       TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.black, backgroundColor: DARK_COLOR_PRIMARY),
+  ),
 );

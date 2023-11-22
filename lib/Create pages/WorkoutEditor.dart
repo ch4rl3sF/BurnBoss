@@ -1,9 +1,12 @@
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/services/database.dart';
+import 'package:burnboss/theme/theme_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
+import 'NewWorkout.dart';
 import 'editActivity.dart';
 
 class WorkoutEditorPage extends StatefulWidget {
@@ -19,6 +22,8 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
   //set the default value - no changes will be made when the page is loaded
   bool changesMade = false;
   List activityNamesDeleted = [];
+  bool addingActivity = false;
+  TextEditingController activityNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,9 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
     // Set the color based on the theme
     Color cardColor = isLightTheme ? Colors.white : Colors.grey[800]!;
 
+    Color IconButtonColor = isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY;
+    Color IconButtonIconColor = isLightTheme ? Colors.white : Colors.black;
+
     void saveChanges() {
       print('Changes made');
       setState(() {
@@ -39,6 +47,9 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
             .createWorkout(widget.workout);
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .deleteActivity(widget.workout.workoutName, activityNamesDeleted);
+
+        //Clear the list once the items are saved
+        activityNamesDeleted.clear();
       });
     }
 
@@ -59,13 +70,85 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
       body: Center(
         child: Column(
           children: [
+            SizedBox(
+              height: 4,
+            ),
+            if (addingActivity)
+              Row(
+                children: [
+                  Expanded(
+                    flex: 6,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: activityNameController,
+                        decoration: InputDecoration(
+                          labelText: 'Activity Name',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: SizedBox(
+                      height: 55,
+                      width: 55,
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            addingActivity = !addingActivity;
+                            String newActivityName = activityNameController.text.trim();
+                            int placeholderReps = 0;
+                            if (newActivityName.isNotEmpty) {
+                              widget.workout.activities.add(Activity(activityName: newActivityName, reps: placeholderReps));
+                              activityNameController.clear();
+                            }
+                          });
+
+                        },
+                        icon: Icon(Icons.add_rounded),
+                        style: IconButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)
+                          ),
+                          backgroundColor: IconButtonColor,
+                          foregroundColor: IconButtonIconColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: SizedBox(
+                      height: 55,
+                      width: 55,
+                      child: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            addingActivity = !addingActivity;
+                          });
+                        },
+                        icon: Icon(Icons.close),
+                        style: IconButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)
+                          ),
+                          backgroundColor: IconButtonColor,
+                          foregroundColor: IconButtonIconColor,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ListView.builder(
               shrinkWrap: true,
               itemCount: widget.workout.activities.length,
               itemBuilder: (context, index) {
                 Activity activity = widget.workout.activities[index];
                 return Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(4.0),
                   child: Card(
                     color: cardColor,
                     child: ListTile(
@@ -100,7 +183,8 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                 setState(() {
                                   widget.workout.activities.removeAt(index);
                                   changesMade = true;
-                                  activityNamesDeleted.add(activity.activityName);
+                                  activityNamesDeleted
+                                      .add(activity.activityName);
                                 });
                               },
                               icon: Icon(Icons.delete_rounded))
@@ -111,13 +195,35 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                 );
               },
             ),
-            if (changesMade)
-              ElevatedButton(
-                onPressed: () {
-                  saveChanges();
-                },
-                child: Text('Save changes'),
-              )
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                if (!addingActivity)
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        changesMade = true;
+                        addingActivity = true;
+
+                      });
+                    },
+                    child: Icon(
+                      Icons.add_rounded,
+                      size: 30,
+                    ),
+                  ),
+                if (changesMade)
+                  ElevatedButton(
+                    onPressed: () {
+                      saveChanges();
+                    },
+                    child: Text(
+                      'Save changes',
+                      style: TextStyle(fontFamily: 'Bebas', fontSize: 20),
+                    ),
+                  ),
+              ],
+            ),
           ],
         ),
       ),

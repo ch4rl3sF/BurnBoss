@@ -166,6 +166,7 @@ class _ActivityListState extends State<ActivityList> {
     print(widget.activities);
   }
 
+  //function to delete any of the activities from their index
   void deleteActivityItem(int index) {
     setState(() {
       widget.activities.removeAt(index);
