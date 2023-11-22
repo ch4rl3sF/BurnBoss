@@ -1,4 +1,5 @@
 import 'package:burnboss/models/user.dart';
+import 'package:burnboss/theme/theme_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
@@ -8,20 +9,25 @@ class NavDrawerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Access the current theme
+    ThemeData theme = Theme.of(context);
+
+    // Determine if the theme is light
+    bool isLightTheme = theme.brightness == Brightness.light;
+
     var email = FirebaseAuth.instance.currentUser!.email.toString();
     return Drawer(
-      // backgroundColor: Color(0xff121212),
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            // decoration: BoxDecoration(color: Color(0xff292929)),
+            decoration: BoxDecoration(color: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY),
             accountName: Text(
               'ch4rl3sF',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: isLightTheme? Colors.white : Colors.black),
             ),
             accountEmail: Text(
               email,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(color: isLightTheme? Colors.white : Colors.black),
             ),
             currentAccountPicture: CircleAvatar(
               backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),

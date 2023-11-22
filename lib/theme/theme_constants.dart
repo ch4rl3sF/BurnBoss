@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 const COLOR_PRIMARY = Color(0xffFF2c14);
-const COLOR_SECONDARY = Color(0xffFF2c14);
-const DARK_COLOR_PRIMARY = Color(0xff1DE6C9);
+const COLOR_SECONDARY = Color(0xffDD2C00);
+const DARK_COLOR_PRIMARY = Color(0xff14e7ff);
 
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: COLOR_PRIMARY,
   useMaterial3: true,
-  appBarTheme: const AppBarTheme(color: COLOR_SECONDARY),
-  cardTheme: CardTheme(color: COLOR_SECONDARY),
+  appBarTheme: const AppBarTheme(color: COLOR_PRIMARY),
+  cardTheme: CardTheme(color: COLOR_PRIMARY),
   iconTheme: IconThemeData(color: Colors.black),
   tabBarTheme:
       TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
