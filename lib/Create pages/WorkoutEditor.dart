@@ -19,7 +19,6 @@ class WorkoutEditorPage extends StatefulWidget {
 }
 
 class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
-
   //set the default value - no changes will be made when the page is loaded
   bool changesMade = false;
   bool addingActivity = false;
@@ -31,7 +30,6 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
   TextEditingController workoutNameAdd = TextEditingController();
 
   @override
-
   Widget build(BuildContext context) {
     // Access the current theme
     ThemeData theme = Theme.of(context);
@@ -44,16 +42,17 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
     Color IconButtonColor = isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY;
     Color IconButtonIconColor = isLightTheme ? Colors.white : Colors.black;
-        void saveChanges() {
+    void saveChanges() {
       print('Changes made');
       setState(() {
-        changesMade = false;;
+        changesMade = false;
+
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-            .createWorkout(widget.workout);
-        print('workout created: ${widget.workout.workoutName}');
+            .editWorkoutName(
+            widget.workout.workoutID, widget.workout.workoutName);
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-            .deleteActivity(widget.workout.workoutName, activityNamesDeleted);
-        print('activities deleted : $activityNamesDeleted');
+            .editActivities(widget.workout, activityNamesDeleted);
+
         //Clear the list once the items are saved
         activityNamesDeleted.clear();
       });
@@ -94,7 +93,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                   ],
                 )
               : Text(
-                  workoutNameAdd.text,
+                  widget.workout.workoutName,
                   style: TextStyle(
                     fontSize: 45,
                     fontWeight: FontWeight.bold,

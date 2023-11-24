@@ -119,9 +119,33 @@ class DatabaseService {
     }, onError: (e) => print('Couldnt delete workout: $workoutID'));
   }
 
-  Future deleteActivity(String workoutID, List activityNames) async {
-    for (var activity in activityNames) {
-      WorkoutsCollection.doc(workoutID)
+  //function to edit workout name
+  Future editWorkoutName(String workoutID, String workoutName) async {
+    return WorkoutsCollection.doc(workoutID)
+        .update({'workoutName': workoutName}).then(
+            (value) => print("DocumentSnapshot successfully updated!"),
+            onError: (e) => print("Error updating document $e"));
+  }
+
+  Future editActivities(Workout workout, List activityNamesDeleted) async {
+    if (workout.activities.isNotEmpty) {
+      for (int i = 0; i < workout.activities.length; i++) {
+        CollectionReference activitiesCollection =
+            WorkoutsCollection.doc(workout.workoutID).collection('activities');
+        Activity activity = workout.activities[i];
+        // Use the position in the list as the ordering criteria
+        Map<String, dynamic> activityData = {
+          ...activity.toMap(),
+          'position': i
+        };
+        await activitiesCollection.doc(activity.activityName).set(activityData);
+      }
+    } else {
+      print('No activities to be deleted');
+    }
+
+    for (var activity in activityNamesDeleted) {
+      WorkoutsCollection.doc(workout.workoutID)
           .collection('activities')
           .doc(activity)
           .delete();
