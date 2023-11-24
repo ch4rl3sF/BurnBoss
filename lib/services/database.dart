@@ -121,4 +121,7 @@ class DatabaseService {
       WorkoutsCollection.doc(workoutName).collection('activities').doc(activity).delete();
     }
   }
+
+  Future editActivity(String newWorkoutName, List activities) async {
+  }
 }

@@ -19,13 +19,19 @@ class WorkoutEditorPage extends StatefulWidget {
 }
 
 class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
+
   //set the default value - no changes will be made when the page is loaded
   bool changesMade = false;
-  List activityNamesDeleted = [];
   bool addingActivity = false;
+  bool editingTitle = false;
+
+  List activityNamesDeleted = [];
+
   TextEditingController activityNameController = TextEditingController();
+  TextEditingController workoutNameAdd = TextEditingController();
 
   @override
+
   Widget build(BuildContext context) {
     // Access the current theme
     ThemeData theme = Theme.of(context);
@@ -38,16 +44,16 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
     Color IconButtonColor = isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY;
     Color IconButtonIconColor = isLightTheme ? Colors.white : Colors.black;
-
-    void saveChanges() {
+        void saveChanges() {
       print('Changes made');
       setState(() {
-        changesMade = false;
+        changesMade = false;;
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .createWorkout(widget.workout);
+        print('workout created: ${widget.workout.workoutName}');
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .deleteActivity(widget.workout.workoutName, activityNamesDeleted);
-
+        print('activities deleted : $activityNamesDeleted');
         //Clear the list once the items are saved
         activityNamesDeleted.clear();
       });
@@ -55,18 +61,62 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        toolbarHeight: 125,
-        title: Text(
-          widget.workout.workoutName,
-          style: TextStyle(
-            fontSize: 45,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2.0,
-            fontFamily: 'Bebas',
-          ),
-        ),
-      ),
+          centerTitle: true,
+          toolbarHeight: 125,
+          title: editingTitle
+              ? Row(
+                  children: [
+                    Expanded(
+                      flex: 6,
+                      child: TextField(
+                        controller: workoutNameAdd,
+                        decoration: InputDecoration(
+                          labelText: 'Workout Name',
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            changesMade = true;
+                            editingTitle = !editingTitle;
+                            widget.workout.workoutName = workoutNameAdd.text;
+                          });
+                        },
+                        icon: Icon(Icons.done)),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            editingTitle = !editingTitle;
+                          });
+                        },
+                        icon: Icon(Icons.close)),
+                  ],
+                )
+              : Text(
+                  workoutNameAdd.text,
+                  style: TextStyle(
+                    fontSize: 45,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2.0,
+                    fontFamily: 'Bebas',
+                  ),
+                ),
+          actions: [
+            if (!editingTitle)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 4, 0),
+                child: IconButton(
+                  onPressed: () {
+                    setState(() {
+                      editingTitle = !editingTitle;
+                    });
+                  },
+                  icon: Icon(Icons.edit_rounded),
+                  color: Colors.black,
+                ),
+              )
+          ]),
       body: Center(
         child: Column(
           children: [
@@ -98,20 +148,21 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                         onPressed: () {
                           setState(() {
                             addingActivity = !addingActivity;
-                            String newActivityName = activityNameController.text.trim();
+                            String newActivityName =
+                                activityNameController.text.trim();
                             int placeholderReps = 0;
                             if (newActivityName.isNotEmpty) {
-                              widget.workout.activities.add(Activity(activityName: newActivityName, reps: placeholderReps));
+                              widget.workout.activities.add(Activity(
+                                  activityName: newActivityName,
+                                  reps: placeholderReps));
                               activityNameController.clear();
                             }
                           });
-
                         },
                         icon: Icon(Icons.add_rounded),
                         style: IconButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)
-                          ),
+                              borderRadius: BorderRadius.circular(12)),
                           backgroundColor: IconButtonColor,
                           foregroundColor: IconButtonIconColor,
                         ),
@@ -132,8 +183,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                         icon: Icon(Icons.close),
                         style: IconButton.styleFrom(
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)
-                          ),
+                              borderRadius: BorderRadius.circular(12)),
                           backgroundColor: IconButtonColor,
                           foregroundColor: IconButtonIconColor,
                         ),
@@ -204,7 +254,6 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                       setState(() {
                         changesMade = true;
                         addingActivity = true;
-
                       });
                     },
                     child: Icon(

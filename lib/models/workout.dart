@@ -1,7 +1,7 @@
 import 'package:burnboss/models/activity.dart';
 
 class Workout {
-  final String workoutName;
+  late String workoutName;
   final List<Activity> activities;
 
   // final String activity;
