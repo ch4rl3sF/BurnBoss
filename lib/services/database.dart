@@ -35,8 +35,7 @@ class DatabaseService {
   //function to create a workout
   Future createWorkout(Workout workout) async {
     // Add the workout to Firestore
-    DocumentReference workoutDocument =
-        await WorkoutsCollection.doc(workout.workoutName);
+    DocumentReference workoutDocument = await WorkoutsCollection.doc();
 
     // Set the workout data, including the workout name
     Map<String, dynamic> workoutData = {
@@ -68,6 +67,7 @@ class DatabaseService {
       //for each document within the "Workouts collection"
       for (var workoutDocSnapshot in workoutsSnapshot.docs) {
         List<Activity> activities = [];
+        String workoutName = workoutDocSnapshot.get('workoutName');
 
         // Fetch activities for each workout
         QuerySnapshot activitiesSnapshot =
@@ -88,7 +88,7 @@ class DatabaseService {
 
         // Create a workout object with the fetched data
         Workout workout = Workout(
-          workoutName: workoutDocSnapshot.id,
+          workoutName: workoutName,
           activities: activities,
         );
 
@@ -115,13 +115,15 @@ class DatabaseService {
       }
     }, onError: (e) => print('Couldnt delete workout: $workoutName'));
   }
-  
+
   Future deleteActivity(String workoutName, List activityNames) async {
-    for(var activity in activityNames) {
-      WorkoutsCollection.doc(workoutName).collection('activities').doc(activity).delete();
+    for (var activity in activityNames) {
+      WorkoutsCollection.doc(workoutName)
+          .collection('activities')
+          .doc(activity)
+          .delete();
     }
   }
 
-  Future editActivity(String newWorkoutName, List activities) async {
-  }
+  Future editActivity(String newWorkoutName, List activities) async {}
 }
