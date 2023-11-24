@@ -14,7 +14,20 @@ class EditWorkoutPage extends StatefulWidget {
 }
 
 class _EditWorkoutPageState extends State<EditWorkoutPage> {
+  late Future<List<Workout>> futureWorkouts;
+
   @override
+  void initState() {
+    super.initState();
+    futureWorkouts = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getAllWorkouts();
+  }
+
+  Future<void> _refreshWorkoutsList() async {
+    setState(() {
+      futureWorkouts = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getAllWorkouts();
+    });
+  }
+
   Widget build(BuildContext context) {
     // Access the current theme
     ThemeData theme = Theme.of(context);
@@ -38,83 +51,85 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
           ),
         ),
       ),
-      body: FutureBuilder<List<Workout>>(
-          future: DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-              .getAllWorkouts(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: SpinKitDualRing(
-                  color: COLOR_PRIMARY,
-                  size: 50.0,
-                ),
-              ); // or a loading indicator
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Text('No workouts available.');
-            } else {
-              // Use a ListView.builder to create cards for each workout
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  Workout workout = snapshot.data![index];
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Card(
-                          color: cardColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: ListTile(
-                            title: Text(workout.workoutName),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                WorkoutEditorPage(
-                                                  workout:
-                                                      snapshot.data![index],
-                                                )));
-                                  },
-                                  icon: Icon(
-                                    Icons.edit_rounded,
-                                    size: 30,
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      DatabaseService(
-                                              uid: FirebaseAuth
-                                                  .instance.currentUser!.uid)
-                                          .deleteWorkout(workout.workoutID);
-                                    });
-                                  },
-                                  icon: Icon(
-                                    Icons.delete_rounded,
-                                    size: 30,
-                                  ),
-                                ),
-                              ],
+      body: RefreshIndicator(
+        onRefresh: _refreshWorkoutsList,
+        child: FutureBuilder<List<Workout>>(
+            future: futureWorkouts,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: SpinKitDualRing(
+                    color: COLOR_PRIMARY,
+                    size: 50.0,
+                  ),
+                ); // or a loading indicator
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Text('No workouts available.');
+              } else {
+                // Use a ListView.builder to create cards for each workout
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    Workout workout = snapshot.data![index];
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Card(
+                            color: cardColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            onTap: () {},
+                            child: ListTile(
+                              title: Text(workout.workoutName),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  WorkoutEditorPage(
+                                                    workout:
+                                                        snapshot.data![index],
+                                                  )));
+                                    },
+                                    icon: Icon(
+                                      Icons.edit_rounded,
+                                      size: 30,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        DatabaseService(
+                                                uid: FirebaseAuth
+                                                    .instance.currentUser!.uid)
+                                            .deleteWorkout(workout.workoutID);
+                                      });
+                                    },
+                                    icon: Icon(
+                                      Icons.delete_rounded,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: () {},
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              );
-            }
-          }),
+                      ],
+                    );
+                  },
+                );
+              }
+            }),
+      ),
     );
   }
 }
