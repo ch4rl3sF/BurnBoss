@@ -39,6 +39,7 @@ class DatabaseService {
 
     // Set the workout data, including the workout name
     Map<String, dynamic> workoutData = {
+      'workoutID': workoutDocument.id,
       'workoutName': workout.workoutName,
     };
 
@@ -88,6 +89,7 @@ class DatabaseService {
 
         // Create a workout object with the fetched data
         Workout workout = Workout(
+          workoutID: workoutDocSnapshot.id,
           workoutName: workoutName,
           activities: activities,
         );
@@ -102,28 +104,27 @@ class DatabaseService {
   }
 
   //Function to delete a workout
-  Future deleteWorkout(String workoutName) async {
-    return WorkoutsCollection.doc(workoutName).delete().then((doc) async {
-      QuerySnapshot activitySnapshot = await WorkoutsCollection.doc(workoutName)
+  Future deleteWorkout(String workoutID) async {
+    return WorkoutsCollection.doc(workoutID).delete().then((doc) async {
+      QuerySnapshot activitySnapshot = await WorkoutsCollection.doc(workoutID)
           .collection('activities')
           .get();
       for (var activitySnapshot in activitySnapshot.docs) {
-        WorkoutsCollection.doc(workoutName)
+        WorkoutsCollection.doc(workoutID)
             .collection('activities')
             .doc(activitySnapshot.id)
             .delete();
+        print('workout deleted: $workoutID');
       }
-    }, onError: (e) => print('Couldnt delete workout: $workoutName'));
+    }, onError: (e) => print('Couldnt delete workout: $workoutID'));
   }
 
-  Future deleteActivity(String workoutName, List activityNames) async {
+  Future deleteActivity(String workoutID, List activityNames) async {
     for (var activity in activityNames) {
-      WorkoutsCollection.doc(workoutName)
+      WorkoutsCollection.doc(workoutID)
           .collection('activities')
           .doc(activity)
           .delete();
     }
   }
-
-  Future editActivity(String newWorkoutName, List activities) async {}
 }

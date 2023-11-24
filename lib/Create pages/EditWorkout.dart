@@ -95,7 +95,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                       DatabaseService(
                                               uid: FirebaseAuth
                                                   .instance.currentUser!.uid)
-                                          .deleteWorkout(workout.workoutName);
+                                          .deleteWorkout(workout.workoutID);
                                     });
                                   },
                                   icon: Icon(

@@ -76,6 +76,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                           onPressed: () async {
                             Navigator.pushNamed(context, '/Creator');
                             Workout workout = Workout(
+                                workoutID: '',
                                 workoutName: workoutNameAdd.text,
                                 activities: activities);
                             await DatabaseService(
