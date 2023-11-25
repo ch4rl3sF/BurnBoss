@@ -54,7 +54,17 @@ class _SelectPageState extends State<SelectPage> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Text('No workouts available.');
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(height: 120,),
+                    Icon(Icons.not_interested_rounded, size: 60,),
+                    SizedBox(height: 20,),
+                    Text('No workouts available', style: TextStyle(fontFamily: 'Bebas', fontSize: 30),),
+                  ],
+                ),
+              );
             } else {
               // Use a ListView.builder to create cards for each workout
               return ListView.builder(
