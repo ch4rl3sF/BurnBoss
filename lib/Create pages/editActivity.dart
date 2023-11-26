@@ -17,13 +17,19 @@ class editActivity extends StatefulWidget {
 class _editActivityState extends State<editActivity> {
   TextEditingController repsController = TextEditingController();
   TextEditingController weightsController = TextEditingController();
+  TextEditingController hoursController = TextEditingController();
+  TextEditingController minutesController = TextEditingController();
+  TextEditingController secondsController = TextEditingController();
   List<bool> isSelected = [];
+  late int timerSeconds;
 
   @override
   void initState() {
     super.initState();
     isSelected = [!widget.activity.weightsUsed, widget.activity.weightsUsed];
+    timerSeconds = 0;
   }
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -66,8 +72,12 @@ class _editActivityState extends State<editActivity> {
                       for (int index = 0; index < isSelected.length; index++) {
                         if (index == newIndex) {
                           setState(() {
-                            widget.activity.weightsUsed = (newIndex == 1); // Set weightsUsed based on the selected index
-                            isSelected = List.generate(isSelected.length, (index) => index == newIndex); // Update isSelected
+                            widget.activity.weightsUsed = (newIndex ==
+                                1); // Set weightsUsed based on the selected index
+                            isSelected = List.generate(
+                                isSelected.length,
+                                (index) =>
+                                    index == newIndex); // Update isSelected
                           });
                         }
                         isSelected[index] = (index == newIndex);
@@ -94,7 +104,7 @@ class _editActivityState extends State<editActivity> {
                       controller: weightsController,
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(
-                          border: OutlineInputBorder(),
+                        border: OutlineInputBorder(),
                         hintText: widget.activity.weights.toString(),
                       ),
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
@@ -106,7 +116,6 @@ class _editActivityState extends State<editActivity> {
                         } catch (e) {
                           print('Error parsing weight integer');
                         }
-                        
                       },
                     ),
                   )
@@ -127,8 +136,11 @@ class _editActivityState extends State<editActivity> {
                     controller: repsController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
-                        border: OutlineInputBorder(), hintText: widget.activity.reps.toString()),
-                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                        border: OutlineInputBorder(),
+                        hintText: widget.activity.reps.toString()),
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
                     onSubmitted: (reps) {
                       try {
                         int parsedReps = int.parse(reps);
@@ -144,6 +156,101 @@ class _editActivityState extends State<editActivity> {
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Time:', style: TextStyle(fontSize: 30, fontFamily: 'Bebas'),),
+                Container(
+                  width: 200,
+                  height: 50,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 3,
+                        child: TextField(
+                          controller: hoursController,
+                          decoration: InputDecoration(
+                            hintText: '00',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(2)
+                          ],
+                          onSubmitted: (hours) {
+                            try {
+                              setState(() {
+                                int parsedHours = int.parse(hours);
+                                timerSeconds = timerSeconds + (parsedHours*3600);
+                              });
+                            } catch (e) {
+                              print('invalid input: $hours, error $e');
+                            }
+                          },
+                        ),
+                      ),
+                      Text(':', style: TextStyle(fontSize: 30),),
+                      Expanded(
+                        flex: 3,
+                        child: TextField(
+                          controller: minutesController,
+                          decoration: InputDecoration(
+                            hintText: '00',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(2)
+                          ],
+                          onSubmitted: (mins) {
+                            try {
+                              setState(() {
+                                int parsedMins = int.parse(mins);
+                                timerSeconds = timerSeconds + (parsedMins*60);
+                              });
+                            } catch (e) {
+                              print('invalid input: $mins');
+                            }
+                          },
+                        ),
+                      ),
+                      Text(':', style: TextStyle(fontSize: 30),),
+                      Expanded(
+                        flex: 3,
+                        child: TextField(
+                          controller: secondsController,
+                          decoration: InputDecoration(
+                            hintText: '00',
+                            border: OutlineInputBorder(),
+                          ),
+                          keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            LengthLimitingTextInputFormatter(2),
+
+                          ],
+                          onSubmitted: (secs) {
+                            try {
+                              setState(() {
+                                int parsedSecs = int.parse(secs);
+                                timerSeconds = timerSeconds + parsedSecs;
+                              });
+                            } catch (e) {
+                              print('invalid input: $secs');
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
