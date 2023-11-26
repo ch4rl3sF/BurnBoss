@@ -66,10 +66,12 @@ class _editActivityState extends State<editActivity> {
                       for (int index = 0; index < isSelected.length; index++) {
                         if (index == newIndex) {
                           setState(() {
-                            widget.activity.weightsUsed = isSelected[index];
+                            widget.activity.weightsUsed = (newIndex == 1); // Set weightsUsed based on the selected index
+                            isSelected = List.generate(isSelected.length, (index) => index == newIndex); // Update isSelected
                           });
                         }
                         isSelected[index] = (index == newIndex);
+                        widget.activity.weights = 0;
                       }
                     });
                   },

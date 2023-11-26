@@ -12,7 +12,8 @@ class Activity {
     return {
       'activityName': activityName,
       'reps': reps,
-      'weight': weights,
+      'weights': weights,
+      'weightsUsed': weightsUsed,
     };
   }
 
