@@ -3,18 +3,21 @@ import 'package:flutter/material.dart';
 class Activity {
   String activityName;
   int reps;
+  bool weightsUsed;
+  int weights;
 
-  Activity({required this.activityName, required this.reps});
+  Activity({required this.activityName, this.reps = 0, this.weightsUsed = false, this.weights = 0});
 
   Map<String, dynamic> toMap() {
     return {
       'activityName': activityName,
       'reps': reps,
+      'weight': weights,
     };
   }
 
   factory Activity.fromMap(Map<String, dynamic> map) {
-    return Activity(activityName: map['activityName'], reps: map['reps']);
+    return Activity(activityName: map['activityName'], reps: map['reps'], weightsUsed: map['weightsUsed']);
   }
   void updateReps(int newReps) {
     reps = newReps;

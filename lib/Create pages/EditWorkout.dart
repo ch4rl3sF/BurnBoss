@@ -32,6 +32,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
     });
   }
 
+  @override
   Widget build(BuildContext context) {
     // Access the current theme
     ThemeData theme = Theme.of(context);
@@ -70,7 +71,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Center(
+                return const Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
