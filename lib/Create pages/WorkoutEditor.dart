@@ -5,8 +5,6 @@ import 'package:burnboss/theme/theme_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'NewWorkout.dart';
 import 'editActivity.dart';
 
 class WorkoutEditorPage extends StatefulWidget {
@@ -49,7 +47,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .editWorkoutName(
-            widget.workout.workoutID, widget.workout.workoutName);
+                widget.workout.workoutID, widget.workout.workoutName);
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .editActivities(widget.workout, activityNamesDeleted);
 

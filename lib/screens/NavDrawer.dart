@@ -16,14 +16,34 @@ class NavDrawerWidget extends StatelessWidget {
     bool isLightTheme = theme.brightness == Brightness.light;
 
     var email = FirebaseAuth.instance.currentUser!.email.toString();
+
+    //function to trim the email to before the @ symbol to use as the username
+    Future<String> _getUsername() async {
+      var email = FirebaseAuth.instance.currentUser!.email.toString();
+      var username = email.split('@')[0];
+      return username;
+    }
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
             decoration: BoxDecoration(color: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY),
-            accountName: Text(
-              'ch4rl3sF',
-              style: TextStyle(color: isLightTheme? Colors.white : Colors.black),
+            accountName: FutureBuilder<String>(
+              future: _getUsername(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Text('Loading...');
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return Text(
+                    snapshot.data ?? 'No Username',
+                    style: TextStyle(
+                      color: isLightTheme ? Colors.white : Colors.black,
+                    ),
+                  );
+                }
+              },
             ),
             accountEmail: Text(
               email,
@@ -83,9 +103,9 @@ class NavDrawerWidget extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
             },
-            child: const CircleAvatar(
+            child: CircleAvatar(
               radius: 20,
-              backgroundColor: Color(0xff1DE6C9),
+              backgroundColor: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
               child: CircleAvatar(
                 radius: 19,
                 backgroundColor: Color(0xff292929),
