@@ -5,8 +5,15 @@ class Activity {
   int reps;
   bool weightsUsed;
   int weights;
+  Duration time;
 
-  Activity({required this.activityName, this.reps = 0, this.weightsUsed = false, this.weights = 0});
+  Activity(
+      {required this.activityName,
+      this.reps = 0,
+      this.weightsUsed = false,
+      this.weights = 0,
+      this.time = const Duration()}
+      );
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,14 +21,30 @@ class Activity {
       'reps': reps,
       'weights': weights,
       'weightsUsed': weightsUsed,
+      'time': time,
     };
   }
 
   factory Activity.fromMap(Map<String, dynamic> map) {
-    return Activity(activityName: map['activityName'], reps: map['reps'], weightsUsed: map['weightsUsed']);
+    return Activity(
+      activityName: map['activityName'],
+      reps: map['reps'],
+      weightsUsed: map['weightsUsed'],
+      weights: map['weights'],
+      time: Duration(milliseconds: map['time']),
+    );
   }
+
   void updateReps(int newReps) {
     reps = newReps;
+  }
+
+  void updateWeight(int newWeight) {
+    weights = newWeight;
+  }
+
+  void updateTime(Duration newTime) {
+    time = newTime;
   }
 }
 
@@ -30,7 +53,11 @@ class ActivityCard extends StatefulWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  ActivityCard({required this.activity, required this.onEdit, required this.onDelete, required ValueKey<String> key});
+  ActivityCard(
+      {required this.activity,
+      required this.onEdit,
+      required this.onDelete,
+      required ValueKey<String> key});
 
   @override
   _ActivityCardState createState() => _ActivityCardState();
@@ -48,14 +75,14 @@ class _ActivityCardState extends State<ActivityCard> {
     // Set the color based on the theme
     Color cardColor = isLightTheme ? Colors.white : Colors.grey[800]!;
 
-
     return Card(
       key: ValueKey(widget.activity.activityName),
       color: cardColor,
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
         title: Text(widget.activity.activityName),
-        subtitle: Text('Reps: ${widget.activity.reps}'), // Use widget.activity here
+        subtitle: Text('Reps: ${widget.activity.reps}'),
+        // Use widget.activity here
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [

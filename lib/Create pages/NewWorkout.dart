@@ -167,6 +167,17 @@ class _ActivityListState extends State<ActivityList> {
               widget.activities[index].updateReps(newReps);
             });
           },
+          onUpdateWeight: (int newWeight) {
+            // Update the weight of the original instance in the ActivityList
+            setState(() {
+              widget.activities[index].updateWeight(newWeight);
+            });
+          },
+          onUpdateTime: (Duration newTime) {
+            setState(() {
+              widget.activities[index].updateTime(newTime);
+            });
+          },
         ),
       ),
     );

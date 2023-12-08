@@ -1,13 +1,16 @@
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/theme/theme_constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class editActivity extends StatefulWidget {
   final Activity activity;
   final Function(int) onUpdateReps; // Add callback function
+  final Function(int) onUpdateWeight;
+  final Function(Duration) onUpdateTime;
 
-  editActivity({Key? key, required this.activity, required this.onUpdateReps})
+  editActivity({Key? key, required this.activity, required this.onUpdateReps, required this.onUpdateWeight, required this.onUpdateTime})
       : super(key: key);
 
   @override
@@ -21,13 +24,13 @@ class _editActivityState extends State<editActivity> {
   TextEditingController minutesController = TextEditingController();
   TextEditingController secondsController = TextEditingController();
   List<bool> isSelected = [];
-  late int timerSeconds;
+  // late int timerSeconds;
 
   @override
   void initState() {
     super.initState();
     isSelected = [!widget.activity.weightsUsed, widget.activity.weightsUsed];
-    timerSeconds = 0;
+    // timerSeconds = 0;
   }
 
   Widget build(BuildContext context) {
@@ -111,7 +114,8 @@ class _editActivityState extends State<editActivity> {
                       onSubmitted: (weights) {
                         try {
                           setState(() {
-                            widget.activity.weights = int.parse(weights);
+                            int parsedWeight = int.parse(weights);
+                            widget.onUpdateWeight(parsedWeight);
                           });
                         } catch (e) {
                           print('Error parsing weight integer');
@@ -157,98 +161,26 @@ class _editActivityState extends State<editActivity> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Time:', style: TextStyle(fontSize: 30, fontFamily: 'Bebas'),),
-                Container(
-                  width: 200,
-                  height: 50,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: TextField(
-                          controller: hoursController,
-                          decoration: InputDecoration(
-                            hintText: '00',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(2)
-                          ],
-                          onSubmitted: (hours) {
-                            try {
-                              setState(() {
-                                int parsedHours = int.parse(hours);
-                                timerSeconds = timerSeconds + (parsedHours*3600);
-                              });
-                            } catch (e) {
-                              print('invalid input: $hours, error $e');
-                            }
-                          },
-                        ),
-                      ),
-                      Text(':', style: TextStyle(fontSize: 30),),
-                      Expanded(
-                        flex: 3,
-                        child: TextField(
-                          controller: minutesController,
-                          decoration: InputDecoration(
-                            hintText: '00',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(2)
-                          ],
-                          onSubmitted: (mins) {
-                            try {
-                              setState(() {
-                                int parsedMins = int.parse(mins);
-                                timerSeconds = timerSeconds + (parsedMins*60);
-                              });
-                            } catch (e) {
-                              print('invalid input: $mins');
-                            }
-                          },
-                        ),
-                      ),
-                      Text(':', style: TextStyle(fontSize: 30),),
-                      Expanded(
-                        flex: 3,
-                        child: TextField(
-                          controller: secondsController,
-                          decoration: InputDecoration(
-                            hintText: '00',
-                            border: OutlineInputBorder(),
-                          ),
-                          keyboardType: TextInputType.number,
-                          inputFormatters: [
-                            FilteringTextInputFormatter.digitsOnly,
-                            LengthLimitingTextInputFormatter(2),
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
 
-                          ],
-                          onSubmitted: (secs) {
-                            try {
-                              setState(() {
-                                int parsedSecs = int.parse(secs);
-                                timerSeconds = timerSeconds + parsedSecs;
-                              });
-                            } catch (e) {
-                              print('invalid input: $secs');
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            child: Align(
+                alignment: Alignment.topLeft,
+                child: Text('Time:', style: TextStyle(fontSize: 30, fontFamily: 'Bebas'),)),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+            child: SizedBox(
+              height: 140,
+              width: 300,
+              child: CupertinoTimerPicker(
+                initialTimerDuration: widget.activity.time,
+                onTimerDurationChanged: (value) {
+                  setState(() {
+                    Duration TimePickerTime = value;
+                    widget.onUpdateTime(TimePickerTime);
+                  });
+                },
+              ),
             ),
           )
         ],

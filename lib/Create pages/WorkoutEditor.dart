@@ -220,6 +220,19 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                         changesMade = true;
                                       });
                                     },
+                                    onUpdateWeight: (int newWeight) {
+                                      // Update the weight of the original instance in the ActivityList
+                                      setState(() {
+                                        widget.workout.activities[index].updateWeight(newWeight);
+                                        changesMade = true;
+                                      });
+                                    },
+                                    onUpdateTime: (Duration newTime) {
+                                      setState(() {
+                                        widget.workout.activities[index].updateTime(newTime);
+                                        changesMade = true;
+                                      });
+                                    },
                                   ),
                                 ),
                               );
