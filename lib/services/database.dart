@@ -139,10 +139,12 @@ class DatabaseService {
             WorkoutsCollection.doc(workout.workoutID).collection('activities');
         Activity activity = workout.activities[i];
         // Use the position in the list as the ordering criteria
-        Map<String, dynamic> activityData = {
-          ...activity.toMap(),
-          'position': i
-        };
+        Map<String, dynamic> activityData = {'activityName': activity.activityName,
+          'reps': activity.reps,
+          'weights': activity.weights,
+          'weightsUsed': activity.weightsUsed,
+          'time': activity.time.inMilliseconds, // Convert Duration to milliseconds
+          'position': i,};
         await activitiesCollection.doc(activity.activityName).set(activityData);
       }
     } else {
