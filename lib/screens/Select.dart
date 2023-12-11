@@ -1,13 +1,10 @@
 import 'package:burnboss/models/workout.dart';
+import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:burnboss/services/database.dart';
-import 'package:burnboss/shared/workout_list.dart';
 import 'package:burnboss/theme/theme_constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 
 class SelectPage extends StatefulWidget {
   @override
@@ -58,10 +55,20 @@ class _SelectPageState extends State<SelectPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    SizedBox(height: 120,),
-                    Icon(Icons.not_interested_rounded, size: 60,),
-                    SizedBox(height: 20,),
-                    Text('No workouts available', style: TextStyle(fontFamily: 'Bebas', fontSize: 30),),
+                    SizedBox(
+                      height: 120,
+                    ),
+                    Icon(
+                      Icons.not_interested_rounded,
+                      size: 60,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text(
+                      'No workouts available',
+                      style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
+                    ),
                   ],
                 ),
               );
@@ -83,7 +90,13 @@ class _SelectPageState extends State<SelectPage> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                IconButton(onPressed: () {}, icon: Icon(Icons.play_arrow_rounded, size: 30,),)
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.play_arrow_rounded,
+                                    size: 30,
+                                  ),
+                                )
                               ],
                             ),
                             onTap: () {},
