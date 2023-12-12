@@ -6,14 +6,15 @@ class Activity {
   bool weightsUsed;
   int weights;
   Duration time;
+  String activityType;
 
-  Activity(
-      {required this.activityName,
-      this.reps = 0,
-      this.weightsUsed = false,
-      this.weights = 0,
-      this.time = const Duration()}
-      );
+  Activity({required this.activityName,
+    this.reps = 0,
+    this.weightsUsed = false,
+    this.weights = 0,
+    this.time = const Duration(),
+    this.activityType = 'Reps',
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -22,6 +23,7 @@ class Activity {
       'weights': weights,
       'weightsUsed': weightsUsed,
       'time': time,
+      'activityType': activityType,
     };
   }
 
@@ -32,6 +34,7 @@ class Activity {
       weightsUsed: map['weightsUsed'],
       weights: map['weights'],
       time: Duration(milliseconds: map['time']),
+      activityType: map['activityType'],
     );
   }
 
@@ -46,6 +49,10 @@ class Activity {
   void updateTime(Duration newTime) {
     time = newTime;
   }
+
+  void updateActivityType(String newActivityType) {
+    activityType = newActivityType;
+  }
 }
 
 class ActivityCard extends StatefulWidget {
@@ -53,11 +60,10 @@ class ActivityCard extends StatefulWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  ActivityCard(
-      {required this.activity,
-      required this.onEdit,
-      required this.onDelete,
-      required ValueKey<String> key});
+  ActivityCard({required this.activity,
+    required this.onEdit,
+    required this.onDelete,
+    required ValueKey<String> key});
 
   @override
   _ActivityCardState createState() => _ActivityCardState();

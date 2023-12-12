@@ -233,6 +233,12 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                         changesMade = true;
                                       });
                                     },
+                                    onUpdateActivityName: (String newActivityType) {
+                                      setState(() {
+                                        widget.workout.activities[index].updateActivityType(newActivityType);
+                                        changesMade = true;
+                                      });
+                                    },
                                   ),
                                 ),
                               );

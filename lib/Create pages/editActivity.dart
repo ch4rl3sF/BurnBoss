@@ -9,14 +9,16 @@ class editActivity extends StatefulWidget {
   final Function(int) onUpdateReps; // Add callback function
   final Function(int) onUpdateWeight;
   final Function(Duration) onUpdateTime;
+  final Function(String) onUpdateActivityName;
 
-  editActivity(
-      {Key? key,
-      required this.activity,
-      required this.onUpdateReps,
-      required this.onUpdateWeight,
-      required this.onUpdateTime})
-      : super(key: key);
+  editActivity({
+    Key? key,
+    required this.activity,
+    required this.onUpdateReps,
+    required this.onUpdateWeight,
+    required this.onUpdateTime,
+    required this.onUpdateActivityName,
+  }) : super(key: key);
 
   @override
   State<editActivity> createState() => _editActivityState();
@@ -30,7 +32,7 @@ class _editActivityState extends State<editActivity> {
   TextEditingController secondsController = TextEditingController();
   List<bool> isSelected = [];
   List<String> activityOptions = ['Reps', 'Timer', 'Stopwatch'];
-  String? activityOptionSelected = 'Reps';
+  String? activityOptionSelected = '';
 
   // late int timerSeconds;
 
@@ -38,7 +40,26 @@ class _editActivityState extends State<editActivity> {
   void initState() {
     super.initState();
     isSelected = [!widget.activity.weightsUsed, widget.activity.weightsUsed];
-    // timerSeconds = 0;
+    activityOptionSelected = widget.activity.activityType;
+  }
+
+  void changeActivityOption() {
+    setState(() {
+      if (activityOptionSelected == 'Reps') {
+        widget.activity.time = Duration.zero;
+      } else if (activityOptionSelected == 'Timer') {
+        widget.activity.weightsUsed = false;
+        widget.activity.weights = 0;
+        widget.activity.reps = 0;
+        // Clear timer-related fields
+        widget.activity.time = Duration.zero;
+      } else if (activityOptionSelected == 'Stopwatch') {
+        widget.activity.time = Duration.zero;
+        widget.activity.weightsUsed = false;
+        widget.activity.weights = 0;
+        widget.activity.reps = 0;
+      }
+    });
   }
 
   Widget build(BuildContext context) {
@@ -67,8 +88,15 @@ class _editActivityState extends State<editActivity> {
                               style: TextStyle(
                                   fontFamily: 'Bebas', fontSize: 20))))
                       .toList(),
-                  onChanged: (activityOption) =>
-                      setState(() => activityOptionSelected = activityOption),
+                  // onChanged: (activityOption) =>
+                  //     setState(() => activityOptionSelected = activityOption),
+                  onChanged: (activityOption) {
+                    setState(() {
+                      activityOptionSelected = activityOption;
+                      changeActivityOption();
+                      widget.onUpdateActivityName(activityOption!);
+                    });
+                  },
                 ),
               ],
             ),
@@ -130,7 +158,6 @@ class _editActivityState extends State<editActivity> {
               ),
             ),
 
-
           if (activityOptionSelected == 'Reps' && widget.activity.weightsUsed)
             //Weights
             Padding(
@@ -166,7 +193,6 @@ class _editActivityState extends State<editActivity> {
                 ],
               ),
             ),
-
 
           if (activityOptionSelected == 'Reps')
             //Reps
@@ -204,7 +230,6 @@ class _editActivityState extends State<editActivity> {
                 ],
               ),
             ),
-
 
           if (activityOptionSelected == 'Timer')
             //Time text

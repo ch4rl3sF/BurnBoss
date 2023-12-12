@@ -116,15 +116,29 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
             ]),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 30, 20, 0),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text('Muscles Targeted: ', style: TextStyle(fontFamily: 'Bebas', fontSize: 30),),
-                SizedBox(height: 20,),
-                Text('Number of steps: ${activities.length}', style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
-                SizedBox(height: 20,),
-                Text('Equipment used: ', style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
-                SizedBox(height: 20,),
-                Text('Days set: ', style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
-              ]),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Muscles Targeted: ',
+                      style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text('Number of steps: ${activities.length}',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text('Equipment used: ',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Text('Days set: ',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
+                  ]),
             ),
           ],
         ),
@@ -176,6 +190,11 @@ class _ActivityListState extends State<ActivityList> {
           onUpdateTime: (Duration newTime) {
             setState(() {
               widget.activities[index].updateTime(newTime);
+            });
+          },
+          onUpdateActivityName: (String newActivityType) {
+            setState(() {
+              widget.activities[index].updateActivityType(newActivityType);
             });
           },
         ),

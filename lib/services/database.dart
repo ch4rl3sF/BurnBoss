@@ -19,7 +19,7 @@ class DatabaseService {
 
   //creates the collection, after it is created, it only references it
   final CollectionReference usersCollection =
-      FirebaseFirestore.instance.collection('users');
+  FirebaseFirestore.instance.collection('users');
 
   //gets a reference to the document and updates it with the user details
   Future updateUserData(String email) async {
@@ -48,15 +48,19 @@ class DatabaseService {
     // For each activity in the workout, create a subcollection within the workout document
     for (int i = 0; i < workout.activities.length; i++) {
       CollectionReference activitiesCollection =
-          workoutDocument.collection('activities');
+      workoutDocument.collection('activities');
       Activity activity = workout.activities[i];
       // Use the position in the list as the ordering criteria
-      Map<String, dynamic> activityData = {'activityName': activity.activityName,
+      Map<String, dynamic> activityData = {
+        'activityName': activity.activityName,
         'reps': activity.reps,
         'weights': activity.weights,
         'weightsUsed': activity.weightsUsed,
-        'time': activity.time.inMilliseconds, // Convert Duration to milliseconds
-        'position': i,};
+        'time': activity.time.inMilliseconds,
+        'activityType': activity.activityType,
+        // Convert Duration to milliseconds
+        'position': i,
+      };
       await activitiesCollection.doc(activity.activityName).set(activityData);
     }
   }
@@ -77,15 +81,15 @@ class DatabaseService {
 
         // Fetch activities for each workout
         QuerySnapshot activitiesSnapshot =
-            await WorkoutsCollection.doc(workoutDocSnapshot.id)
-                .collection('activities')
-                .orderBy('position')
-                .get();
+        await WorkoutsCollection.doc(workoutDocSnapshot.id)
+            .collection('activities')
+            .orderBy('position')
+            .get();
 
         for (var activityDocSnapshot in activitiesSnapshot.docs) {
           // Parse activity data and add to activities list
           Map<String, dynamic>? activityData =
-              activityDocSnapshot.data() as Map<String, dynamic>?;
+          activityDocSnapshot.data() as Map<String, dynamic>?;
           if (activityData != null) {
             Activity activity = Activity.fromMap(activityData);
             activities.add(activity);
@@ -129,22 +133,26 @@ class DatabaseService {
     return WorkoutsCollection.doc(workoutID)
         .update({'workoutName': workoutName}).then(
             (value) => print("DocumentSnapshot successfully updated!"),
-            onError: (e) => print("Error updating document $e"));
+        onError: (e) => print("Error updating document $e"));
   }
 
   Future editActivities(Workout workout, List activityNamesDeleted) async {
     if (workout.activities.isNotEmpty) {
       for (int i = 0; i < workout.activities.length; i++) {
         CollectionReference activitiesCollection =
-            WorkoutsCollection.doc(workout.workoutID).collection('activities');
+        WorkoutsCollection.doc(workout.workoutID).collection('activities');
         Activity activity = workout.activities[i];
-        // Use the position in the list as the ordering criteria
-        Map<String, dynamic> activityData = {'activityName': activity.activityName,
+        Map<String, dynamic> activityData = {
+          'activityName': activity.activityName,
           'reps': activity.reps,
           'weights': activity.weights,
           'weightsUsed': activity.weightsUsed,
-          'time': activity.time.inMilliseconds, // Convert Duration to milliseconds
-          'position': i,};
+          'time': activity.time.inMilliseconds,
+          // Convert Duration to milliseconds
+          'activityType': activity.activityType,
+          'position': i,
+          // Use the position in the list as the ordering criteria
+        };
         await activitiesCollection.doc(activity.activityName).set(activityData);
       }
     } else {

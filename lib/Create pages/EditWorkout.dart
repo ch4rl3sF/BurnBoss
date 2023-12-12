@@ -119,13 +119,12 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        DatabaseService(
-                                            uid: FirebaseAuth
-                                                .instance.currentUser!.uid)
-                                            .deleteWorkout(workout.workoutID);
-                                      });
+                                    onPressed: () async {
+                                      await DatabaseService(
+                                          uid: FirebaseAuth
+                                              .instance.currentUser!.uid)
+                                          .deleteWorkout(workout.workoutID);
+                                      await _refreshWorkoutsList();
                                     },
                                     icon: Icon(
                                       Icons.delete_rounded,
