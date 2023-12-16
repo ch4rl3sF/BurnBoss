@@ -1,6 +1,7 @@
 import 'package:burnboss/Create%20pages/WorkoutEditor.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
+import 'package:burnboss/screens/WorkoutPlayer.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -108,7 +109,14 @@ class _SelectPageState extends State<SelectPage> {
                                   ),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => WorkoutPlayer(
+                                                workout:
+                                                    snapshot.data![index])));
+                                  },
                                   icon: Icon(
                                     Icons.play_arrow_rounded,
                                     size: 30,

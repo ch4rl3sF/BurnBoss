@@ -250,14 +250,28 @@ class _editActivityState extends State<editActivity> {
             ),
 
           if (activityOptionSelected == 'Stopwatch')
-            Center(
-              child: Switch(
-                value: widget.activity.stopwatchUsed,
-                onChanged: (bool stopwatchIsUsed) {
-                  setState(() {
-                    widget.onUpdateStopwatchUsed(stopwatchIsUsed);
-                  });
-                },
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              child: Column(
+                children: [
+                  Text('Using a stopwatch?', style: TextStyle(fontFamily: 'Bebas', fontSize: 30),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text('Off', style: TextStyle(fontFamily: 'Bebas', fontSize: 20),),
+                      Switch(
+                        value: widget.activity.stopwatchUsed,
+                        activeColor: COLOR_SECONDARY,
+                        onChanged: (bool stopwatchIsUsed) {
+                          setState(() {
+                            widget.onUpdateStopwatchUsed(stopwatchIsUsed);
+                          });
+                        },
+                      ),
+                      Text('On', style: TextStyle(fontFamily: 'Bebas', fontSize: 20),)
+                    ],
+                  )
+                ],
               ),
             )
         ],
