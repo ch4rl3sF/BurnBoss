@@ -10,6 +10,7 @@ class editActivity extends StatefulWidget {
   final Function(int) onUpdateWeight;
   final Function(Duration) onUpdateTime;
   final Function(String) onUpdateActivityName;
+  final Function(bool) onUpdateStopwatchUsed;
 
   editActivity({
     Key? key,
@@ -18,6 +19,7 @@ class editActivity extends StatefulWidget {
     required this.onUpdateWeight,
     required this.onUpdateTime,
     required this.onUpdateActivityName,
+    required this.onUpdateStopwatchUsed,
   }) : super(key: key);
 
   @override
@@ -84,7 +86,8 @@ class _editActivityState extends State<editActivity> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -116,16 +119,17 @@ class _editActivityState extends State<editActivity> {
                           onPressed: (int newIndex) {
                             setState(() {
                               for (int index = 0;
-                              index < isSelected.length;
-                              index++) {
+                                  index < isSelected.length;
+                                  index++) {
                                 if (index == newIndex) {
                                   setState(() {
                                     widget.activity.weightsUsed = (newIndex ==
                                         1); // Set weightsUsed based on the selected index
                                     isSelected = List.generate(
                                         isSelected.length,
-                                            (index) =>
-                                        index == newIndex); // Update isSelected
+                                        (index) =>
+                                            index ==
+                                            newIndex); // Update isSelected
                                   });
                                 }
                                 isSelected[index] = (index == newIndex);
@@ -139,46 +143,52 @@ class _editActivityState extends State<editActivity> {
                   ),
                   if (widget.activity.weightsUsed)
                     Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            flex: 7,
-                            child: Text('Weight (in Kg):',
-                                style: TextStyle(fontFamily: 'Bebas', fontSize: 30))),
-                        Expanded(
-                          flex: 3,
-                          child: TextField(
-                            controller: weightsController,
-                            keyboardType: TextInputType.number,
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              hintText: widget.activity.weights.toString(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
+                      child: Row(
+                        children: [
+                          Expanded(
+                              flex: 7,
+                              child: Text('Weight (in Kg):',
+                                  style: TextStyle(
+                                      fontFamily: 'Bebas', fontSize: 30))),
+                          Expanded(
+                            flex: 3,
+                            child: TextField(
+                              controller: weightsController,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: widget.activity.weights.toString(),
+                              ),
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
+                              onSubmitted: (weights) {
+                                try {
+                                  setState(() {
+                                    int parsedWeight = int.parse(weights);
+                                    widget.onUpdateWeight(parsedWeight);
+                                  });
+                                } catch (e) {
+                                  print('Error parsing weight integer');
+                                }
+                              },
                             ),
-                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                            onSubmitted: (weights) {
-                              try {
-                                setState(() {
-                                  int parsedWeight = int.parse(weights);
-                                  widget.onUpdateWeight(parsedWeight);
-                                });
-                              } catch (e) {
-                                print('Error parsing weight integer');
-                              }
-                            },
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 15),
                     child: Row(
                       children: [
                         Expanded(
                             flex: 7,
                             child: Text('Reps:',
-                                style: TextStyle(fontFamily: 'Bebas', fontSize: 30))),
+                                style: TextStyle(
+                                    fontFamily: 'Bebas', fontSize: 30))),
                         Expanded(
                           flex: 3,
                           child: TextField(
@@ -240,11 +250,18 @@ class _editActivityState extends State<editActivity> {
             ),
 
           if (activityOptionSelected == 'Stopwatch')
-            Text('Stopwatch'),
+            Center(
+              child: Switch(
+                value: widget.activity.stopwatchUsed,
+                onChanged: (bool stopwatchIsUsed) {
+                  setState(() {
+                    widget.onUpdateStopwatchUsed(stopwatchIsUsed);
+                  });
+                },
+              ),
+            )
         ],
       ),
     );
   }
 }
-
-

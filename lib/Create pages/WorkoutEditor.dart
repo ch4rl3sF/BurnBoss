@@ -239,6 +239,11 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                         changesMade = true;
                                       });
                                     },
+                                    onUpdateStopwatchUsed: (bool newStopwatchUsed) {
+                                      setState(() {
+                                        widget.workout.activities[index].updateStopwatchBool(newStopwatchUsed);
+                                      });
+                                    },
                                   ),
                                 ),
                               );

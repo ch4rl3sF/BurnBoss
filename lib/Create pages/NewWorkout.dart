@@ -197,6 +197,12 @@ class _ActivityListState extends State<ActivityList> {
               widget.activities[index].updateActivityType(newActivityType);
             });
           },
+          onUpdateStopwatchUsed: (bool newStopwatchUsed) {
+            setState(() {
+              widget.activities[index].updateStopwatchBool(newStopwatchUsed);
+            });
+          },
+
         ),
       ),
     );

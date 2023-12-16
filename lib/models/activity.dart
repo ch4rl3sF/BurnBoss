@@ -7,6 +7,7 @@ class Activity {
   int weights;
   Duration time;
   String activityType;
+  bool stopwatchUsed;
 
   Activity({required this.activityName,
     this.reps = 0,
@@ -14,6 +15,7 @@ class Activity {
     this.weights = 0,
     this.time = const Duration(),
     this.activityType = 'Reps',
+    this.stopwatchUsed = false,
   });
 
   Map<String, dynamic> toMap() {
@@ -24,6 +26,7 @@ class Activity {
       'weightsUsed': weightsUsed,
       'time': time,
       'activityType': activityType,
+      'stopwatchUsed': stopwatchUsed
     };
   }
 
@@ -35,6 +38,7 @@ class Activity {
       weights: map['weights'],
       time: Duration(milliseconds: map['time']),
       activityType: map['activityType'],
+      stopwatchUsed: map['stopwatchUsed']
     );
   }
 
@@ -52,6 +56,10 @@ class Activity {
 
   void updateActivityType(String newActivityType) {
     activityType = newActivityType;
+  }
+
+  void updateStopwatchBool(bool newStopwatchUsed){
+    stopwatchUsed = newStopwatchUsed;
   }
 }
 

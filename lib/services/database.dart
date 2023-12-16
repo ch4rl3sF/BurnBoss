@@ -59,6 +59,7 @@ class DatabaseService {
         'time': activity.time.inMilliseconds,
         'activityType': activity.activityType,
         // Convert Duration to milliseconds
+        'stopwatchUsed': activity.stopwatchUsed,
         'position': i,
       };
       await activitiesCollection.doc(activity.activityName).set(activityData);
@@ -150,6 +151,7 @@ class DatabaseService {
           'time': activity.time.inMilliseconds,
           // Convert Duration to milliseconds
           'activityType': activity.activityType,
+          'stopwatchUsed': activity.stopwatchUsed,
           'position': i,
           // Use the position in the list as the ordering criteria
         };
