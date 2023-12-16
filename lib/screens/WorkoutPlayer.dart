@@ -25,10 +25,12 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
         controller: _pageController,
         itemCount: widget.workout.activities.length,
         itemBuilder: (context, index) {
+          //builds each activity from the list of objects
           return buildActivityPage(widget.workout.activities[index]);
         },
         onPageChanged: (int page) {
           setState(() {
+            //change the value of the current page to whichever page the user is on
             _currentPage = page;
           });
         },
@@ -40,19 +42,24 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               ElevatedButton(
-                onPressed: _currentPage > 0
+                onPressed: _currentPage >
+                        0 //only allows previous page if on any other page than the first
                     ? () {
                         _pageController.previousPage(
                             duration: Duration(milliseconds: 500),
-                            curve: Curves.ease);
+                            curve: Curves
+                                .ease); //to perform and customise the switch between pages
                       }
                     : null,
                 child: Text('Previous'),
               ),
               Text(
                   'Activity ${_currentPage + 1} of ${widget.workout.activities.length}'),
+              // Shows how far through the user is through the workout
               ElevatedButton(
-                onPressed: _currentPage < widget.workout.activities.length - 1
+                onPressed: _currentPage <
+                        widget.workout.activities.length -
+                            1 //only if not on the last page
                     ? () {
                         _pageController.nextPage(
                             duration: Duration(milliseconds: 500),
@@ -68,12 +75,41 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
     );
   }
 
+  //widget for each activity built by the PageView
   Widget buildActivityPage(Activity activity) {
     return Center(
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('Activity: ${activity.activityName}'),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+            child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  activity.activityName,
+                  style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+                )),
+          ),
+          if (activity.activityType == 'Reps')
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+              child: FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    'Reps: ${activity.reps}',
+                    style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+                  )),
+            ),
+          if (activity.activityType == 'Timer')
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+              child: Text('timer')
+            ),
+          if (activity.activityType == 'Stopwatch')
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                child: Text('stopwatch')
+            ),
         ],
       ),
     );
