@@ -200,7 +200,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                     color: cardColor,
                     child: ListTile(
                       title: Text(activity.activityName),
-                      subtitle: Text('Reps: ${activity.reps}'),
+                      subtitle: Text('Activity Type: ${activity.activityType}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

@@ -34,32 +34,11 @@ class _editActivityState extends State<editActivity> {
   List<String> activityOptions = ['Reps', 'Timer', 'Stopwatch'];
   String? activityOptionSelected = '';
 
-  // late int timerSeconds;
-
   @override
   void initState() {
     super.initState();
     isSelected = [!widget.activity.weightsUsed, widget.activity.weightsUsed];
     activityOptionSelected = widget.activity.activityType;
-  }
-
-  void changeActivityOption() {
-    setState(() {
-      if (activityOptionSelected == 'Reps') {
-        widget.activity.time = Duration.zero;
-      } else if (activityOptionSelected == 'Timer') {
-        widget.activity.weightsUsed = false;
-        widget.activity.weights = 0;
-        widget.activity.reps = 0;
-        // Clear timer-related fields
-        widget.activity.time = Duration.zero;
-      } else if (activityOptionSelected == 'Stopwatch') {
-        widget.activity.time = Duration.zero;
-        widget.activity.weightsUsed = false;
-        widget.activity.weights = 0;
-        widget.activity.reps = 0;
-      }
-    });
   }
 
   Widget build(BuildContext context) {
@@ -93,7 +72,6 @@ class _editActivityState extends State<editActivity> {
                   onChanged: (activityOption) {
                     setState(() {
                       activityOptionSelected = activityOption;
-                      changeActivityOption();
                       widget.onUpdateActivityName(activityOption!);
                     });
                   },
@@ -102,131 +80,131 @@ class _editActivityState extends State<editActivity> {
             ),
           ),
           if (activityOptionSelected == 'Reps')
-            //Weights used
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Container(
+              child: Column(
                 children: [
-                  Text(
-                    'Are weights used?',
-                    style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
-                  ),
-                  ToggleButtons(
-                    isSelected: isSelected,
-                    selectedColor: Colors.white,
-                    color: Colors.black,
-                    fillColor: COLOR_SECONDARY,
-                    textStyle: TextStyle(fontFamily: 'Bebas'),
-                    renderBorder: true,
-                    borderColor: Colors.black,
-                    borderWidth: 1.0,
-                    borderRadius: BorderRadius.circular(5),
-                    selectedBorderColor: Colors.black,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text('No'),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 12),
-                        child: Text('Yes'),
-                      ),
-                    ],
-                    onPressed: (int newIndex) {
-                      setState(() {
-                        for (int index = 0;
-                            index < isSelected.length;
-                            index++) {
-                          if (index == newIndex) {
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Are weights used?',
+                          style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
+                        ),
+                        ToggleButtons(
+                          isSelected: isSelected,
+                          selectedColor: Colors.white,
+                          color: Colors.black,
+                          fillColor: COLOR_SECONDARY,
+                          textStyle: TextStyle(fontFamily: 'Bebas'),
+                          renderBorder: true,
+                          borderColor: Colors.black,
+                          borderWidth: 1.0,
+                          borderRadius: BorderRadius.circular(5),
+                          selectedBorderColor: Colors.black,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('No'),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12),
+                              child: Text('Yes'),
+                            ),
+                          ],
+                          onPressed: (int newIndex) {
                             setState(() {
-                              widget.activity.weightsUsed = (newIndex ==
-                                  1); // Set weightsUsed based on the selected index
-                              isSelected = List.generate(
-                                  isSelected.length,
-                                  (index) =>
-                                      index == newIndex); // Update isSelected
+                              for (int index = 0;
+                              index < isSelected.length;
+                              index++) {
+                                if (index == newIndex) {
+                                  setState(() {
+                                    widget.activity.weightsUsed = (newIndex ==
+                                        1); // Set weightsUsed based on the selected index
+                                    isSelected = List.generate(
+                                        isSelected.length,
+                                            (index) =>
+                                        index == newIndex); // Update isSelected
+                                  });
+                                }
+                                isSelected[index] = (index == newIndex);
+                                widget.activity.weights = 0;
+                              }
                             });
-                          }
-                          isSelected[index] = (index == newIndex);
-                          widget.activity.weights = 0;
-                        }
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-          if (activityOptionSelected == 'Reps' && widget.activity.weightsUsed)
-            //Weights
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 7,
-                      child: Text('Weight (in Kg):',
-                          style: TextStyle(fontFamily: 'Bebas', fontSize: 30))),
-                  Expanded(
-                    flex: 3,
-                    child: TextField(
-                      controller: weightsController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: widget.activity.weights.toString(),
-                      ),
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      onSubmitted: (weights) {
-                        try {
-                          setState(() {
-                            int parsedWeight = int.parse(weights);
-                            widget.onUpdateWeight(parsedWeight);
-                          });
-                        } catch (e) {
-                          print('Error parsing weight integer');
-                        }
-                      },
-                    ),
-                  )
-                ],
-              ),
-            ),
-
-          if (activityOptionSelected == 'Reps')
-            //Reps
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              child: Row(
-                children: [
-                  Expanded(
-                      flex: 7,
-                      child: Text('Reps:',
-                          style: TextStyle(fontFamily: 'Bebas', fontSize: 30))),
-                  Expanded(
-                    flex: 3,
-                    child: TextField(
-                      controller: repsController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: OutlineInputBorder(),
-                          hintText: widget.activity.reps.toString()),
-                      inputFormatters: [
-                        FilteringTextInputFormatter.digitsOnly,
+                          },
+                        ),
                       ],
-                      onSubmitted: (reps) {
-                        try {
-                          int parsedReps = int.parse(reps);
-                          widget.onUpdateReps(
-                              parsedReps); // Call the callback to update reps
-                        } catch (e) {
-                          // Handle the case where the input is not a valid integer
-                          print('Invalid input: $reps');
-                        }
-                      },
                     ),
-                  )
+                  ),
+                  if (widget.activity.weightsUsed)
+                    Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 7,
+                            child: Text('Weight (in Kg):',
+                                style: TextStyle(fontFamily: 'Bebas', fontSize: 30))),
+                        Expanded(
+                          flex: 3,
+                          child: TextField(
+                            controller: weightsController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              hintText: widget.activity.weights.toString(),
+                            ),
+                            inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                            onSubmitted: (weights) {
+                              try {
+                                setState(() {
+                                  int parsedWeight = int.parse(weights);
+                                  widget.onUpdateWeight(parsedWeight);
+                                });
+                              } catch (e) {
+                                print('Error parsing weight integer');
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    child: Row(
+                      children: [
+                        Expanded(
+                            flex: 7,
+                            child: Text('Reps:',
+                                style: TextStyle(fontFamily: 'Bebas', fontSize: 30))),
+                        Expanded(
+                          flex: 3,
+                          child: TextField(
+                            controller: repsController,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: widget.activity.reps.toString()),
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            onSubmitted: (reps) {
+                              try {
+                                int parsedReps = int.parse(reps);
+                                widget.onUpdateReps(
+                                    parsedReps); // Call the callback to update reps
+                              } catch (e) {
+                                // Handle the case where the input is not a valid integer
+                                print('Invalid input: $reps');
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -242,8 +220,8 @@ class _editActivityState extends State<editActivity> {
                     style: TextStyle(fontSize: 30, fontFamily: 'Bebas'),
                   )),
             ),
+
           if (activityOptionSelected == 'Timer')
-            //Time picker
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: SizedBox(
@@ -260,9 +238,13 @@ class _editActivityState extends State<editActivity> {
                 ),
               ),
             ),
-          if (activityOptionSelected == 'Stopwatch') Text('Stopwatch'),
+
+          if (activityOptionSelected == 'Stopwatch')
+            Text('Stopwatch'),
         ],
       ),
     );
   }
 }
+
+

@@ -1,3 +1,4 @@
+import 'package:burnboss/Create%20pages/WorkoutEditor.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:burnboss/services/database.dart';
@@ -90,6 +91,22 @@ class _SelectPageState extends State<SelectPage> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
+                                IconButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                WorkoutEditorPage(
+                                                  workout:
+                                                      snapshot.data![index],
+                                                )));
+                                  },
+                                  icon: Icon(
+                                    Icons.edit_rounded,
+                                    size: 25,
+                                  ),
+                                ),
                                 IconButton(
                                   onPressed: () {},
                                   icon: Icon(
