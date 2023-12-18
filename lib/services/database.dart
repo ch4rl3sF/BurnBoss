@@ -41,6 +41,7 @@ class DatabaseService {
     Map<String, dynamic> workoutData = {
       'workoutID': workoutDocument.id,
       'workoutName': workout.workoutName,
+      'pageProgress': workout.pageProgress,
     };
 
     await workoutDocument.set(workoutData);
@@ -102,6 +103,7 @@ class DatabaseService {
           workoutID: workoutDocSnapshot.id,
           workoutName: workoutName,
           activities: activities,
+          pageProgress: workoutDocSnapshot.get('pageProgress'),
         );
 
         workouts.add(workout);
@@ -135,6 +137,14 @@ class DatabaseService {
         .update({'workoutName': workoutName}).then(
             (value) => print("DocumentSnapshot successfully updated!"),
         onError: (e) => print("Error updating document $e"));
+  }
+  
+  //function to update the current workout progress
+  Future updateWorkoutProgress(String workoutID, int newPageProgress) async {
+    return WorkoutsCollection.doc(workoutID).update({'pageProgress': newPageProgress}).then(
+        (value) => print('DocumentSnapshot successfully updated with new page progress'),
+      onError: (e) => print('Error updating document $e')
+    );
   }
 
   Future editActivities(Workout workout, List activityNamesDeleted) async {

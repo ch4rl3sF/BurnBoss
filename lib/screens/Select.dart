@@ -114,8 +114,17 @@ class _SelectPageState extends State<SelectPage> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) => WorkoutPlayer(
-                                                workout:
-                                                    snapshot.data![index])));
+                                                  workout:
+                                                      snapshot.data![index],
+                                                  onUpdatePage:
+                                                      (int newPageProgress) {
+                                                    setState(() {
+                                                      snapshot.data![index]
+                                                          .updatePage(
+                                                              newPageProgress);
+                                                    });
+                                                  },
+                                                )));
                                   },
                                   icon: Icon(
                                     Icons.play_arrow_rounded,
