@@ -89,6 +89,8 @@ class _SelectPageState extends State<SelectPage> {
                           color: cardColor,
                           child: ListTile(
                             title: Text(workout.workoutName),
+                            subtitle: Text(
+                                'Progress: ${((workout.pageProgress / workout.activities.length) * 100).toStringAsFixed(0)}%'),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
@@ -127,7 +129,11 @@ class _SelectPageState extends State<SelectPage> {
                                                 )));
                                   },
                                   icon: Icon(
-                                    Icons.play_arrow_rounded,
+                                    snapshot.data![index].pageProgress ==
+                                            snapshot
+                                                .data![index].activities.length
+                                        ? Icons.replay
+                                        : Icons.play_arrow_rounded,
                                     size: 30,
                                   ),
                                 )

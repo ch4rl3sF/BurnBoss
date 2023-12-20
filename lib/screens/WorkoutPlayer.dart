@@ -20,7 +20,12 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
 
   @override
   void initState() {
-    _currentPage = widget.workout.pageProgress;
+
+    if (widget.workout.pageProgress == widget.workout.activities.length) {
+      _currentPage = 0;
+    } else {
+      _currentPage = widget.workout.pageProgress;
+    }
     _pageController = PageController(initialPage: _currentPage);
     super.initState();
   }
@@ -38,10 +43,16 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                       content: Text(
                           'Are you sure you want to leave ${widget.workout.workoutName}?'),
                       actions: [
-                        TextButton(onPressed: () async {
-                          Navigator.pushNamed(context, '/Select');
-                          await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).updateWorkoutProgress(widget.workout.workoutID, _currentPage);
-                        }, child: const Text('Exit')),
+                        TextButton(
+                            onPressed: () async {
+                              Navigator.pushNamed(context, '/Select');
+                              await DatabaseService(
+                                      uid: FirebaseAuth
+                                          .instance.currentUser!.uid)
+                                  .updateWorkoutProgress(
+                                      widget.workout.workoutID, _currentPage);
+                            },
+                            child: const Text('Exit')),
                         TextButton(
                             onPressed: () {
                               Navigator.pop(context, 'Cancel');
@@ -55,11 +66,18 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
       ),
       body: PageView.builder(
         controller: _pageController,
-        itemCount: widget.workout.activities.length,
+        itemCount: widget.workout.activities.length + 1,
+        //Add one for the finish page
         itemBuilder: (context, index) {
-          //builds each activity from the list of objects
-          return buildActivityPage(widget.workout.activities[index]);
+          if (index < widget.workout.activities.length) {
+            // Build activity pages
+            return buildActivityPage(widget.workout.activities[index]);
+          } else {
+            // Build the "finish" page
+            return buildFinishPage();
+          }
         },
+
         onPageChanged: (int page) {
           setState(() {
             //change the value of the current page to whichever page the user is on
@@ -85,20 +103,43 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                     : null,
                 child: Text('Previous'),
               ),
-              Text(
-                  'Activity ${_currentPage + 1} of ${widget.workout.activities.length}'),
+
+
+              if (_currentPage + 1 <= widget.workout.activities.length)
+                Text(
+                    'Activity ${_currentPage + 1} of ${widget.workout.activities.length}'),
+
               // Shows how far through the user is through the workout
               ElevatedButton(
-                onPressed: _currentPage <
-                        widget.workout.activities.length -
-                            1 //only if not on the last page
-                    ? () {
-                        _pageController.nextPage(
-                            duration: Duration(milliseconds: 500),
-                            curve: Curves.ease);
-                      }
-                    : null,
-                child: Text('Next'),
+                onPressed: () async {
+                  if (_currentPage + 1 < widget.workout.activities.length) {
+                    _pageController.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  } else if (_currentPage + 1 == widget.workout.activities.length) {
+                    // Handle Finish button action
+                    _pageController.nextPage(
+                      duration: Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    );
+                  } else {
+                      Navigator.pushNamed(context, '/Select');
+                      await DatabaseService(
+                          uid: FirebaseAuth
+                              .instance.currentUser!.uid)
+                          .updateWorkoutProgress(
+                          widget.workout.workoutID, _currentPage);
+
+                  }
+                },
+                child: Text(
+                  _currentPage + 1 < widget.workout.activities.length
+                      ? 'Next'
+                      : _currentPage + 1 == widget.workout.activities.length
+                      ? 'Finish'
+                      : 'Exit',
+                ),
               ),
             ],
           ),
@@ -154,6 +195,22 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
                 child: Text('stopwatch')),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFinishPage() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Workout Complete!',
+            style: TextStyle(fontFamily: 'Bebas', fontSize: 70),
+          ),
+          // Add any additional content for the finish page
         ],
       ),
     );
