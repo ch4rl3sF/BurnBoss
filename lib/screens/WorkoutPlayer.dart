@@ -1,8 +1,10 @@
+import 'dart:async';
+
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/models/workout.dart';
+import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:burnboss/services/database.dart';
 
 class WorkoutPlayer extends StatefulWidget {
   final Workout workout;
@@ -16,18 +18,55 @@ class WorkoutPlayer extends StatefulWidget {
 
 class _WorkoutPlayerState extends State<WorkoutPlayer> {
   PageController _pageController = PageController();
+  final Stopwatch _activityStopwatch = Stopwatch();
   late int _currentPage;
+  late Timer _activityStopwatchTimer;
+  String _activityStopwatchResult = '00:00:00';
+  bool _activityStopwatchIsRunning = false;
 
   @override
   void initState() {
-
     if (widget.workout.pageProgress == widget.workout.activities.length) {
       _currentPage = 0;
     } else {
       _currentPage = widget.workout.pageProgress;
     }
     _pageController = PageController(initialPage: _currentPage);
+
     super.initState();
+  }
+
+  void stopwatchDispose() {
+    _activityStopwatchTimer.cancel();
+    super.dispose();
+  }
+
+  void _toggleActivityStopwatchStartStop() {
+    if (_activityStopwatch.isRunning) {
+      _activityStopwatchTimer.cancel();
+      _activityStopwatch.stop();
+    } else {
+      _activityStopwatchTimer =
+          Timer.periodic(Duration(milliseconds: 10), (timer) {
+        setState(() {
+          _activityStopwatchResult =
+              '${_activityStopwatch.elapsed.inHours.toString().padLeft(2, '0')}:${_activityStopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_activityStopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
+        });
+      });
+      _activityStopwatch.start();
+    }
+    setState(() {
+      _activityStopwatchIsRunning = !_activityStopwatchIsRunning;
+    });
+  }
+
+  void _resetActivityStopwatch() {
+    _activityStopwatchTimer.cancel();
+    _activityStopwatch.reset();
+    _activityStopwatch.stop();
+    setState(() {
+      _activityStopwatchResult = '00:00:00';
+    });
   }
 
   Widget build(BuildContext context) {
@@ -62,7 +101,18 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                     ));
           },
         ),
-        title: Text(widget.workout.workoutName),
+        centerTitle: true,
+        // backgroundColor: Color(0xff292929),
+        toolbarHeight: 125,
+        title: Text(
+          widget.workout.workoutName,
+          style: TextStyle(
+            fontSize: 55,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            fontFamily: 'Bebas',
+          ),
+        ),
       ),
       body: PageView.builder(
         controller: _pageController,
@@ -104,7 +154,6 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                 child: Text('Previous'),
               ),
 
-
               if (_currentPage + 1 <= widget.workout.activities.length)
                 Text(
                     'Activity ${_currentPage + 1} of ${widget.workout.activities.length}'),
@@ -117,28 +166,27 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                       duration: Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
-                  } else if (_currentPage + 1 == widget.workout.activities.length) {
+                  } else if (_currentPage + 1 ==
+                      widget.workout.activities.length) {
                     // Handle Finish button action
                     _pageController.nextPage(
                       duration: Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
                   } else {
-                      Navigator.pushNamed(context, '/Select');
-                      await DatabaseService(
-                          uid: FirebaseAuth
-                              .instance.currentUser!.uid)
-                          .updateWorkoutProgress(
-                          widget.workout.workoutID, _currentPage);
-
+                    Navigator.pushNamed(context, '/Select');
+                    await DatabaseService(
+                            uid: FirebaseAuth.instance.currentUser!.uid)
+                        .updateWorkoutProgress(
+                            widget.workout.workoutID, _currentPage);
                   }
                 },
                 child: Text(
                   _currentPage + 1 < widget.workout.activities.length
                       ? 'Next'
                       : _currentPage + 1 == widget.workout.activities.length
-                      ? 'Finish'
-                      : 'Exit',
+                          ? 'Finish'
+                          : 'Exit',
                 ),
               ),
             ],
@@ -153,16 +201,14 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
     return Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-            child: FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text(
-                  activity.activityName,
-                  style: TextStyle(fontFamily: 'Bebas', fontSize: 70),
-                )),
-          ),
+          FittedBox(
+              fit: BoxFit.fitWidth,
+              child: Text(
+                activity.activityName,
+                style: TextStyle(fontFamily: 'Bebas', fontSize: 70),
+              )),
           if (activity.activityType == 'Reps')
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
@@ -194,7 +240,35 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
             Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: Text('stopwatch')),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _activityStopwatchResult,
+                        style: TextStyle(fontSize: 50.0),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          //Start button
+                          ElevatedButton(
+                              onPressed: _toggleActivityStopwatchStartStop,
+                              child: Text(_activityStopwatch.isRunning
+                                  ? "Stop"
+                                  : "Start")),
+                          //Reset button
+                          ElevatedButton(
+                              onPressed: _resetActivityStopwatch,
+                              child: Text('Reset')),
+                        ],
+                      )
+                    ],
+                  ),
+                )),
         ],
       ),
     );
@@ -203,14 +277,22 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
   Widget buildFinishPage() {
     return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(
-            'Workout Complete!',
-            style: TextStyle(fontFamily: 'Bebas', fontSize: 70),
+          SizedBox(
+            height: 120,
           ),
-          // Add any additional content for the finish page
+          Icon(
+            Icons.check_circle_outline_rounded,
+            size: 60,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            'Workout finished!',
+            style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
+          ),
         ],
       ),
     );

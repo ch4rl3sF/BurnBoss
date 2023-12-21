@@ -36,7 +36,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
       _timer = Timer.periodic(Duration(milliseconds: 30), (Timer t) {
         //Update the UI
         setState(() {
-          _result = '${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMilliseconds % 100).toString().padLeft(2, '0')}';
+          _result = '${(_stopwatch.elapsed.inHours).toString().padLeft(2, '0')}:${_stopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
         });
       });
       _stopwatch.start();
@@ -51,6 +51,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
   void _reset() {
     _timer.cancel();
     _stopwatch.reset();
+    _stopwatch.stop();
 
     //Update the UI
     setState(() {
