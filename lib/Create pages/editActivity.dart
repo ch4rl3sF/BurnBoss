@@ -44,6 +44,12 @@ class _editActivityState extends State<editActivity> {
   }
 
   Widget build(BuildContext context) {
+    // Access the current theme
+    ThemeData theme = Theme.of(context);
+
+    // Determine if the theme is light
+    bool isLightTheme = theme.brightness == Brightness.light;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -99,8 +105,8 @@ class _editActivityState extends State<editActivity> {
                         ToggleButtons(
                           isSelected: isSelected,
                           selectedColor: Colors.white,
-                          color: Colors.black,
-                          fillColor: COLOR_SECONDARY,
+                          color: isLightTheme? Colors.black : Colors.white,
+                          fillColor: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
                           textStyle: TextStyle(fontFamily: 'Bebas'),
                           renderBorder: true,
                           borderColor: Colors.black,
@@ -262,7 +268,7 @@ class _editActivityState extends State<editActivity> {
                       Text('Off', style: TextStyle(fontFamily: 'Bebas', fontSize: 20),),
                       Switch(
                         value: widget.activity.stopwatchUsed,
-                        activeColor: COLOR_SECONDARY,
+                        activeColor: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
                         onChanged: (bool stopwatchIsUsed) {
                           setState(() {
                             widget.onUpdateStopwatchUsed(stopwatchIsUsed);

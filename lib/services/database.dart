@@ -46,7 +46,7 @@ class DatabaseService {
 
     await workoutDocument.set(workoutData);
 
-    // For each activity in the workout, create a subcollection within the workout document
+    // For each activity in the workout, create a subCollection within the workout document
     for (int i = 0; i < workout.activities.length; i++) {
       CollectionReference activitiesCollection =
       workoutDocument.collection('activities');
