@@ -22,7 +22,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
   bool addingActivity = false;
   bool editingTitle = false;
 
-  List activityNamesDeleted = [];
+  List activityIDsDeleted = [];
 
   TextEditingController activityNameController = TextEditingController();
   TextEditingController workoutNameAdd = TextEditingController();
@@ -47,12 +47,12 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .editWorkoutName(
-                widget.workout.workoutID, widget.workout.workoutName);
+            widget.workout.workoutID, widget.workout.workoutName);
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
-            .editActivities(widget.workout, activityNamesDeleted);
+            .editActivities(widget.workout, activityIDsDeleted);
 
-        //Clear the list once the items are saved
-        activityNamesDeleted.clear();
+        // Clear the list once the items are saved
+        activityIDsDeleted.clear();
       });
     }
 
@@ -151,6 +151,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                             int placeholderReps = 0;
                             if (newActivityName.isNotEmpty) {
                               widget.workout.activities.add(Activity(
+                                activityID: '',
                                   activityName: newActivityName,
                                   reps: placeholderReps));
                               activityNameController.clear();
@@ -255,8 +256,8 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                 setState(() {
                                   widget.workout.activities.removeAt(index);
                                   changesMade = true;
-                                  activityNamesDeleted
-                                      .add(activity.activityName);
+                                  activityIDsDeleted
+                                      .add(activity.activityID);
                                 });
                               },
                               icon: Icon(Icons.delete_rounded))

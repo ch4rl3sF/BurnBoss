@@ -165,7 +165,7 @@ class _ActivityListState extends State<ActivityList> {
       int placeholderReps = 0;
 
       widget.activities
-          .add(Activity(activityName: activityName, reps: placeholderReps));
+          .add(Activity(activityID: '',activityName: activityName, reps: placeholderReps));
     });
   }
 

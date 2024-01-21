@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Activity {
+  late String activityID;
   String activityName;
   int reps;
   bool weightsUsed;
@@ -9,7 +10,9 @@ class Activity {
   String activityType;
   bool stopwatchUsed;
 
-  Activity({required this.activityName,
+  Activity({required
+this.activityID,
+  required this.activityName,
     this.reps = 0,
     this.weightsUsed = false,
     this.weights = 0,
@@ -20,6 +23,7 @@ class Activity {
 
   Map<String, dynamic> toMap() {
     return {
+      'activityID': activityID,
       'activityName': activityName,
       'reps': reps,
       'weights': weights,
@@ -32,6 +36,7 @@ class Activity {
 
   factory Activity.fromMap(Map<String, dynamic> map) {
     return Activity(
+      activityID: map['activityID'],
       activityName: map['activityName'],
       reps: map['reps'],
       weightsUsed: map['weightsUsed'],

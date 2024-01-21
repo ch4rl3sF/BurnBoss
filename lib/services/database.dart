@@ -19,7 +19,7 @@ class DatabaseService {
 
   //creates the collection, after it is created, it only references it
   final CollectionReference usersCollection =
-  FirebaseFirestore.instance.collection('users');
+      FirebaseFirestore.instance.collection('users');
 
   //gets a reference to the document and updates it with the user details
   Future updateUserData(String email) async {
@@ -49,10 +49,14 @@ class DatabaseService {
     // For each activity in the workout, create a subCollection within the workout document
     for (int i = 0; i < workout.activities.length; i++) {
       CollectionReference activitiesCollection =
-      workoutDocument.collection('activities');
+          workoutDocument.collection('activities');
       Activity activity = workout.activities[i];
       // Use the position in the list as the ordering criteria
+
+      DocumentReference activityDocument = await activitiesCollection.doc();
+
       Map<String, dynamic> activityData = {
+        'activityID': activityDocument.id,
         'activityName': activity.activityName,
         'reps': activity.reps,
         'weights': activity.weights,
@@ -63,7 +67,7 @@ class DatabaseService {
         'stopwatchUsed': activity.stopwatchUsed,
         'position': i,
       };
-      await activitiesCollection.doc(activity.activityName).set(activityData);
+      await activityDocument.set(activityData);
     }
   }
 
@@ -83,15 +87,15 @@ class DatabaseService {
 
         // Fetch activities for each workout
         QuerySnapshot activitiesSnapshot =
-        await WorkoutsCollection.doc(workoutDocSnapshot.id)
-            .collection('activities')
-            .orderBy('position')
-            .get();
+            await WorkoutsCollection.doc(workoutDocSnapshot.id)
+                .collection('activities')
+                .orderBy('position')
+                .get();
 
         for (var activityDocSnapshot in activitiesSnapshot.docs) {
           // Parse activity data and add to activities list
           Map<String, dynamic>? activityData =
-          activityDocSnapshot.data() as Map<String, dynamic>?;
+              activityDocSnapshot.data() as Map<String, dynamic>?;
           if (activityData != null) {
             Activity activity = Activity.fromMap(activityData);
             activities.add(activity);
@@ -136,46 +140,52 @@ class DatabaseService {
     return WorkoutsCollection.doc(workoutID)
         .update({'workoutName': workoutName}).then(
             (value) => print("DocumentSnapshot successfully updated!"),
-        onError: (e) => print("Error updating document $e"));
-  }
-  
-  //function to update the current workout progress
-  Future updateWorkoutProgress(String workoutID, int newPageProgress) async {
-    return WorkoutsCollection.doc(workoutID).update({'pageProgress': newPageProgress}).then(
-        (value) => print('DocumentSnapshot successfully updated with new page progress'),
-      onError: (e) => print('Error updating document $e')
-    );
+            onError: (e) => print("Error updating document $e"));
   }
 
-  Future editActivities(Workout workout, List activityNamesDeleted) async {
+  //function to update the current workout progress
+  Future updateWorkoutProgress(String workoutID, int newPageProgress) async {
+    return WorkoutsCollection.doc(workoutID)
+        .update({'pageProgress': newPageProgress}).then(
+            (value) => print(
+                'DocumentSnapshot successfully updated with new page progress'),
+            onError: (e) => print('Error updating document $e'));
+  }
+
+  Future editActivities(Workout workout, List activityIDsDeleted) async {
+    for (var activityID in activityIDsDeleted) {
+      // Use the activity ID when deleting documents
+      WorkoutsCollection.doc(workout.workoutID)
+          .collection('activities')
+          .doc(activityID)
+          .delete();
+    }
+
     if (workout.activities.isNotEmpty) {
       for (int i = 0; i < workout.activities.length; i++) {
         CollectionReference activitiesCollection =
-        WorkoutsCollection.doc(workout.workoutID).collection('activities');
+            WorkoutsCollection.doc(workout.workoutID).collection('activities');
         Activity activity = workout.activities[i];
+
+        // Use the activity ID when updating documents
+        DocumentReference activityDocument =
+            activitiesCollection.doc(activity.activityID);
+
         Map<String, dynamic> activityData = {
+          'activityID': activityDocument.id,
           'activityName': activity.activityName,
           'reps': activity.reps,
           'weights': activity.weights,
           'weightsUsed': activity.weightsUsed,
           'time': activity.time.inMilliseconds,
-          // Convert Duration to milliseconds
           'activityType': activity.activityType,
           'stopwatchUsed': activity.stopwatchUsed,
           'position': i,
-          // Use the position in the list as the ordering criteria
         };
-        await activitiesCollection.doc(activity.activityName).set(activityData);
+        await activityDocument.set(activityData);
       }
     } else {
       print('No activities to be deleted');
-    }
-
-    for (var activity in activityNamesDeleted) {
-      WorkoutsCollection.doc(workout.workoutID)
-          .collection('activities')
-          .doc(activity)
-          .delete();
     }
   }
 }
