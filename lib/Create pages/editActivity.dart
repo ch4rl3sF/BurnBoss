@@ -45,6 +45,7 @@ class _editActivityState extends State<editActivity> {
 
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text(widget.activity.activityName),
       ),

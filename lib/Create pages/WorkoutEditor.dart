@@ -57,6 +57,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
           centerTitle: true,
           toolbarHeight: 125,

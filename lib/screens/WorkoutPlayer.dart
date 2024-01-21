@@ -221,11 +221,14 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                         style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
                       )),
                   if (activity.weights != 0)
-                    FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text(
-                        'At weight: ${activity.weights.toString()}',
-                        style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          'At weight: ${activity.weights.toString()}',
+                          style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+                        ),
                       ),
                     )
                 ],
@@ -235,7 +238,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
             Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: Text('timer')),
+                child: Text(activity.time.inMinutes.toString())),
           if (activity.activityType == 'Stopwatch')
             Padding(
                 padding:
