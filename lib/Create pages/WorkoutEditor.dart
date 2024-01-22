@@ -150,10 +150,10 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                 activityNameController.text.trim();
                             int placeholderReps = 0;
                             if (newActivityName.isNotEmpty) {
-                              widget.workout.activities.add(Activity(
-                                activityID: '',
-                                  activityName: newActivityName,
-                                  reps: placeholderReps));
+                              Activity newActivity = Activity(activityID: '', activityName: newActivityName, reps: placeholderReps);
+
+
+                              widget.workout.activities.add(newActivity);
                               activityNameController.clear();
                             }
                           });

@@ -25,6 +25,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
   late Timer _activityStopwatchTimer;
   String _activityStopwatchResult = '00:00:00';
   bool _activityStopwatchIsRunning = false;
+  Timer? _activityCountdownTimer;
 
   @override
   void initState() {
@@ -69,6 +70,23 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
     setState(() {
       _activityStopwatchResult = '00:00:00';
     });
+  }
+
+  void _startActivityTimer(Activity activity) {
+    _activityCountdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (activity.time.inSeconds > 0) {
+          activity.time -= Duration(seconds: 1);
+        } else {
+          // Stop the timer when it reaches 0
+          _stopActivityTimer(reset: false);
+        }
+      });
+    });
+  }
+
+  void _stopActivityTimer() {
+    _activityCountdownTimer?.cancel();
   }
 
   Widget build(BuildContext context) {
@@ -238,29 +256,12 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
             ),
           if (activity.activityType == 'Timer')
             Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                  child: TimerCountdown(
-                    format: CountDownTimerFormat.hoursMinutesSeconds,
-                    endTime: DateTime.now().add(activity.time),
-                    timeTextStyle: TextStyle(fontSize: 50),
-                    colonsTextStyle: TextStyle(fontSize: 50),
-                    onEnd: () {
-                      print('timer finished');
-                    },
-
-                  )
-                ),
-                Row(
-                  children: [
-                    ElevatedButton(onPressed: () {}, child: Icon(Icons.play_arrow_rounded)),
-                    ElevatedButton(onPressed: () {}, child: Icon(Icons.replay_rounded))
-                  ],
-                )
+                buildTimer(activity),
+                timerButtons(activity),
               ],
             ),
-
           if (activity.activityType == 'Stopwatch')
             Padding(
                 padding:
@@ -299,8 +300,47 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
     );
   }
 
+  Widget buildTimer(Activity activity) {
+    return Text(
+      '${activity.time.inHours.toString().padLeft(2, '0')}:${(activity.time.inMinutes % 60).toString().padLeft(2, '0')}:${(activity.time.inSeconds % 60).toString().padLeft(2, '0')}',
+      style: TextStyle(fontSize: 50),
+
+    );
+  }
+
+  Widget timerButtons(Activity activity) {
+    final _activityTimerIsRunning = _activityCountdownTimer == null
+        ? false
+        : _activityCountdownTimer!.isActive;
+
+    return _activityTimerIsRunning
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                  onPressed: () {
+                    _stopActivityTimer();
+                  },
+                  child: Icon(Icons.pause_rounded)),
+              SizedBox(
+                width: 30,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    _stopActivityTimer();
+                  },
+                  child: Icon(Icons.replay_rounded))
+            ],
+          )
+        : ElevatedButton(
+            onPressed: () {
+              _startActivityTimer(activity);
+            },
+            child: Icon(Icons.play_arrow_rounded));
+  }
+
   Widget buildFinishPage() {
-    return Center(
+    return const Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

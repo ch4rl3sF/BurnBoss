@@ -167,22 +167,40 @@ class DatabaseService {
             WorkoutsCollection.doc(workout.workoutID).collection('activities');
         Activity activity = workout.activities[i];
 
-        // Use the activity ID when updating documents
-        DocumentReference activityDocument =
-            activitiesCollection.doc(activity.activityID);
+        if(activity.activityID.isNotEmpty) {// Use the activity ID when updating documents
+          DocumentReference activityDocument =
+          activitiesCollection.doc(activity.activityID);
 
-        Map<String, dynamic> activityData = {
-          'activityID': activityDocument.id,
-          'activityName': activity.activityName,
-          'reps': activity.reps,
-          'weights': activity.weights,
-          'weightsUsed': activity.weightsUsed,
-          'time': activity.time.inMilliseconds,
-          'activityType': activity.activityType,
-          'stopwatchUsed': activity.stopwatchUsed,
-          'position': i,
-        };
-        await activityDocument.set(activityData);
+          Map<String, dynamic> activityData = {
+            'activityID': activityDocument.id,
+            'activityName': activity.activityName,
+            'reps': activity.reps,
+            'weights': activity.weights,
+            'weightsUsed': activity.weightsUsed,
+            'time': activity.time.inMilliseconds,
+            'activityType': activity.activityType,
+            'stopwatchUsed': activity.stopwatchUsed,
+            'position': i,
+          };
+          await activityDocument.set(activityData);
+        } else {
+          // Use the activity ID when updating documents
+          DocumentReference activityDocument =
+          activitiesCollection.doc();
+
+          Map<String, dynamic> activityData = {
+            'activityID': activityDocument.id,
+            'activityName': activity.activityName,
+            'reps': activity.reps,
+            'weights': activity.weights,
+            'weightsUsed': activity.weightsUsed,
+            'time': activity.time.inMilliseconds,
+            'activityType': activity.activityType,
+            'stopwatchUsed': activity.stopwatchUsed,
+            'position': i,
+          };
+          await activityDocument.set(activityData);
+        }
       }
     } else {
       print('No activities to be deleted');
