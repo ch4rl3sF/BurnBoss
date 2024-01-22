@@ -79,7 +79,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
           activity.time -= Duration(seconds: 1);
         } else {
           // Stop the timer when it reaches 0
-          _stopActivityTimer(reset: false);
+          _stopActivityTimer();
         }
       });
     });
