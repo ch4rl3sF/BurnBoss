@@ -5,6 +5,7 @@ import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 class WorkoutPlayer extends StatefulWidget {
   final Workout workout;
@@ -16,7 +17,8 @@ class WorkoutPlayer extends StatefulWidget {
   State<WorkoutPlayer> createState() => _WorkoutPlayerState();
 }
 
-class _WorkoutPlayerState extends State<WorkoutPlayer> {
+class _WorkoutPlayerState extends State<WorkoutPlayer>
+    with TickerProviderStateMixin {
   PageController _pageController = PageController();
   final Stopwatch _activityStopwatch = Stopwatch();
   late int _currentPage;
@@ -235,10 +237,30 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
               ),
             ),
           if (activity.activityType == 'Timer')
-            Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: Text(activity.time.inMinutes.toString())),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+                  child: TimerCountdown(
+                    format: CountDownTimerFormat.hoursMinutesSeconds,
+                    endTime: DateTime.now().add(activity.time),
+                    timeTextStyle: TextStyle(fontSize: 50),
+                    colonsTextStyle: TextStyle(fontSize: 50),
+                    onEnd: () {
+                      print('timer finished');
+                    },
+
+                  )
+                ),
+                Row(
+                  children: [
+                    ElevatedButton(onPressed: () {}, child: Icon(Icons.play_arrow_rounded)),
+                    ElevatedButton(onPressed: () {}, child: Icon(Icons.replay_rounded))
+                  ],
+                )
+              ],
+            ),
+
           if (activity.activityType == 'Stopwatch')
             Padding(
                 padding:
