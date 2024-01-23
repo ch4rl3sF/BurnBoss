@@ -23,11 +23,13 @@ class NavDrawerWidget extends StatelessWidget {
       var username = email.split('@')[0];
       return username;
     }
+
     return Drawer(
       child: ListView(
         children: [
           UserAccountsDrawerHeader(
-            decoration: BoxDecoration(color: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY),
+            decoration: BoxDecoration(
+                color: isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY),
             accountName: FutureBuilder<String>(
               future: _getUsername(),
               builder: (context, snapshot) {
@@ -35,6 +37,8 @@ class NavDrawerWidget extends StatelessWidget {
                   return Text('Loading...');
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
+                } else if (snapshot.data == null) {
+                  return Text('Guest');
                 } else {
                   return Text(
                     snapshot.data ?? 'No Username',
@@ -47,10 +51,12 @@ class NavDrawerWidget extends StatelessWidget {
             ),
             accountEmail: Text(
               email,
-              style: TextStyle(color: isLightTheme? Colors.white : Colors.black),
+              style:
+                  TextStyle(color: isLightTheme ? Colors.white : Colors.black),
             ),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),
+              backgroundImage:
+                  AssetImage('assets/images/defaultProfilePicture.png'),
             ),
           ),
           buildNavBarItem(
@@ -105,7 +111,8 @@ class NavDrawerWidget extends StatelessWidget {
             },
             child: CircleAvatar(
               radius: 20,
-              backgroundColor: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
+              backgroundColor:
+                  isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
               child: CircleAvatar(
                 radius: 19,
                 backgroundColor: Color(0xff292929),
