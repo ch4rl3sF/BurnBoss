@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:burnboss/models/activity.dart';
+import 'package:burnboss/models/stopwatch.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/models/timer_activity_player.dart';
+import 'package:burnboss/models/stopwatch.dart';
 
 class WorkoutPlayer extends StatefulWidget {
   final Workout workout;
@@ -17,14 +19,9 @@ class WorkoutPlayer extends StatefulWidget {
   State<WorkoutPlayer> createState() => _WorkoutPlayerState();
 }
 
-class _WorkoutPlayerState extends State<WorkoutPlayer>
-    with TickerProviderStateMixin {
+class _WorkoutPlayerState extends State<WorkoutPlayer> {
   PageController _pageController = PageController();
-  final Stopwatch _activityStopwatch = Stopwatch();
   late int _currentPage;
-  late Timer _activityStopwatchTimer;
-  String _activityStopwatchResult = '00:00:00';
-  bool _activityStopwatchIsRunning = false;
 
   @override
   void initState() {
@@ -38,38 +35,6 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
     super.initState();
   }
 
-  void stopwatchDispose() {
-    _activityStopwatchTimer.cancel();
-    super.dispose();
-  }
-
-  void _toggleActivityStopwatchStartStop() {
-    if (_activityStopwatch.isRunning) {
-      _activityStopwatchTimer.cancel();
-      _activityStopwatch.stop();
-    } else {
-      _activityStopwatchTimer =
-          Timer.periodic(Duration(milliseconds: 10), (timer) {
-        setState(() {
-          _activityStopwatchResult =
-              '${_activityStopwatch.elapsed.inHours.toString().padLeft(2, '0')}:${_activityStopwatch.elapsed.inMinutes.toString().padLeft(2, '0')}:${(_activityStopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
-        });
-      });
-      _activityStopwatch.start();
-    }
-    setState(() {
-      _activityStopwatchIsRunning = !_activityStopwatchIsRunning;
-    });
-  }
-
-  void _resetActivityStopwatch() {
-    _activityStopwatchTimer.cancel();
-    _activityStopwatch.reset();
-    _activityStopwatch.stop();
-    setState(() {
-      _activityStopwatchResult = '00:00:00';
-    });
-  }
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -245,78 +210,14 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
             Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _activityStopwatchResult,
-                        style: TextStyle(fontSize: 50.0),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          //Start button
-                          ElevatedButton(
-                              onPressed: _toggleActivityStopwatchStartStop,
-                              child: Text(_activityStopwatch.isRunning
-                                  ? "Stop"
-                                  : "Start")),
-                          //Reset button
-                          ElevatedButton(
-                              onPressed: _resetActivityStopwatch,
-                              child: Text('Reset')),
-                        ],
-                      )
-                    ],
-                  ),
-                )),
+                child: ActivityStopwatch(
+                  key: GlobalKey<ActivityStopwatchState>(),
+                ),
+            ),
         ],
       ),
     );
   }
-
-  // Widget buildTimer(Activity activity) {
-  //   return Text(
-  //     '${activity.time.inHours.toString().padLeft(2, '0')}:${(activity.time.inMinutes % 60).toString().padLeft(2, '0')}:${(activity.time.inSeconds % 60).toString().padLeft(2, '0')}',
-  //     style: TextStyle(fontSize: 50),
-  //
-  //   );
-  // }
-
-  // Widget timerButtons(Activity activity) {
-  //   final _activityTimerIsRunning = _activityCountdownTimer == null
-  //       ? false
-  //       : _activityCountdownTimer!.isActive;
-  //
-  //   return _activityTimerIsRunning
-  //       ? Row(
-  //           mainAxisAlignment: MainAxisAlignment.center,
-  //           children: [
-  //             ElevatedButton(
-  //                 onPressed: () {
-  //                   _stopActivityTimer();
-  //                 },
-  //                 child: Icon(Icons.pause_rounded)),
-  //             SizedBox(
-  //               width: 30,
-  //             ),
-  //             ElevatedButton(
-  //                 onPressed: () {
-  //                   _stopActivityTimer();
-  //                 },
-  //                 child: Icon(Icons.replay_rounded))
-  //           ],
-  //         )
-  //       : ElevatedButton(
-  //           onPressed: () {
-  //             _startActivityTimer(activity);
-  //           },
-  //           child: Icon(Icons.play_arrow_rounded));
-  // }
 
   Widget buildFinishPage() {
     return const Center(
