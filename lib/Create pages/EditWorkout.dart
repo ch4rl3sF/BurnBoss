@@ -42,7 +42,6 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
     // Set the color based on the theme
     Color cardColor = isLightTheme ? Colors.white : Colors.grey[800]!;
     return Scaffold(
-
       appBar: AppBar(
         centerTitle: true,
         // backgroundColor: Color(0xff292929),

@@ -5,7 +5,7 @@ import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:burnboss/models/timer_activity_player.dart';
 
 class WorkoutPlayer extends StatefulWidget {
   final Workout workout;
@@ -25,7 +25,6 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
   late Timer _activityStopwatchTimer;
   String _activityStopwatchResult = '00:00:00';
   bool _activityStopwatchIsRunning = false;
-  Timer? _activityCountdownTimer;
 
   @override
   void initState() {
@@ -70,23 +69,6 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
     setState(() {
       _activityStopwatchResult = '00:00:00';
     });
-  }
-
-  void _startActivityTimer(Activity activity) {
-    _activityCountdownTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        if (activity.time.inSeconds > 0) {
-          activity.time -= Duration(seconds: 1);
-        } else {
-          // Stop the timer when it reaches 0
-          _stopActivityTimer();
-        }
-      });
-    });
-  }
-
-  void _stopActivityTimer() {
-    _activityCountdownTimer?.cancel();
   }
 
   Widget build(BuildContext context) {
@@ -255,12 +237,9 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
               ),
             ),
           if (activity.activityType == 'Timer')
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                buildTimer(activity),
-                timerButtons(activity),
-              ],
+            ActivityTimer(
+              key: GlobalKey<ActivityTimerState>(),
+              initialTime: activity.time,
             ),
           if (activity.activityType == 'Stopwatch')
             Padding(
@@ -300,44 +279,44 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
     );
   }
 
-  Widget buildTimer(Activity activity) {
-    return Text(
-      '${activity.time.inHours.toString().padLeft(2, '0')}:${(activity.time.inMinutes % 60).toString().padLeft(2, '0')}:${(activity.time.inSeconds % 60).toString().padLeft(2, '0')}',
-      style: TextStyle(fontSize: 50),
+  // Widget buildTimer(Activity activity) {
+  //   return Text(
+  //     '${activity.time.inHours.toString().padLeft(2, '0')}:${(activity.time.inMinutes % 60).toString().padLeft(2, '0')}:${(activity.time.inSeconds % 60).toString().padLeft(2, '0')}',
+  //     style: TextStyle(fontSize: 50),
+  //
+  //   );
+  // }
 
-    );
-  }
-
-  Widget timerButtons(Activity activity) {
-    final _activityTimerIsRunning = _activityCountdownTimer == null
-        ? false
-        : _activityCountdownTimer!.isActive;
-
-    return _activityTimerIsRunning
-        ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                  onPressed: () {
-                    _stopActivityTimer();
-                  },
-                  child: Icon(Icons.pause_rounded)),
-              SizedBox(
-                width: 30,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    _stopActivityTimer();
-                  },
-                  child: Icon(Icons.replay_rounded))
-            ],
-          )
-        : ElevatedButton(
-            onPressed: () {
-              _startActivityTimer(activity);
-            },
-            child: Icon(Icons.play_arrow_rounded));
-  }
+  // Widget timerButtons(Activity activity) {
+  //   final _activityTimerIsRunning = _activityCountdownTimer == null
+  //       ? false
+  //       : _activityCountdownTimer!.isActive;
+  //
+  //   return _activityTimerIsRunning
+  //       ? Row(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             ElevatedButton(
+  //                 onPressed: () {
+  //                   _stopActivityTimer();
+  //                 },
+  //                 child: Icon(Icons.pause_rounded)),
+  //             SizedBox(
+  //               width: 30,
+  //             ),
+  //             ElevatedButton(
+  //                 onPressed: () {
+  //                   _stopActivityTimer();
+  //                 },
+  //                 child: Icon(Icons.replay_rounded))
+  //           ],
+  //         )
+  //       : ElevatedButton(
+  //           onPressed: () {
+  //             _startActivityTimer(activity);
+  //           },
+  //           child: Icon(Icons.play_arrow_rounded));
+  // }
 
   Widget buildFinishPage() {
     return const Center(
