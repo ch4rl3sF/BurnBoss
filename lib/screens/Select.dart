@@ -149,7 +149,7 @@ class _SelectPageState extends State<SelectPage> {
               );
             }
           }),
-      drawer: const NavDrawerWidget(),
+      drawer: const NavDrawerWidget(currentRoute: '/Select'),
     );
   }
 }

@@ -29,7 +29,7 @@ class Home extends StatelessWidget {
           ),
         ),
       ),
-      drawer: NavDrawerWidget(),
+      drawer: NavDrawerWidget(currentRoute: '/'),
       body: Align(
         alignment: Alignment.topCenter,
         child: Padding(

@@ -51,7 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
           },
         ),
       ]),
-      drawer: NavDrawerWidget(),
+      drawer: NavDrawerWidget(currentRoute: '/Settings'),
     );
   }
 }

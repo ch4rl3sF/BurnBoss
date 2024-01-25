@@ -18,7 +18,7 @@ class CalendarPage extends StatelessWidget {
         ),
       ),
       body: Text('Calendar'),
-      drawer: NavDrawerWidget(),
+      drawer: NavDrawerWidget(currentRoute: '/Calendar',),
     );
   }
 }

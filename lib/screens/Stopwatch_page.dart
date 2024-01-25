@@ -39,7 +39,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
           key: GlobalKey<ActivityStopwatchState>(),
         ),
       ),
-      drawer: NavDrawerWidget(),
+      drawer: NavDrawerWidget(currentRoute: '/Stopwatch'),
     );
   }
 }

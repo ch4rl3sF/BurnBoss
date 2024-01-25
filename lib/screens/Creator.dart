@@ -68,7 +68,7 @@ class CreatePage extends StatelessWidget {
           ],
         ),
       ),
-      drawer: NavDrawerWidget(),
+      drawer: NavDrawerWidget(currentRoute: '/Creator'),
     );
   }
 
