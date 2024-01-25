@@ -41,28 +41,73 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ),
-      body: Column(children: [
-        Switch(
-          value: widget.themeManager.themeModeIsDark,
-          onChanged: (bool switchIsOn) {
-            setState(
-              () {
-                print(
-                    'Switch changed to $switchIsOn'); //show that the switch is turned on
-                widget.themeManager.setThemeToDark(
-                    switchIsOn); //when the switch is on, change the theme to dark
-                DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).updateTheme(!switchIsOn);
-              },
-            );
-          },
+      body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        SizedBox(height: 10,),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+          child: Text(
+            'Theme:',
+            style: TextStyle(fontSize: 20),
+          ),
         ),
-        TextButton.icon(
-          icon: Icon(Icons.person),
-          label: Text('Sign Out'),
-          onPressed: () async {
-            await _auth.signOut();
-            Navigator.pushNamed(context, '/');
-          },
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.sunny),
+            SizedBox(
+              width: 20,
+            ),
+            Switch(
+              value: widget.themeManager.themeModeIsDark,
+              onChanged: (bool switchIsOn) {
+                setState(
+                  () {
+                    print(
+                        'Switch changed to $switchIsOn'); //show that the switch is turned on
+                    widget.themeManager.setThemeToDark(
+                        switchIsOn); //when the switch is on, change the theme to dark
+                    DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+                        .updateTheme(!switchIsOn);
+                  },
+                );
+              },
+            ),
+            SizedBox(
+              width: 20,
+            ),
+            Icon(Icons.nightlight)
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
+          child: const Divider(
+            thickness: 1,
+            color: Colors.grey,
+            indent: 20,
+            endIndent: 20,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+          child: Text(
+            'Account:',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Column(
+            children: [
+              TextButton.icon(
+                icon: Icon(Icons.person),
+                label: Text('Sign Out'),
+                onPressed: () async {
+                  await _auth.signOut();
+                  Navigator.pushNamed(context, '/');
+                },
+              ),
+            ],
+          ),
         ),
       ]),
       drawer: NavDrawerWidget(currentRoute: '/Settings'),
