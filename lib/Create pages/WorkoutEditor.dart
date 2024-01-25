@@ -27,6 +27,15 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
   TextEditingController activityNameController = TextEditingController();
   TextEditingController workoutNameAdd = TextEditingController();
 
+  late int numberOfActivities;
+
+  void initState() {
+    setState(() {
+      numberOfActivities = widget.workout.activities.length;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Access the current theme
@@ -47,7 +56,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .editWorkoutName(
-            widget.workout.workoutID, widget.workout.workoutName);
+                widget.workout.workoutID, widget.workout.workoutName);
         DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
             .editActivities(widget.workout, activityIDsDeleted);
 
@@ -55,6 +64,8 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
         activityIDsDeleted.clear();
       });
     }
+
+
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -150,8 +161,10 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                 activityNameController.text.trim();
                             int placeholderReps = 0;
                             if (newActivityName.isNotEmpty) {
-                              Activity newActivity = Activity(activityID: '', activityName: newActivityName, reps: placeholderReps);
-
+                              Activity newActivity = Activity(
+                                  activityID: '',
+                                  activityName: newActivityName,
+                                  reps: placeholderReps);
 
                               widget.workout.activities.add(newActivity);
                               activityNameController.clear();
@@ -225,25 +238,33 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                     onUpdateWeight: (int newWeight) {
                                       // Update the weight of the original instance in the ActivityList
                                       setState(() {
-                                        widget.workout.activities[index].updateWeight(newWeight);
+                                        widget.workout.activities[index]
+                                            .updateWeight(newWeight);
                                         changesMade = true;
                                       });
                                     },
                                     onUpdateTime: (Duration newTime) {
                                       setState(() {
-                                        widget.workout.activities[index].updateTime(newTime);
+                                        widget.workout.activities[index]
+                                            .updateTime(newTime);
                                         changesMade = true;
                                       });
                                     },
-                                    onUpdateActivityName: (String newActivityType) {
+                                    onUpdateActivityName:
+                                        (String newActivityType) {
                                       setState(() {
-                                        widget.workout.activities[index].updateActivityType(newActivityType);
+                                        widget.workout.activities[index]
+                                            .updateActivityType(
+                                                newActivityType);
                                         changesMade = true;
                                       });
                                     },
-                                    onUpdateStopwatchUsed: (bool newStopwatchUsed) {
+                                    onUpdateStopwatchUsed:
+                                        (bool newStopwatchUsed) {
                                       setState(() {
-                                        widget.workout.activities[index].updateStopwatchBool(newStopwatchUsed);
+                                        widget.workout.activities[index]
+                                            .updateStopwatchBool(
+                                                newStopwatchUsed);
                                       });
                                     },
                                   ),
@@ -251,16 +272,18 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                               );
                             },
                           ),
-                          IconButton(
+                          if (numberOfActivities > 1)
+                            IconButton(
                               onPressed: () {
                                 setState(() {
                                   widget.workout.activities.removeAt(index);
                                   changesMade = true;
-                                  activityIDsDeleted
-                                      .add(activity.activityID);
+                                  activityIDsDeleted.add(activity.activityID);
+                                  numberOfActivities = numberOfActivities - 1;
                                 });
                               },
-                              icon: Icon(Icons.delete_rounded))
+                              icon: Icon(Icons.delete_rounded),
+                            ),
                         ],
                       ),
                     ),
