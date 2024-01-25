@@ -1,22 +1,27 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../services/database.dart';
 
-class  ThemeManager with ChangeNotifier {
-  bool? themeValue = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getTheme();
+class ThemeManager with ChangeNotifier {
+  ThemeMode _themeMode = ThemeMode.light;
 
-  ThemeMode _themeMode = themeValue ? ThemeMode.light : ThemeMode.dark; //set the themeMode to light as default
+  ThemeManager() {
+    initializeTheme();
+  }
+
+  Future<void> initializeTheme() async {
+    bool? isLightTheme = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getTheme();
+    if (isLightTheme != null) {
+      _themeMode = isLightTheme ? ThemeMode.light : ThemeMode.dark;
+    }
+  }
 
   get themeMode => _themeMode;
 
   setThemeToDark(bool isDark) {
-    print(
-        "Theme mode toggled to ${isDark ? "dark" : "light"}"); //shows if the theme mode is dark or light
-    _themeMode = isDark
-        ? ThemeMode.dark
-        : ThemeMode
-            .light; //if the themeMode is changed to dark through the switch,
-    // make the themeMode dark, else make it light
+    print("Theme mode toggled to ${isDark ? "dark" : "light"}");
+    _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }
 

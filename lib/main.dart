@@ -29,6 +29,7 @@ class BurnBoss extends StatefulWidget {
 
 class _BurnBossState extends State<BurnBoss> {
   final ThemeManager _themeManager = ThemeManager();
+
   final AuthService authService = AuthService();
   late bool themeIsDark;
 
@@ -69,9 +70,17 @@ class _BurnBossState extends State<BurnBoss> {
   @override
   void initState() {
     super.initState();
+    initializeTheme();
     themeIsDark = _themeManager.themeModeIsDark;
     _themeManager.addListener(themeChangeListener);
   } //adds the listener for changing theme function
+
+  Future<void> initializeTheme() async {
+    await _themeManager.initializeTheme();
+    setState(() {
+      themeIsDark = _themeManager.themeModeIsDark;
+    });
+  }
 
   themeChangeListener() {
     if (mounted) {
