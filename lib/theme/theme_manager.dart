@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../services/database.dart';
+
 class  ThemeManager with ChangeNotifier {
-  ThemeMode _themeMode =
-      ThemeMode.light; //set the themeMode to light as default
+  bool? themeValue = DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getTheme();
+
+  ThemeMode _themeMode = themeValue ? ThemeMode.light : ThemeMode.dark; //set the themeMode to light as default
 
   get themeMode => _themeMode;
 

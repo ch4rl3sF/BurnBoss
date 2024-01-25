@@ -11,6 +11,7 @@ import 'package:burnboss/theme/theme_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:burnboss/services/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,7 @@ class BurnBoss extends StatefulWidget {
 
 class _BurnBossState extends State<BurnBoss> {
   final ThemeManager _themeManager = ThemeManager();
+  final AuthService authService = AuthService();
   late bool themeIsDark;
 
   @override

@@ -32,6 +32,28 @@ class DatabaseService {
     });
   }
 
+  Future? updateTheme(bool isLightTheme) async {
+    return await usersCollection
+        .doc(uid)
+        .collection('Theme')
+        .doc('theme')
+        .set({'isLightTheme': isLightTheme});
+  }
+
+  Future<bool?> getTheme() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await usersCollection
+        .doc(uid)
+        .collection('Theme')
+        .doc('theme')
+        .get();
+
+    if (snapshot.exists) {
+      return snapshot.data()?['isLightTheme'];
+    } else {
+      return null; // Return null if the document doesn't exist
+    }
+  }
+
   //function to create a workout
   Future createWorkout(Workout workout) async {
     // Add the workout to Firestore
@@ -167,9 +189,10 @@ class DatabaseService {
             WorkoutsCollection.doc(workout.workoutID).collection('activities');
         Activity activity = workout.activities[i];
 
-        if(activity.activityID.isNotEmpty) {// Use the activity ID when updating documents
+        if (activity.activityID.isNotEmpty) {
+          // Use the activity ID when updating documents
           DocumentReference activityDocument =
-          activitiesCollection.doc(activity.activityID);
+              activitiesCollection.doc(activity.activityID);
 
           Map<String, dynamic> activityData = {
             'activityID': activityDocument.id,
@@ -185,8 +208,7 @@ class DatabaseService {
           await activityDocument.set(activityData);
         } else {
           // Use the activity ID when updating documents
-          DocumentReference activityDocument =
-          activitiesCollection.doc();
+          DocumentReference activityDocument = activitiesCollection.doc();
 
           Map<String, dynamic> activityData = {
             'activityID': activityDocument.id,

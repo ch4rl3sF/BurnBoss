@@ -1,5 +1,7 @@
 import 'package:burnboss/services/auth.dart';
+import 'package:burnboss/services/database.dart';
 import 'package:burnboss/theme/theme_manager.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 
@@ -19,7 +21,18 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Settings'),
+        centerTitle: true,
+        // backgroundColor: Color(0xff292929),
+        toolbarHeight: 125,
+        title: const Text(
+          'Select',
+          style: TextStyle(
+            fontSize: 55,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 2.0,
+            fontFamily: 'Bebas',
+          ),
+        ),
         leading: Builder(
           builder: (context) => IconButton(
             padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
@@ -38,6 +51,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     'Switch changed to $switchIsOn'); //show that the switch is turned on
                 widget.themeManager.setThemeToDark(
                     switchIsOn); //when the switch is on, change the theme to dark
+                DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).updateTheme(!switchIsOn);
               },
             );
           },
