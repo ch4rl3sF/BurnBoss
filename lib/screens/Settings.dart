@@ -103,7 +103,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 label: Text('Sign Out'),
                 onPressed: () async {
                   await _auth.signOut();
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushReplacementNamed(context, '/');
                 },
               ),
             ],
