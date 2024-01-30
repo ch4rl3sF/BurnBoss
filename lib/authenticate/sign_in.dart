@@ -26,6 +26,7 @@ class _SignInState extends State<SignIn> {
     return loading
         ? Loading()
         : Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               centerTitle: true,
               // backgroundColor: Color(0xff292929),
@@ -60,16 +61,17 @@ class _SignInState extends State<SignIn> {
                     SizedBox(height: 10),
                     TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'Password',
+                          hintText: 'Password',
                           suffixIcon: IconButton(
-                            icon: Icon(_passwordVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded),
+                            icon: Icon(_passwordVisible
+                                ? Icons.visibility_off_rounded
+                                : Icons.visibility_rounded),
                             onPressed: () {
                               setState(() {
                                 _passwordVisible = !_passwordVisible;
                               });
                             },
-                          )
-                      ),
+                          )),
                       validator: (val) => val!.length < 6
                           ? 'Enter a password 6+ chars long'
                           : null,

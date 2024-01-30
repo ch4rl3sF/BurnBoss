@@ -18,37 +18,48 @@ class ActivityStopwatchState extends State<ActivityStopwatch> {
   @override
   void initState() {
     super.initState();
+    print('new stopwatch made');
   }
 
   void stopwatchDispose() {
     _stopwatchTimer.cancel();
     super.dispose();
+    print('stopwatch disposed');
   }
 
   void _toggleStopwatchStartStop() {
-    if(_stopwatch.isRunning) {
-      _stopwatchTimer.cancel();
-      _stopwatch.stop();
-    } else {
-      _stopwatchTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        setState(() {
-          _stopwatchResult = '${_stopwatch.elapsed.inHours.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMinutes % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
+    if (mounted) {
+      if (_stopwatch.isRunning) {
+        _stopwatchTimer.cancel();
+        _stopwatch.stop();
+      } else {
+        _stopwatchTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+          if (mounted) {
+            setState(() {
+              _stopwatchResult =
+              '${_stopwatch.elapsed.inHours.toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inMinutes % 60).toString().padLeft(2, '0')}:${(_stopwatch.elapsed.inSeconds % 60).toString().padLeft(2, '0')}';
+            });
+          } else {
+            _stopwatchTimer.cancel(); // Cancel the timer if the widget is no longer mounted
+          }
         });
+        _stopwatch.start();
+      }
+      setState(() {
+        _stopwatchIsRunning = !_stopwatchIsRunning;
       });
-      _stopwatch.start();
     }
-    setState(() {
-      _stopwatchIsRunning = !_stopwatchIsRunning;
-    });
   }
 
   void _resetStopwatch() {
-    _stopwatchTimer.cancel();
-    _stopwatch.reset();
-    _stopwatch.stop();
-    setState(() {
-      _stopwatchResult = '00:00:00';
-    });
+    if (mounted) {
+      _stopwatchTimer.cancel();
+      _stopwatch.reset();
+      _stopwatch.stop();
+      setState(() {
+        _stopwatchResult = '00:00:00';
+      });
+    }
   }
 
   Widget build(BuildContext context) {

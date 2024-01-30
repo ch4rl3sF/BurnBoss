@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:burnboss/models/stopwatch.dart';
 
 class StopwatchPage extends StatefulWidget {
-  const StopwatchPage({Key? key}) : super(key: key);
+  final GlobalKey<ActivityStopwatchState> stopwatchKey;
+  const StopwatchPage({Key? key, required this.stopwatchKey}) : super(key: key);
 
   @override
   State<StopwatchPage> createState() => _StopwatchPageState();
@@ -36,7 +37,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
       ),
       body: Center(
         child: ActivityStopwatch(
-          key: GlobalKey<ActivityStopwatchState>(),
+          key: widget.stopwatchKey,
         ),
       ),
       drawer: NavDrawerWidget(currentRoute: '/Stopwatch'),

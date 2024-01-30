@@ -1,3 +1,4 @@
+import 'package:burnboss/models/stopwatch.dart';
 import 'package:burnboss/screens/Calendar.dart';
 import 'package:burnboss/screens/Creator.dart';
 import 'package:burnboss/screens/Select.dart';
@@ -23,12 +24,15 @@ void main() async {
 }
 
 class BurnBoss extends StatefulWidget {
+  final GlobalKey<ActivityStopwatchState> stopwatchKey =
+  GlobalKey<ActivityStopwatchState>();
   @override
   State<StatefulWidget> createState() => _BurnBossState();
 }
 
 class _BurnBossState extends State<BurnBoss> {
   final ThemeManager _themeManager = ThemeManager();
+
 
   final AuthService authService = AuthService();
   late bool themeIsDark;
@@ -54,7 +58,7 @@ class _BurnBossState extends State<BurnBoss> {
           '/Calendar': (context) => CalendarPage(),
           '/Creator': (context) => CreatePage(),
           '/Select': (context) => SelectPage(),
-          '/Stopwatch': (context) => StopwatchPage(),
+          '/Stopwatch': (context) => StopwatchPage(stopwatchKey: stopwatchKey),
           '/Settings': (context) => SettingsPage(_themeManager),
         }, //sets the routes to the different pages
       ),

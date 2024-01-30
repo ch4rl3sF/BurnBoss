@@ -26,6 +26,7 @@ class _RegisterState extends State<Register> {
     return loading
         ? Loading()
         : Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               centerTitle: true,
               // backgroundColor: Color(0xff292929),
@@ -62,7 +63,9 @@ class _RegisterState extends State<Register> {
                       decoration: InputDecoration(
                           hintText: 'Password',
                           suffixIcon: IconButton(
-                            icon: Icon(_passwordVisible ? Icons.visibility_off_rounded : Icons.visibility_rounded),
+                            icon: Icon(_passwordVisible
+                                ? Icons.visibility_off_rounded
+                                : Icons.visibility_rounded),
                             onPressed: () {
                               setState(() {
                                 _passwordVisible = !_passwordVisible;
