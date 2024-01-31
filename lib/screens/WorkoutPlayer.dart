@@ -10,6 +10,7 @@ import 'package:burnboss/models/timer_activity_player.dart';
 import 'package:burnboss/models/stopwatch.dart';
 
 class WorkoutPlayer extends StatefulWidget {
+  final ActivityStopwatch _activityStopwatch = ActivityStopwatch();
   final Workout workout;
   final Function(int) onUpdatePage;
 
@@ -210,9 +211,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
             Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: ActivityStopwatch(
-                  key: GlobalKey<ActivityStopwatchState>(),
-                ),
+                child: widget._activityStopwatch,
             ),
         ],
       ),

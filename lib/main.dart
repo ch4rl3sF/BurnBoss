@@ -24,16 +24,12 @@ void main() async {
 }
 
 class BurnBoss extends StatefulWidget {
-  final GlobalKey<ActivityStopwatchState> stopwatchKey =
-  GlobalKey<ActivityStopwatchState>();
   @override
   State<StatefulWidget> createState() => _BurnBossState();
 }
 
 class _BurnBossState extends State<BurnBoss> {
   final ThemeManager _themeManager = ThemeManager();
-
-
   final AuthService authService = AuthService();
   late bool themeIsDark;
 
@@ -58,7 +54,7 @@ class _BurnBossState extends State<BurnBoss> {
           '/Calendar': (context) => CalendarPage(),
           '/Creator': (context) => CreatePage(),
           '/Select': (context) => SelectPage(),
-          '/Stopwatch': (context) => StopwatchPage(stopwatchKey: stopwatchKey),
+          '/Stopwatch': (context) => StopwatchPage(),
           '/Settings': (context) => SettingsPage(_themeManager),
         }, //sets the routes to the different pages
       ),

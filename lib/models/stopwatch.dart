@@ -1,9 +1,16 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-
 class ActivityStopwatch extends StatefulWidget {
-  const ActivityStopwatch({Key? key}) : super(key: key);
+  // Create a static instance of the class
+  static final ActivityStopwatch _instance = ActivityStopwatch._internal();
+
+  // Provide a factory constructor to return the instance
+  factory ActivityStopwatch({Key? key}) {
+    return _instance;
+  }
+
+  ActivityStopwatch._internal({Key? key}) : super(key: key);
 
   @override
   State<ActivityStopwatch> createState() => ActivityStopwatchState();
@@ -14,6 +21,7 @@ class ActivityStopwatchState extends State<ActivityStopwatch> {
   late Timer _stopwatchTimer;
   String _stopwatchResult = '00:00:00';
   bool _stopwatchIsRunning = false;
+
 
   @override
   void initState() {
