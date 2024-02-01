@@ -75,10 +75,20 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SizedBox(height: 120,),
-                      Icon(Icons.not_interested_rounded, size: 60,),
-                      SizedBox(height: 20,),
-                      Text('No workouts available', style: TextStyle(fontFamily: 'Bebas', fontSize: 30),),
+                      SizedBox(
+                        height: 120,
+                      ),
+                      Icon(
+                        Icons.not_interested_rounded,
+                        size: 60,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'No workouts available',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
+                      ),
                     ],
                   ),
                 );
@@ -110,7 +120,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                               builder: (context) =>
                                                   WorkoutEditorPage(
                                                     workout:
-                                                    snapshot.data![index],
+                                                        snapshot.data![index],
                                                   )));
                                     },
                                     icon: Icon(
@@ -119,12 +129,35 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                     ),
                                   ),
                                   IconButton(
-                                    onPressed: () async {
-                                      await DatabaseService(
-                                          uid: FirebaseAuth
-                                              .instance.currentUser!.uid)
-                                          .deleteWorkout(workout.workoutID);
-                                      await _refreshWorkoutsList();
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) =>
+                                              AlertDialog(
+                                                title: const Text(
+                                                    'Delete workout?'),
+                                                content: Text(
+                                                    'Are you sure you want to delete ${workout.workoutName}'),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () async {
+                                                        await DatabaseService(
+                                                            uid: FirebaseAuth
+                                                                .instance.currentUser!.uid)
+                                                            .deleteWorkout(workout.workoutID);
+                                                        await _refreshWorkoutsList();
+                                                      },
+                                                      child: Text('Delete')),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(
+                                                            context, 'Cancel');
+                                                      },
+                                                      child:
+                                                          const Text('Cancel'))
+                                                ],
+                                              ));
+
                                     },
                                     icon: Icon(
                                       Icons.delete_rounded,
