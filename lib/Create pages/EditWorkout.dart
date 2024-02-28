@@ -146,8 +146,10 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                                                 .instance.currentUser!.uid)
                                                             .deleteWorkout(workout.workoutID);
                                                         await _refreshWorkoutsList();
+                                                        Navigator.pop(context, 'Delete');
                                                       },
                                                       child: Text('Delete')),
+
                                                   TextButton(
                                                       onPressed: () {
                                                         Navigator.pop(
