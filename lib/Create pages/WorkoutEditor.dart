@@ -62,10 +62,33 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
         // Clear the list once the items are saved
         activityIDsDeleted.clear();
+
+        //Show the SnackBar
+        var savingSnackBar = SnackBar(
+          content: const Center(
+              child: Text(
+                'Saving...',
+                style: TextStyle(
+                    fontSize: 20,
+                    fontFamily: 'Bebas',
+                    color: Colors.white),
+              )),
+          duration: const Duration(milliseconds: 2000),
+          width: 180.0,
+          padding: const EdgeInsets.symmetric(
+            horizontal:
+            8.0, // Inner padding for SnackBar content.
+          ),
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          backgroundColor: Colors.black12,
+        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(savingSnackBar);
       });
     }
-
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -111,6 +134,63 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                     fontFamily: 'Bebas',
                   ),
                 ),
+          leading: IconButton(
+            onPressed: () async {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Warning!'),
+                  content: Text(changesMade
+                      ? 'Would you like to exit without saving?'
+                      : 'Would you like to stop editing?'),
+                  actions: [
+                    if (changesMade)
+                      TextButton(
+                        onPressed: () async {
+                          Navigator.pushNamed(context, '/Creator');
+                          saveChanges();
+                          var savingSnackBar = SnackBar(
+                            content: Center(
+                                child: Text(
+                              'Saving...',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontFamily: 'Bebas',
+                                  color: Colors.white),
+                            )),
+                            duration: Duration(milliseconds: 2000),
+                            width: 180.0,
+                            padding: EdgeInsets.symmetric(
+                              horizontal:
+                                  8.0, // Inner padding for SnackBar content.
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            backgroundColor: Colors.black12,
+                          );
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(savingSnackBar);
+                        },
+                        child: Text('Save'),
+                      ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/Creator');
+                      },
+                      child: const Text('Exit'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Return'),
+                      child: const Text('Return'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
           actions: [
             if (!editingTitle)
               Padding(

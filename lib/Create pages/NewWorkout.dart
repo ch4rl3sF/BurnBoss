@@ -43,6 +43,88 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               },
             ),
           ),
+          leading: IconButton(
+            onPressed: () async {
+              if (workoutName == '' || activities.isEmpty) {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Warning!'),
+                    content: const Text(
+                        'Your workout either has no name or no activities!'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.pushNamed(context, '/Creator'),
+                        child: const Text('Abandon'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Return'),
+                        child: const Text('Return'),
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                showDialog<String>(
+                  context: context,
+                  builder: (BuildContext context) => AlertDialog(
+                    title: const Text('Warning!'),
+                    content:
+                        const Text('Would you like to exit without saving?'),
+                    actions: [
+                      TextButton(
+                          onPressed: () async {
+                            Navigator.pushNamed(context, '/Creator');
+                            Workout workout = Workout(
+                                workoutID: '',
+                                workoutName: workoutNameAdd.text,
+                                activities: activities);
+                            await DatabaseService(
+                                    uid: FirebaseAuth.instance.currentUser!.uid)
+                                .createWorkout(workout);
+                            var savingSnackBar = SnackBar(
+                              content: const Center(
+                                  child: Text(
+                                'Saving...',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Bebas',
+                                    color: Colors.white),
+                              )),
+                              duration: const Duration(milliseconds: 2000),
+                              width: 180.0,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal:
+                                    8.0, // Inner padding for SnackBar content.
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              backgroundColor: Colors.black12,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(savingSnackBar);
+                          },
+                          child: Text('Save')),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/Creator');
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Exit'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(context, 'Return'),
+                        child: const Text('Return'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
+            icon: Icon(Icons.arrow_back),
+          ),
           actions: [
             IconButton(
               onPressed: () {
@@ -82,6 +164,29 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                             await DatabaseService(
                                     uid: FirebaseAuth.instance.currentUser!.uid)
                                 .createWorkout(workout);
+                            var savingSnackBar = SnackBar(
+                              content: const Center(
+                                  child: Text(
+                                    'Saving...',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontFamily: 'Bebas',
+                                        color: Colors.white),
+                                  )),
+                              duration: const Duration(milliseconds: 2000),
+                              width: 180.0,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal:
+                                8.0, // Inner padding for SnackBar content.
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              backgroundColor: Colors.black12,
+                            );
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(savingSnackBar);
                           },
                         ),
                       ],
@@ -164,8 +269,8 @@ class _ActivityListState extends State<ActivityList> {
     setState(() {
       int placeholderReps = 0;
 
-      widget.activities
-          .add(Activity(activityID: '',activityName: activityName, reps: placeholderReps));
+      widget.activities.add(Activity(
+          activityID: '', activityName: activityName, reps: placeholderReps));
     });
   }
 
@@ -202,7 +307,6 @@ class _ActivityListState extends State<ActivityList> {
               widget.activities[index].updateStopwatchBool(newStopwatchUsed);
             });
           },
-
         ),
       ),
     );
