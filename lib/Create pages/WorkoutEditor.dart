@@ -142,7 +142,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                   title: const Text('Warning!'),
                   content: Text(changesMade
                       ? 'Would you like to exit without saving?'
-                      : 'Would you like to stop editing?'),
+                      : 'Would you like to exit editing page?'),
                   actions: [
                     if (changesMade)
                       TextButton(
