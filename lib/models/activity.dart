@@ -5,7 +5,7 @@ class Activity {
   String activityName;
   int reps;
   bool weightsUsed;
-  int weights;
+  double weights;
   Duration time;
   String activityType;
   bool stopwatchUsed;
@@ -51,7 +51,7 @@ this.activityID,
     reps = newReps;
   }
 
-  void updateWeight(int newWeight) {
+  void updateWeight(double newWeight) {
     weights = newWeight;
   }
 

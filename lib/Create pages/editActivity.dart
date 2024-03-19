@@ -3,11 +3,12 @@ import 'package:burnboss/theme/theme_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:math' as math;
 
 class editActivity extends StatefulWidget {
   final Activity activity;
   final Function(int) onUpdateReps; // Add callback function
-  final Function(int) onUpdateWeight;
+  final Function(double) onUpdateWeight;
   final Function(Duration) onUpdateTime;
   final Function(String) onUpdateActivityName;
   final Function(bool) onUpdateStopwatchUsed;
@@ -32,15 +33,19 @@ class _editActivityState extends State<editActivity> {
   TextEditingController hoursController = TextEditingController();
   TextEditingController minutesController = TextEditingController();
   TextEditingController secondsController = TextEditingController();
-  List<bool> isSelected = [];
+  List<bool> isWeightsSelected = [];
+  List<bool> activitySelected = [];
   List<String> activityOptions = ['Reps', 'Timer', 'Stopwatch'];
   String? activityOptionSelected = '';
 
   @override
   void initState() {
     super.initState();
-    isSelected = [!widget.activity.weightsUsed, widget.activity.weightsUsed];
+    isWeightsSelected = [!widget.activity.weightsUsed, widget.activity.weightsUsed];
+    activitySelected = [true, false, false];
     activityOptionSelected = widget.activity.activityType;
+    weightsController.text = widget.activity.weights.toString();
+    repsController.text = widget.activity.reps.toString();
   }
 
   Widget build(BuildContext context) {
@@ -103,10 +108,12 @@ class _editActivityState extends State<editActivity> {
                           style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
                         ),
                         ToggleButtons(
-                          isSelected: isSelected,
-                          selectedColor: Colors.white,
-                          color: isLightTheme? Colors.black : Colors.white,
-                          fillColor: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
+                          isSelected: isWeightsSelected,
+                          selectedColor: isLightTheme ? Colors.white : Colors.black,
+                          color: isLightTheme ? Colors.black : Colors.white,
+                          fillColor: isLightTheme
+                              ? COLOR_SECONDARY
+                              : DARK_COLOR_PRIMARY,
                           textStyle: TextStyle(fontFamily: 'Bebas'),
                           renderBorder: true,
                           borderColor: Colors.black,
@@ -126,20 +133,20 @@ class _editActivityState extends State<editActivity> {
                           onPressed: (int newIndex) {
                             setState(() {
                               for (int index = 0;
-                                  index < isSelected.length;
+                                  index < isWeightsSelected.length;
                                   index++) {
                                 if (index == newIndex) {
                                   setState(() {
                                     widget.activity.weightsUsed = (newIndex ==
                                         1); // Set weightsUsed based on the selected index
-                                    isSelected = List.generate(
-                                        isSelected.length,
+                                    isWeightsSelected = List.generate(
+                                        isWeightsSelected.length,
                                         (index) =>
                                             index ==
                                             newIndex); // Update isSelected
                                   });
                                 }
-                                isSelected[index] = (index == newIndex);
+                                isWeightsSelected[index] = (index == newIndex);
                                 widget.activity.weights = 0;
                               }
                             });
@@ -161,20 +168,21 @@ class _editActivityState extends State<editActivity> {
                                       fontFamily: 'Bebas', fontSize: 30))),
                           Expanded(
                             flex: 3,
-                            child: TextField(
+                            child: TextFormField(
                               controller: weightsController,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
-                                hintText: widget.activity.weights.toString(),
                               ),
                               inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d*\.?\d{0,2}')),
                               ],
-                              onSubmitted: (weights) {
+                              onFieldSubmitted: (weights) {
                                 try {
                                   setState(() {
-                                    int parsedWeight = int.parse(weights);
+                                    double parsedWeight = double.parse(weights);
                                     widget.onUpdateWeight(parsedWeight);
                                   });
                                 } catch (e) {
@@ -261,26 +269,88 @@ class _editActivityState extends State<editActivity> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: Column(
                 children: [
-                  Text('Using a stopwatch?', style: TextStyle(fontFamily: 'Bebas', fontSize: 30),),
+                  Text(
+                    'Using a stopwatch?',
+                    style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text('Off', style: TextStyle(fontFamily: 'Bebas', fontSize: 20),),
+                      Text(
+                        'Off',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 20),
+                      ),
                       Switch(
                         value: widget.activity.stopwatchUsed,
-                        activeColor: isLightTheme? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
+                        activeColor:
+                            isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
                         onChanged: (bool stopwatchIsUsed) {
                           setState(() {
                             widget.onUpdateStopwatchUsed(stopwatchIsUsed);
                           });
                         },
                       ),
-                      Text('On', style: TextStyle(fontFamily: 'Bebas', fontSize: 20),)
+                      Text(
+                        'On',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 20),
+                      )
                     ],
                   )
                 ],
               ),
-            )
+            ),
+
+          //NEW DESIGN
+          ToggleButtons(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text('Reps'),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text('Timer'),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text('Stopwatch'),
+              )
+            ],
+            selectedColor: isLightTheme ? Colors.white : Colors.black,
+            color: isLightTheme ? Colors.black : Colors.white,
+            fillColor: isLightTheme
+                ? COLOR_SECONDARY
+                : DARK_COLOR_PRIMARY,
+            textStyle: TextStyle(fontFamily: 'Bebas'),
+            renderBorder: true,
+            borderColor: Colors.black,
+            borderWidth: 1.0,
+            borderRadius: BorderRadius.circular(5),
+            selectedBorderColor: Colors.black,
+            isSelected: activitySelected,
+            onPressed: (int index) {
+              setState(() {
+                // The button that is tapped is set to true, and the others to false.
+                for (int i = 0; i < activitySelected.length; i++) {
+                  activitySelected[i] = i == index;
+                }
+              });
+            },
+          ),
+
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              Text('Sets:')
+            ],
+          )
         ],
       ),
     );

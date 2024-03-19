@@ -193,7 +193,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                       child: FittedBox(
                         fit: BoxFit.fitWidth,
                         child: Text(
-                          'At weight: ${activity.weights.toString()}',
+                          'At weight: ${activity.weights.toString()}kg',
                           style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
                         ),
                       ),

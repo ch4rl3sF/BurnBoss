@@ -315,7 +315,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                         changesMade = true;
                                       });
                                     },
-                                    onUpdateWeight: (int newWeight) {
+                                    onUpdateWeight: (double newWeight) {
                                       // Update the weight of the original instance in the ActivityList
                                       setState(() {
                                         widget.workout.activities[index]
