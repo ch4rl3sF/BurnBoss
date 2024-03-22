@@ -92,8 +92,6 @@ class _editActivityState extends State<editActivity> {
                               style: TextStyle(
                                   fontFamily: 'Bebas', fontSize: 20))))
                       .toList(),
-                  // onChanged: (activityOption) =>
-                  //     setState(() => activityOptionSelected = activityOption),
                   onChanged: (activityOption) {
                     setState(() {
                       activityOptionSelected = activityOption;
@@ -132,15 +130,22 @@ class _editActivityState extends State<editActivity> {
                                   LengthLimitingTextInputFormatter(4),
                                 ],
                                 onFieldSubmitted: (sets) {
+                                  if (setsController.text.isEmpty) {
+                                    setState(() {
+                                      restSwitchOn = false;
+                                    });
+                                  }
                                   try {
                                     int parsedSets = int.parse(sets);
                                     widget.onUpdateSets(parsedSets);
+                                    print('$sets');
                                     setState(() {
                                       numberOfSets = parsedSets;
                                       if (numberOfSets == 0) {
                                         restSwitchOn = false;
                                       }
-                                    });
+                                    }
+                                    );
                                   } catch (e) {
                                     print('Error parsing int $sets');
                                   }
@@ -259,7 +264,7 @@ class _editActivityState extends State<editActivity> {
                           ],
                         ),
                         Visibility(
-                          visible: (numberOfSets != 0 || widget.activity.sets != 0) && restSwitchOn,
+                          visible: restSwitchOn,
                           // Show the timer picker only when the switch is on
                           child: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
