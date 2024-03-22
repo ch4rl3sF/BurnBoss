@@ -1,5 +1,6 @@
 import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/services/database.dart';
+import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Access the current theme
+    ThemeData theme = Theme.of(context);
+
+    // Determine if the theme is light
+    bool isLightTheme = theme.brightness == Brightness.light;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -59,6 +65,7 @@ class _SettingsPageState extends State<SettingsPage> {
             ),
             Switch(
               value: widget.themeManager.themeModeIsDark,
+              activeColor: DARK_COLOR_PRIMARY,
               onChanged: (bool switchIsOn) {
                 setState(
                   () {
@@ -94,19 +101,22 @@ class _SettingsPageState extends State<SettingsPage> {
             style: TextStyle(fontSize: 20),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Column(
-            children: [
-              TextButton.icon(
-                icon: Icon(Icons.person),
-                label: Text('Sign Out'),
-                onPressed: () async {
-                  await _auth.signOut();
-                  Navigator.pushReplacementNamed(context, '/');
-                },
-              ),
-            ],
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              children: [
+                TextButton.icon(
+                  icon: Icon(Icons.person, color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY,),
+                  label: Text('Sign Out', style: TextStyle(color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY),),
+
+                  onPressed: () async {
+                    await _auth.signOut();
+                    Navigator.pushReplacementNamed(context, '/');
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ]),

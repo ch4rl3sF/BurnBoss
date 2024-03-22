@@ -3,11 +3,10 @@ import 'package:burnboss/theme/theme_constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math' as math;
 
 class editActivity extends StatefulWidget {
   final Activity activity;
-  final Function(int) onUpdateReps; // Add callback function
+  final Function(int) onUpdateReps;
   final Function(int) onUpdateSets;
   final Function(Duration) onUpdateRest;
   final Function(double) onUpdateWeight;
@@ -45,7 +44,6 @@ class _editActivityState extends State<editActivity> {
   late int numberOfSets;
   late bool restSwitchOn;
 
-
   @override
   void initState() {
     super.initState();
@@ -55,7 +53,7 @@ class _editActivityState extends State<editActivity> {
     repsController.text = widget.activity.reps.toString();
     setsController.text = widget.activity.sets.toString();
     numberOfSets = widget.activity.sets;
-    restSwitchOn = widget.activity.rest > Duration.zero  ? true : false;
+    restSwitchOn = widget.activity.rest > Duration.zero ? true : false;
   }
 
   Widget build(BuildContext context) {
@@ -64,7 +62,6 @@ class _editActivityState extends State<editActivity> {
 
     // Determine if the theme is light
     bool isLightTheme = theme.brightness == Brightness.light;
-
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -141,11 +138,10 @@ class _editActivityState extends State<editActivity> {
                                     print('$sets');
                                     setState(() {
                                       numberOfSets = parsedSets;
-                                      if (numberOfSets == 0) {
+                                      if (numberOfSets <= 1) {
                                         restSwitchOn = false;
                                       }
-                                    }
-                                    );
+                                    });
                                   } catch (e) {
                                     print('Error parsing int $sets');
                                   }
@@ -247,14 +243,18 @@ class _editActivityState extends State<editActivity> {
                             Text('Rest between sets?'),
                             SizedBox(width: 20),
                             AbsorbPointer(
-                              absorbing: numberOfSets == 0 || widget.activity.sets == 0 || setsController.text.isEmpty,
+                              absorbing: numberOfSets <= 1 ||
+                                  widget.activity.sets <= 1 ||
+                                  setsController.text.isEmpty,
                               child: Switch(
-                                activeColor: isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
+                                activeColor: isLightTheme
+                                    ? COLOR_SECONDARY
+                                    : DARK_COLOR_PRIMARY,
                                 value: restSwitchOn,
                                 onChanged: (bool value) {
                                   setState(() {
                                     restSwitchOn = value;
-                                    if(restSwitchOn == false) {
+                                    if (restSwitchOn == false) {
                                       widget.onUpdateRest(Duration.zero);
                                     }
                                   });
@@ -267,7 +267,8 @@ class _editActivityState extends State<editActivity> {
                           visible: restSwitchOn,
                           // Show the timer picker only when the switch is on
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 30, vertical: 15),
                             child: SizedBox(
                               height: 140,
                               width: 300,
@@ -352,8 +353,6 @@ class _editActivityState extends State<editActivity> {
                 ],
               ),
             ),
-
-          //NEW DESIGN
         ],
       ),
     );
