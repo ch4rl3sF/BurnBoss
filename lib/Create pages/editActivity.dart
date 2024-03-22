@@ -42,7 +42,9 @@ class _editActivityState extends State<editActivity> {
   List<bool> activitySelected = [];
   List<String> activityOptions = ['Reps', 'Timer', 'Stopwatch'];
   String? activityOptionSelected = '';
-  bool light = true;
+  late int numberOfSets;
+  late bool restSwitchOn;
+
 
   @override
   void initState() {
@@ -52,6 +54,8 @@ class _editActivityState extends State<editActivity> {
     weightsController.text = widget.activity.weights.toString();
     repsController.text = widget.activity.reps.toString();
     setsController.text = widget.activity.sets.toString();
+    numberOfSets = widget.activity.sets;
+    restSwitchOn = widget.activity.rest > Duration.zero  ? true : false;
   }
 
   Widget build(BuildContext context) {
@@ -60,6 +64,7 @@ class _editActivityState extends State<editActivity> {
 
     // Determine if the theme is light
     bool isLightTheme = theme.brightness == Brightness.light;
+
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -130,7 +135,12 @@ class _editActivityState extends State<editActivity> {
                                   try {
                                     int parsedSets = int.parse(sets);
                                     widget.onUpdateSets(parsedSets);
-                                    print('$setsController');
+                                    setState(() {
+                                      numberOfSets = parsedSets;
+                                      if (numberOfSets == 0) {
+                                        restSwitchOn = false;
+                                      }
+                                    });
                                   } catch (e) {
                                     print('Error parsing int $sets');
                                   }
@@ -226,33 +236,33 @@ class _editActivityState extends State<editActivity> {
                         const Divider(
                           height: 15,
                         ),
-                        if (setsController.text.isNotEmpty ||
-                            int.tryParse(setsController.text) != 0 ||
-                            widget.activity.sets != 0)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text('Rest between sets?'),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Switch(
-                                value: light,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text('Rest between sets?'),
+                            SizedBox(width: 20),
+                            AbsorbPointer(
+                              absorbing: numberOfSets == 0 || widget.activity.sets == 0 || setsController.text.isEmpty,
+                              child: Switch(
+                                activeColor: isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
+                                value: restSwitchOn,
                                 onChanged: (bool value) {
                                   setState(() {
-                                    light = value;
+                                    restSwitchOn = value;
+                                    if(restSwitchOn == false) {
+                                      widget.onUpdateRest(Duration.zero);
+                                    }
                                   });
                                 },
                               ),
-
-                            ],
-                          ),
+                            ),
+                          ],
+                        ),
                         Visibility(
-                          visible: light,
+                          visible: (numberOfSets != 0 || widget.activity.sets != 0) && restSwitchOn,
                           // Show the timer picker only when the switch is on
                           child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 30, vertical: 15),
+                            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                             child: SizedBox(
                               height: 140,
                               width: 300,
@@ -268,81 +278,6 @@ class _editActivityState extends State<editActivity> {
                             ),
                           ),
                         ),
-                        // Visibility(
-                        //   visible: activityOptionSelected == 'Reps' &&
-                        //       (setsController.text.isEmpty ||
-                        //           int.tryParse(setsController.text) == 0 ||
-                        //           widget.activity.sets == 0),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.symmetric(
-                        //         horizontal: 30, vertical: 15),
-                        //     child: Column(
-                        //       children: [
-                        //         Text(
-                        //           'Rest between sets?',
-                        //           style: TextStyle(
-                        //               fontFamily: 'Bebas', fontSize: 30),
-                        //         ),
-                        //         Row(
-                        //           mainAxisAlignment:
-                        //               MainAxisAlignment.spaceEvenly,
-                        //           children: [
-                        //             Text(
-                        //               'Off',
-                        //               style: TextStyle(
-                        //                   fontFamily: 'Bebas', fontSize: 20),
-                        //             ),
-                        //             Switch(
-                        //               value: light,
-                        //               activeColor: isLightTheme
-                        //                   ? COLOR_SECONDARY
-                        //                   : DARK_COLOR_PRIMARY,
-                        //               onChanged: (bool value) {
-                        //                 setState(() {
-                        //                   if (setsController.text.isEmpty ||
-                        //                       int.tryParse(
-                        //                               setsController.text) ==
-                        //                           0 ||
-                        //                       widget.activity.sets == 0) {
-                        //                     light = false;
-                        //                   } else {
-                        //                     light = value;
-                        //                   }
-                        //                 });
-                        //               },
-                        //             ),
-                        //             Text(
-                        //               'On',
-                        //               style: TextStyle(
-                        //                   fontFamily: 'Bebas', fontSize: 20),
-                        //             )
-                        //           ],
-                        //         )
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
-                        // Visibility(
-                        //   visible: light && widget.activity.sets != 0,
-                        //   // Show the timer picker only when the switch is on and sets is not 0
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.symmetric(
-                        //         horizontal: 30, vertical: 15),
-                        //     child: SizedBox(
-                        //       height: 140,
-                        //       width: 300,
-                        //       child: CupertinoTimerPicker(
-                        //         initialTimerDuration: widget.activity.rest,
-                        //         onTimerDurationChanged: (value) {
-                        //           setState(() {
-                        //             Duration TimePickerTime = value;
-                        //             widget.onUpdateRest(TimePickerTime);
-                        //           });
-                        //         },
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
                       ],
                     ),
                   )),
