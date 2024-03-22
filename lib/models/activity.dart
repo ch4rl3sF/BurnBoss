@@ -4,7 +4,8 @@ class Activity {
   late String activityID;
   String activityName;
   int reps;
-  bool weightsUsed;
+  int sets;
+  Duration rest;
   double weights;
   Duration time;
   String activityType;
@@ -14,7 +15,8 @@ class Activity {
 this.activityID,
   required this.activityName,
     this.reps = 0,
-    this.weightsUsed = false,
+    this.sets = 0,
+    this.rest = const Duration(),
     this.weights = 0,
     this.time = const Duration(),
     this.activityType = 'Reps',
@@ -26,8 +28,9 @@ this.activityID,
       'activityID': activityID,
       'activityName': activityName,
       'reps': reps,
+      'sets' : sets,
+      'rest': rest,
       'weights': weights,
-      'weightsUsed': weightsUsed,
       'time': time,
       'activityType': activityType,
       'stopwatchUsed': stopwatchUsed
@@ -39,7 +42,8 @@ this.activityID,
       activityID: map['activityID'],
       activityName: map['activityName'],
       reps: map['reps'],
-      weightsUsed: map['weightsUsed'],
+      sets: map['sets'],
+      rest: Duration(milliseconds: map['rest']),
       weights: map['weights'],
       time: Duration(milliseconds: map['time']),
       activityType: map['activityType'],
@@ -49,6 +53,14 @@ this.activityID,
 
   void updateReps(int newReps) {
     reps = newReps;
+  }
+
+  void updateSets(int newSets) {
+    sets = newSets;
+  }
+
+  void updateRest (Duration newRest) {
+    rest = newRest;
   }
 
   void updateWeight(double newWeight) {

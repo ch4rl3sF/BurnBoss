@@ -239,12 +239,11 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                             addingActivity = !addingActivity;
                             String newActivityName =
                                 activityNameController.text.trim();
-                            int placeholderReps = 0;
                             if (newActivityName.isNotEmpty) {
                               Activity newActivity = Activity(
                                   activityID: '',
                                   activityName: newActivityName,
-                                  reps: placeholderReps);
+                              );
 
                               widget.workout.activities.add(newActivity);
                               activityNameController.clear();
@@ -312,6 +311,18 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                       setState(() {
                                         widget.workout.activities[index]
                                             .updateReps(newReps);
+                                        changesMade = true;
+                                      });
+                                    },
+                                    onUpdateSets: (int newSets) {
+                                      setState(() {
+                                        widget.workout.activities[index].updateSets(newSets);
+                                        changesMade = true;
+                                      });
+                                    },
+                                    onUpdateRest: (Duration newRest) {
+                                      setState(() {
+                                        widget.workout.activities[index].updateRest(newRest);
                                         changesMade = true;
                                       });
                                     },

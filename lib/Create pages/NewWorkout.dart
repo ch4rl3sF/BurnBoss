@@ -267,10 +267,9 @@ class _ActivityListState extends State<ActivityList> {
   addActivityItem(String activityName) {
     //ADD IN: record time when workout was created
     setState(() {
-      int placeholderReps = 0;
 
       widget.activities.add(Activity(
-          activityID: '', activityName: activityName, reps: placeholderReps));
+          activityID: '', activityName: activityName));
     });
   }
 
@@ -284,6 +283,16 @@ class _ActivityListState extends State<ActivityList> {
             // Update the reps of the original instance in the ActivityList
             setState(() {
               widget.activities[index].updateReps(newReps);
+            });
+          },
+          onUpdateSets: (int newSets) {
+            setState(() {
+              widget.activities[index].updateSets(newSets);
+            });
+          },
+          onUpdateRest: (Duration newRest) {
+            setState(() {
+              widget.activities[index].updateRest(newRest);
             });
           },
           onUpdateWeight: (double newWeight) {

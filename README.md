@@ -44,7 +44,7 @@ Primary: #FF2c14
    On Primary Container: #D70000
 
 Secondary: #1DE6C9
-   Secondary Container: #D6F9F3
+   Secondary Container: #0E0F0F
    On Secondary Container: #006D3F
 
 
