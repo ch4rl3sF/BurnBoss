@@ -34,10 +34,6 @@ class _editActivityState extends State<editActivity> {
   TextEditingController repsController = TextEditingController();
   TextEditingController setsController = TextEditingController();
   TextEditingController weightsController = TextEditingController();
-
-  // TextEditingController timeHoursController = TextEditingController();
-  // TextEditingController timeMinutesController = TextEditingController();
-  // TextEditingController timeSecondsController = TextEditingController();
   List<bool> activitySelected = [];
   List<String> activityOptions = ['Reps', 'Timer', 'Stopwatch'];
   String? activityOptionSelected = '';
@@ -133,10 +129,9 @@ class _editActivityState extends State<editActivity> {
                                     });
                                   }
                                   try {
-                                    int parsedSets = int.parse(sets);
-                                    widget.onUpdateSets(parsedSets);
-                                    print('$sets');
                                     setState(() {
+                                      int parsedSets = int.parse(sets);
+                                      widget.onUpdateSets(parsedSets);
                                       numberOfSets = parsedSets;
                                       if (numberOfSets <= 1) {
                                         restSwitchOn = false;
@@ -161,7 +156,7 @@ class _editActivityState extends State<editActivity> {
                             SizedBox(
                               height: 60,
                               width: 70,
-                              child: TextField(
+                              child: TextFormField(
                                 controller: repsController,
                                 keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
@@ -173,10 +168,12 @@ class _editActivityState extends State<editActivity> {
                                   FilteringTextInputFormatter.digitsOnly,
                                   LengthLimitingTextInputFormatter(4),
                                 ],
-                                onSubmitted: (reps) {
+                                onFieldSubmitted: (reps) {
                                   try {
-                                    int parsedReps = int.parse(reps);
-                                    widget.onUpdateReps(parsedReps);
+                                    setState(() {
+                                      int parsedReps = int.parse(reps);
+                                      widget.onUpdateReps(parsedReps);
+                                    });
                                   } catch (e) {
                                     print('Invalid input: $reps');
                                   }

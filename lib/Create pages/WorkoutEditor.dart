@@ -294,7 +294,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                     color: cardColor,
                     child: ListTile(
                       title: Text(activity.activityName),
-                      subtitle: Text('Activity Type: ${activity.activityType}'),
+                      subtitle: Text(widget.workout.activities[index].activityType == 'Reps' ? 'Sets: ${widget.workout.activities[index].sets} | Reps: ${widget.workout.activities[index].reps} | ${widget.workout.activities[index].weights}Kg'  : 'Activity type: ${widget.workout.activities[index].activityType}'),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [

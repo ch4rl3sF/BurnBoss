@@ -112,7 +112,7 @@ class _ActivityCardState extends State<ActivityCard> {
       margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
         title: Text(widget.activity.activityName),
-        subtitle: Text('Activity Type: ${widget.activity.activityType}'),
+        subtitle: Text(widget.activity.activityType == 'Reps' ? 'Sets: ${widget.activity.sets} | Reps: ${widget.activity.reps} | ${widget.activity.weights}Kg'  : 'Activity type: ${widget.activity.activityType}'),
         // Use widget.activity here
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

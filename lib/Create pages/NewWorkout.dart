@@ -110,7 +110,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/Creator');
-                          Navigator.pop(context);
+                          print('exit button pressed');
                         },
                         child: const Text('Exit'),
                       ),
