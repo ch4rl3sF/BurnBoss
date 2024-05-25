@@ -52,6 +52,46 @@ class _editActivityState extends State<editActivity> {
     restSwitchOn = widget.activity.rest > Duration.zero ? true : false;
   }
 
+  void setValues() {
+    if (activityOptionSelected == 'Reps') {
+      //Sets
+      if (setsController.text.isEmpty) {
+        setState(() {
+          restSwitchOn = false;
+        });
+      }
+      try {
+        setState(() {
+          int parsedSets = int.parse(setsController.text);
+          numberOfSets = parsedSets;
+          widget.onUpdateSets(numberOfSets);
+        });
+      } catch (e) {
+        print('Error parsing int ${setsController.text}');
+      }
+
+      //Reps
+      try {
+        setState(() {
+          int parsedReps = int.parse(repsController.text);
+          widget.onUpdateReps(parsedReps);
+        });
+      } catch (e) {
+        print('Error parsing int ${repsController.text}');
+      }
+
+      //Weights
+      try {
+        setState(() {
+          double parsedWeight = double.parse(weightsController.text);
+          widget.onUpdateWeight(parsedWeight);
+        });
+      } catch (e) {
+        print('Error parsing weight ${weightsController.text}');
+      }
+    }
+  }
+
   Widget build(BuildContext context) {
     // Access the current theme
     ThemeData theme = Theme.of(context);
@@ -62,6 +102,13 @@ class _editActivityState extends State<editActivity> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            setValues();
+            Navigator.pop(context);
+          },
+        ),
         title: Text(widget.activity.activityName),
       ),
       body: Column(
@@ -115,27 +162,39 @@ class _editActivityState extends State<editActivity> {
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
                                   border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10))),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
+                                  ),
                                 ),
                                 inputFormatters: [
                                   FilteringTextInputFormatter.digitsOnly,
                                   LengthLimitingTextInputFormatter(4),
                                 ],
-                                onFieldSubmitted: (sets) {
-                                  if (setsController.text.isEmpty) {
+                                onChanged: (sets) {
+                                  if (sets.isEmpty) {
                                     setState(() {
                                       restSwitchOn = false;
                                     });
+                                  } else {
+                                    try {
+                                      setState(() {
+                                        int parsedSets = int.parse(sets);
+                                        numberOfSets = parsedSets;
+                                        if (numberOfSets <= 1) {
+                                          restSwitchOn = false;
+                                        }
+                                      });
+                                    } catch (e) {
+                                      print('Error parsing int $sets');
+                                    }
                                   }
+                                },
+                                onFieldSubmitted: (sets) {
                                   try {
+                                    int parsedSets = int.parse(sets);
+                                    widget.onUpdateSets(parsedSets);
                                     setState(() {
-                                      int parsedSets = int.parse(sets);
-                                      widget.onUpdateSets(parsedSets);
                                       numberOfSets = parsedSets;
-                                      if (numberOfSets <= 1) {
-                                        restSwitchOn = false;
-                                      }
                                     });
                                   } catch (e) {
                                     print('Error parsing int $sets');
@@ -168,16 +227,17 @@ class _editActivityState extends State<editActivity> {
                                   FilteringTextInputFormatter.digitsOnly,
                                   LengthLimitingTextInputFormatter(4),
                                 ],
-                                onFieldSubmitted: (reps) {
-                                  try {
-                                    setState(() {
-                                      int parsedReps = int.parse(reps);
-                                      widget.onUpdateReps(parsedReps);
-                                    });
-                                  } catch (e) {
-                                    print('Invalid input: $reps');
-                                  }
-                                },
+                                // onFieldSubmitted: (reps) {
+
+                                // try {
+                                //   setState(() {
+                                //     int parsedReps = int.parse(reps);
+                                //     widget.onUpdateReps(parsedReps);
+                                //   });
+                                // } catch (e) {
+                                //   print('Invalid input: $reps');
+                                // }
+                                // },
                               ),
                             ),
                             const Expanded(
@@ -206,17 +266,17 @@ class _editActivityState extends State<editActivity> {
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r'^\d*\.?\d{0,2}')),
                                 ],
-                                onFieldSubmitted: (weights) {
-                                  try {
-                                    setState(() {
-                                      double parsedWeight =
-                                          double.parse(weights);
-                                      widget.onUpdateWeight(parsedWeight);
-                                    });
-                                  } catch (e) {
-                                    print('Error parsing weight double');
-                                  }
-                                },
+                                // onFieldSubmitted: (weights) {
+                                //   try {
+                                //     setState(() {
+                                //       double parsedWeight =
+                                //           double.parse(weights);
+                                //       widget.onUpdateWeight(parsedWeight);
+                                //     });
+                                //   } catch (e) {
+                                //     print('Error parsing weight double');
+                                //   }
+                                // },
                               ),
                             ),
                             const Expanded(
