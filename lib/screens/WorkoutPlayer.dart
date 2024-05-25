@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:burnboss/models/activity.dart';
 import 'package:burnboss/models/stopwatch.dart';
 import 'package:burnboss/models/workout.dart';
@@ -7,7 +5,6 @@ import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/models/timer_activity_player.dart';
-import 'package:burnboss/models/stopwatch.dart';
 
 class WorkoutPlayer extends StatefulWidget {
   final Workout workout;
@@ -34,7 +31,6 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
 
     super.initState();
   }
-
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,6 +180,12 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
                   FittedBox(
                       fit: BoxFit.fitWidth,
                       child: Text(
+                        'Sets: ${activity.sets}',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+                      )),
+                  FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
                         'Reps: ${activity.reps}',
                         style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
                       )),
@@ -208,9 +210,8 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
             ),
           if (activity.activityType == 'Stopwatch')
             Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-                child: ActivityStopwatch(),
+              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+              child: ActivityStopwatch(),
             ),
         ],
       ),
