@@ -44,7 +44,7 @@ class _SelectPageState extends State<SelectPage> {
               .getAllWorkouts(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: SpinKitDualRing(
                   color: COLOR_PRIMARY,
                   size: 50.0,
@@ -53,7 +53,7 @@ class _SelectPageState extends State<SelectPage> {
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(
+              return const Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
