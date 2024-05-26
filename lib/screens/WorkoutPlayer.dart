@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/models/timer_activity_player.dart';
 
+import '../models/activityPage.dart';
+
 class WorkoutPlayer extends StatefulWidget {
   final Workout workout;
   final Function(int) onUpdatePage;
@@ -16,20 +18,27 @@ class WorkoutPlayer extends StatefulWidget {
   State<WorkoutPlayer> createState() => _WorkoutPlayerState();
 }
 
-class _WorkoutPlayerState extends State<WorkoutPlayer> {
+class _WorkoutPlayerState extends State<WorkoutPlayer>
+    with TickerProviderStateMixin {
   PageController _pageController = PageController();
   late int _currentPage;
+  bool _isSetPageViewInteracting = false;
 
   @override
   void initState() {
+    super.initState();
     if (widget.workout.pageProgress == widget.workout.activities.length) {
       _currentPage = 0;
     } else {
       _currentPage = widget.workout.pageProgress;
     }
     _pageController = PageController(initialPage: _currentPage);
+  }
 
-    super.initState();
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   Widget build(BuildContext context) {
@@ -77,26 +86,34 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
           ),
         ),
       ),
-      body: PageView.builder(
-        controller: _pageController,
-        itemCount: widget.workout.activities.length + 1,
-        //Add one for the finish page
-        itemBuilder: (context, index) {
-          if (index < widget.workout.activities.length) {
-            // Build activity pages
-            return buildActivityPage(widget.workout.activities[index]);
-          } else {
-            // Build the "finish" page
-            return buildFinishPage();
-          }
-        },
-
-        onPageChanged: (int page) {
-          setState(() {
-            //change the value of the current page to whichever page the user is on
-            _currentPage = page;
-          });
-        },
+      body: IgnorePointer(
+        ignoring: _isSetPageViewInteracting,
+        child: PageView.builder(
+          controller: _pageController,
+          itemCount: widget.workout.activities.length + 1,
+          //Add one for the finish page
+          itemBuilder: (context, index) {
+            if (index < widget.workout.activities.length) {
+              return ActivityPage(
+                activity: widget.workout.activities[index],
+                onSetPageViewInteraction: (isInteracting) {
+                  setState(() {
+                    _isSetPageViewInteracting = isInteracting;
+                  });
+                },
+              );
+            } else {
+              return buildFinishPage();
+            }
+          },
+          physics: ClampingScrollPhysics(),
+          onPageChanged: (int page) {
+            setState(() {
+              //change the value of the current page to whichever page the user is on
+              _currentPage = page;
+            });
+          },
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -159,80 +176,6 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
     );
   }
 
-  //widget for each activity built by the PageView
-  Widget buildActivityPage(Activity activity) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text(
-                activity.activityName,
-                style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
-              )),
-          if (activity.activityType == 'Reps')
-            Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: Colors.grey, width: 0.5)),
-              child: SizedBox(
-                height: 250,
-                width: 300,
-                child: PageView.builder(
-                    itemCount: activity.sets,
-                    itemBuilder: (context, setIndex) {
-                  return setCard(activity);
-                }),
-              ),
-            ),
-
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-          //   child: Column(
-          //     children: [
-          //       FittedBox(
-          //           fit: BoxFit.fitWidth,
-          //           child: Text(
-          //             'Sets: ${activity.sets}',
-          //             style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
-          //           )),
-          //       FittedBox(
-          //           fit: BoxFit.fitWidth,
-          //           child: Text(
-          //             'Reps: ${activity.reps}',
-          //             style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
-          //           )),
-          //       if (activity.weights != 0)
-          //         Padding(
-          //           padding: const EdgeInsets.symmetric(horizontal: 20),
-          //           child: FittedBox(
-          //             fit: BoxFit.fitWidth,
-          //             child: Text(
-          //               'At weight: ${activity.weights.toString()}kg',
-          //               style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
-          //             ),
-          //           ),
-          //         )
-          //     ],
-          //   ),
-          // ),
-          if (activity.activityType == 'Timer')
-            ActivityTimer(
-              key: GlobalKey<ActivityTimerState>(),
-              initialTime: activity.time,
-            ),
-          if (activity.activityType == 'Stopwatch')
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-              child: ActivityStopwatch(),
-            ),
-        ],
-      ),
-    );
-  }
-
   Widget buildFinishPage() {
     return const Center(
       child: Column(
@@ -256,18 +199,6 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
       ),
     );
   }
-
-  Widget setCard(Activity activity) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            'Reps: ${activity.reps}',
-            style: TextStyle(fontFamily: 'Bebas', fontSize: 40),
-          ),
-        ],
-      ),
-    );
-  }
 }
+
+
