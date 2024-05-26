@@ -170,39 +170,54 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
               fit: BoxFit.fitWidth,
               child: Text(
                 activity.activityName,
-                style: TextStyle(fontFamily: 'Bebas', fontSize: 70),
+                style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
               )),
           if (activity.activityType == 'Reps')
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
-              child: Column(
-                children: [
-                  FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text(
-                        'Sets: ${activity.sets}',
-                        style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
-                      )),
-                  FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Text(
-                        'Reps: ${activity.reps}',
-                        style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
-                      )),
-                  if (activity.weights != 0)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: FittedBox(
-                        fit: BoxFit.fitWidth,
-                        child: Text(
-                          'At weight: ${activity.weights.toString()}kg',
-                          style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
-                        ),
-                      ),
-                    )
-                ],
+            Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: BorderSide(color: Colors.grey, width: 0.5)),
+              child: SizedBox(
+                height: 250,
+                width: 300,
+                child: PageView.builder(
+                    itemCount: activity.sets,
+                    itemBuilder: (context, setIndex) {
+                  return setCard(activity);
+                }),
               ),
             ),
+
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+          //   child: Column(
+          //     children: [
+          //       FittedBox(
+          //           fit: BoxFit.fitWidth,
+          //           child: Text(
+          //             'Sets: ${activity.sets}',
+          //             style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+          //           )),
+          //       FittedBox(
+          //           fit: BoxFit.fitWidth,
+          //           child: Text(
+          //             'Reps: ${activity.reps}',
+          //             style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+          //           )),
+          //       if (activity.weights != 0)
+          //         Padding(
+          //           padding: const EdgeInsets.symmetric(horizontal: 20),
+          //           child: FittedBox(
+          //             fit: BoxFit.fitWidth,
+          //             child: Text(
+          //               'At weight: ${activity.weights.toString()}kg',
+          //               style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+          //             ),
+          //           ),
+          //         )
+          //     ],
+          //   ),
+          // ),
           if (activity.activityType == 'Timer')
             ActivityTimer(
               key: GlobalKey<ActivityTimerState>(),
@@ -236,6 +251,20 @@ class _WorkoutPlayerState extends State<WorkoutPlayer> {
           Text(
             'Workout finished!',
             style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget setCard(Activity activity) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            'Reps: ${activity.reps}',
+            style: TextStyle(fontFamily: 'Bebas', fontSize: 40),
           ),
         ],
       ),
