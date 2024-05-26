@@ -1,10 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/services/database.dart';
+import 'package:burnboss/services/imagePicker.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:burnboss/theme/theme_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SettingsPage extends StatefulWidget {
   final ThemeManager themeManager;
@@ -17,6 +21,14 @@ class SettingsPage extends StatefulWidget {
 
 class _SettingsPageState extends State<SettingsPage> {
   final AuthService _auth = AuthService();
+  Uint8List? _profilePic;
+
+  void selectImage() async {
+    Uint8List img = await pickImage(ImageSource.gallery);
+    setState(() {
+      _profilePic = img;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +60,9 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        SizedBox(height: 10,),
+        SizedBox(
+          height: 10,
+        ),
         Padding(
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Text(
@@ -106,10 +120,42 @@ class _SettingsPageState extends State<SettingsPage> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: [
+                Stack(
+                  children: [
+                    _profilePic != null
+                        ? CircleAvatar(
+                            radius: 44,
+                            backgroundImage: MemoryImage(_profilePic!),
+                          )
+                        : const CircleAvatar(
+                            radius: 44,
+                            backgroundImage: AssetImage(
+                                'assets/images/defaultProfilePicture.png'),
+                          ),
+                    Positioned(
+                      bottom: -5,
+                      left: 45,
+                      child: IconButton(
+                        onPressed: selectImage,
+                        icon: const Icon(
+                          Icons.add_a_photo,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 TextButton.icon(
-                  icon: Icon(Icons.person, color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY,),
-                  label: Text('Sign Out', style: TextStyle(color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY),),
-
+                  icon: Icon(
+                    Icons.person,
+                    color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY,
+                  ),
+                  label: Text(
+                    'Sign Out',
+                    style: TextStyle(
+                        color:
+                            isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY),
+                  ),
                   onPressed: () async {
                     await _auth.signOut();
                     Navigator.pushReplacementNamed(context, '/');

@@ -1,7 +1,9 @@
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/models/activity.dart';
-import 'package:flutter/material.dart';
+
 
 class DatabaseService {
   final String uid;
@@ -22,7 +24,7 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('users');
 
   //gets a reference to the document and updates it with the user details
-  Future updateUserData(String email) async {
+  Future updateUserData(String email,) async {
     return await usersCollection
         .doc(uid)
         .collection('Details')
@@ -31,6 +33,7 @@ class DatabaseService {
       'email': email,
     });
   }
+
 
   Future? updateTheme(bool isLightTheme) async {
     return await usersCollection
