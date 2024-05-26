@@ -24,7 +24,9 @@ class _ActivityPageState extends State<ActivityPage>
     super.initState();
     _tabController = TabController(
       initialIndex: _currentSet,
-      length: widget.activity.sets,
+      length: widget.activity.rest > Duration.zero
+          ? widget.activity.sets * 2 - 1
+          : widget.activity.sets,
       vsync: this,
     );
   }
@@ -69,20 +71,35 @@ class _ActivityPageState extends State<ActivityPage>
                     children: [
                       Expanded(
                         child: PageView.builder(
-                          itemCount: widget.activity.sets,
-                          itemBuilder: (context, setIndex) {
-                            return setCard(widget.activity, setIndex);
+                          itemCount: widget.activity.rest > Duration.zero
+                              ? widget.activity.sets * 2 - 1
+                              : widget.activity.sets,
+                          itemBuilder: (context, index) {
+                            if (widget.activity.rest > Duration.zero) {
+                              if (index % 2 == 0) {
+                                int setIndex = index ~/ 2;
+                                return setCard(widget.activity, setIndex);
+                              } else {
+                                return restCard(widget.activity);
+                              }
+                            } else {
+                              return setCard(widget.activity, index);
+                            }
                           },
                           onPageChanged: (int set) {
                             setState(() {
-                              _currentSet = set;
+                              _currentSet = set ~/ 2;
                               _tabController.animateTo(set);
                             });
                           },
                         ),
                       ),
-                      TabPageSelector(
-                        controller: _tabController,
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: TabPageSelector(
+                          controller: _tabController,
+                          indicatorSize: 8,
+                        ),
                       ),
                     ],
                   ),
@@ -113,6 +130,18 @@ class _ActivityPageState extends State<ActivityPage>
             'Set ${setIndex + 1}: ${activity.reps} Reps',
             style: TextStyle(fontFamily: 'Bebas', fontSize: 40),
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget restCard(Activity activity) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          ActivityTimer(
+              key: GlobalKey<ActivityTimerState>(), initialTime: activity.rest)
         ],
       ),
     );
