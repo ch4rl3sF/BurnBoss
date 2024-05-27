@@ -19,7 +19,7 @@ ThemeData lightTheme = ThemeData(
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      primary: Colors.black,
+      foregroundColor: Colors.black,
       side: BorderSide(width: 0.5, color: Colors.black12),
     ),
   ),
