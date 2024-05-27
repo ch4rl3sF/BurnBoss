@@ -1,9 +1,7 @@
-
-
+import 'package:burnboss/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/models/activity.dart';
-
 
 class DatabaseService {
   final String uid;
@@ -24,16 +22,39 @@ class DatabaseService {
       FirebaseFirestore.instance.collection('users');
 
   //gets a reference to the document and updates it with the user details
-  Future updateUserData(String email,) async {
-    return await usersCollection
+  // Future updateUserData(String email,) async {
+  //   return await usersCollection
+  //       .doc(uid)
+  //       .collection('Details')
+  //       .doc('details')
+  //       .set({
+  //     'email': email,
+  //   });
+  // }
+
+  Future updateUserData(CustomUser customUser) async {
+    DocumentReference userDocument =
+        await usersCollection.doc(uid).collection('Details').doc('details');
+
+    Map<String, dynamic> userData = customUser.toMap();
+
+    await userDocument.set(userData);
+  }
+
+  Future<CustomUser?> getUserData() async {
+    DocumentSnapshot<Map<String, dynamic>> snapshot = await usersCollection
         .doc(uid)
         .collection('Details')
         .doc('details')
-        .set({
-      'email': email,
-    });
-  }
+        .get();
 
+    if(snapshot.exists) {
+      CustomUser customUser = CustomUser.fromMap(snapshot.data());
+      return customUser;
+    } else {
+      return null;
+    }
+  }
 
   Future? updateTheme(bool isLightTheme) async {
     return await usersCollection
@@ -44,11 +65,8 @@ class DatabaseService {
   }
 
   Future<bool?> getTheme() async {
-    DocumentSnapshot<Map<String, dynamic>> snapshot = await usersCollection
-        .doc(uid)
-        .collection('Theme')
-        .doc('theme')
-        .get();
+    DocumentSnapshot<Map<String, dynamic>> snapshot =
+        await usersCollection.doc(uid).collection('Theme').doc('theme').get();
 
     if (snapshot.exists) {
       return snapshot.data()?['isLightTheme'];

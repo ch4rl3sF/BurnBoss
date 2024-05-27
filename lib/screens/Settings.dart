@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../models/user.dart';
+
 class SettingsPage extends StatefulWidget {
   final ThemeManager themeManager;
 
@@ -22,6 +24,10 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final AuthService _auth = AuthService();
   Uint8List? _profilePic;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  late String username;
+  late String email;
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -30,17 +36,44 @@ class _SettingsPageState extends State<SettingsPage> {
     });
   }
 
+  void _updateProfilePic(Uint8List newPic) {
+    setState(() {
+      _profilePic = newPic;
+    });
+  }
+
+  void _updateUsername(String newUsername) {
+    setState(() {
+      username = newUsername;
+      
+    });
+  }
+
+  @override
+  void initState() async {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    CustomUser? customUser = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserData();
+    if (customUser != null) {
+      setState(() {
+        username = customUser.username!;
+        email = customUser.email!;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Access the current theme
     ThemeData theme = Theme.of(context);
-
-    // Determine if the theme is light
     bool isLightTheme = theme.brightness == Brightness.light;
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        // backgroundColor: Color(0xff292929),
         toolbarHeight: 125,
         title: const Text(
           'Select',
@@ -60,9 +93,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        SizedBox(
-          height: 10,
-        ),
+        SizedBox(height: 10),
         Padding(
           padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Text(
@@ -74,28 +105,22 @@ class _SettingsPageState extends State<SettingsPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.sunny),
-            SizedBox(
-              width: 20,
-            ),
+            SizedBox(width: 20),
             Switch(
               value: widget.themeManager.themeModeIsDark,
               activeColor: DARK_COLOR_PRIMARY,
               onChanged: (bool switchIsOn) {
                 setState(
-                  () {
-                    print(
-                        'Switch changed to $switchIsOn'); //show that the switch is turned on
-                    widget.themeManager.setThemeToDark(
-                        switchIsOn); //when the switch is on, change the theme to dark
+                      () {
+                    print('Switch changed to $switchIsOn');
+                    widget.themeManager.setThemeToDark(switchIsOn);
                     DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
                         .updateTheme(!switchIsOn);
                   },
                 );
               },
             ),
-            SizedBox(
-              width: 20,
-            ),
+            SizedBox(width: 20),
             Icon(Icons.nightlight)
           ],
         ),
@@ -115,55 +140,111 @@ class _SettingsPageState extends State<SettingsPage> {
             style: TextStyle(fontSize: 20),
           ),
         ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Column(
-              children: [
-                Stack(
-                  children: [
-                    _profilePic != null
-                        ? CircleAvatar(
-                            radius: 44,
-                            backgroundImage: MemoryImage(_profilePic!),
-                          )
-                        : const CircleAvatar(
-                            radius: 44,
-                            backgroundImage: AssetImage(
-                                'assets/images/defaultProfilePicture.png'),
-                          ),
-                    Positioned(
-                      bottom: -5,
-                      left: 45,
-                      child: IconButton(
-                        onPressed: selectImage,
-                        icon: const Icon(
-                          Icons.add_a_photo,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ],
+        Column(
+          children: [
+            ListTile(
+              leading: SizedBox(
+                height: 88,
+                width: 88,
+                child: _profilePic != null
+                    ? CircleAvatar(
+                  radius: 44,
+                  backgroundImage: MemoryImage(_profilePic!),
+                )
+                    : const CircleAvatar(
+                  radius: 44,
+                  backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),
                 ),
-                TextButton.icon(
-                  icon: Icon(
-                    Icons.person,
-                    color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY,
-                  ),
-                  label: Text(
-                    'Sign Out',
-                    style: TextStyle(
-                        color:
-                            isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY),
-                  ),
-                  onPressed: () async {
-                    await _auth.signOut();
-                    Navigator.pushReplacementNamed(context, '/');
-                  },
-                ),
-              ],
+              ),
+              title: Text(username),
+              subtitle: Text('Email: $email'),
+              trailing: IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return StatefulBuilder(
+                        builder: (BuildContext context, StateSetter setState) {
+                          return AlertDialog(
+                            title: Text('Edit details'),
+                            content: SizedBox(
+                              height: 200,
+                              child: Column(
+                                children: [
+                                  Stack(
+                                    children: [
+                                      _profilePic != null
+                                          ? CircleAvatar(
+                                        radius: 44,
+                                        backgroundImage: MemoryImage(_profilePic!),
+                                      )
+                                          : const CircleAvatar(
+                                        radius: 44,
+                                        backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),
+                                      ),
+                                      Positioned(
+                                        bottom: -5,
+                                        left: 45,
+                                        child: IconButton(
+                                          onPressed: () async {
+                                            Uint8List img = await pickImage(ImageSource.gallery);
+                                            setState(() {
+                                              _updateProfilePic(img);
+                                            });
+                                          },
+                                          icon: const Icon(
+                                            Icons.add_a_photo,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 25),
+                                  TextFormField(
+                                    controller: usernameController,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Username',
+                                      contentPadding: EdgeInsets.all(10),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                  ),
+                                  TextFormField(
+                                    controller: emailController,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Username',
+                                      contentPadding: EdgeInsets.all(10),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             ),
-          ),
+            TextButton.icon(
+              icon: Icon(
+                Icons.person,
+                color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY,
+              ),
+              label: Text(
+                'Sign Out',
+                style: TextStyle(
+                    color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY),
+              ),
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+          ],
         ),
       ]),
       drawer: NavDrawerWidget(currentRoute: '/Settings'),

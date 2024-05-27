@@ -9,15 +9,15 @@ class AuthService{
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
 
-  UserModel.customUser? _userFromFirebaseUser(User? user) {
+  UserModel.CustomUser? _userFromFirebaseUser(User? user) {
     if (user != null) {
-      return UserModel.customUser(uid: user.uid, email: user.email);
+      return UserModel.CustomUser(uid: user.uid, email: user.email);
     } else {
       return null;
     }
   }
   //auth change user stream. Every time a user signs in or signs out, we get a response down this stream
-  Stream<UserModel.customUser?> get user {
+  Stream<UserModel.CustomUser?> get user {
     return _auth.authStateChanges().map(_userFromFirebaseUser);
   }
 
@@ -45,18 +45,24 @@ class AuthService{
   }
 
   //register with email and password
-  Future registerWithEmailAndPassword(String email, String password) async {
-    try{
+  Future<UserModel.CustomUser?> registerWithEmailAndPassword(String email, String password) async {
+    try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user = result.user;
-      //create a new document for the user with the uid
-      await DatabaseService(uid: user!.uid).updateUserData(email);
-      return _userFromFirebaseUser(user);
-    } catch(e) {
+      if (user != null) {
+        // Create a new CustomUser instance
+        UserModel.CustomUser customUser = UserModel.CustomUser(uid: user.uid, email: user.email, username: user.email!.split('@')[0]);
+        // Create a new document for the user with the uid
+        await DatabaseService(uid: user.uid).updateUserData(customUser);
+        return _userFromFirebaseUser(user);
+      }
+      return null;
+    } catch (e) {
       print(e.toString());
       return null;
     }
   }
+
 
   //sign out
   Future signOut() async {

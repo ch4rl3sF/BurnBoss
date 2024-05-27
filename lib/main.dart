@@ -38,7 +38,7 @@ class _BurnBossState extends State<BurnBoss> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamProvider<customUser?>.value(
+    return StreamProvider<CustomUser?>.value(
       value: AuthService().user,
       initialData: null,
       child: MaterialApp(
