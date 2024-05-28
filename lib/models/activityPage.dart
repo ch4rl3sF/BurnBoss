@@ -54,7 +54,7 @@ class _ActivityPageState extends State<ActivityPage>
           Expanded(
             flex: 1,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(

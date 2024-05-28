@@ -59,6 +59,7 @@ class _BurnBossState extends State<BurnBoss> {
           '/Select': (context) => SelectPage(),
           '/Stopwatch': (context) => StopwatchPage(),
           '/Settings': (context) => SettingsPage(_themeManager),
+          
         }, //sets the routes to the different pages
       ),
     );

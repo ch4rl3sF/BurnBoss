@@ -283,104 +283,106 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                   ),
                 ],
               ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.workout.activities.length,
-              itemBuilder: (context, index) {
-                Activity activity = widget.workout.activities[index];
-                return Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Card(
-                    color: cardColor,
-                    child: ListTile(
-                      title: Text(activity.activityName),
-                      subtitle: Text(widget.workout.activities[index].activityType == 'Reps' ? 'Sets: ${widget.workout.activities[index].sets} | Reps: ${widget.workout.activities[index].reps} | ${widget.workout.activities[index].weights}Kg'  : 'Activity type: ${widget.workout.activities[index].activityType}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit_rounded),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => editActivity(
-                                    activity: widget.workout.activities[index],
-                                    onUpdateReps: (int newReps) {
-                                      // Update the reps of the original instance in the ActivityList
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateReps(newReps);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateSets: (int newSets) {
-                                      setState(() {
-                                        widget.workout.activities[index].updateSets(newSets);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateRest: (Duration newRest) {
-                                      setState(() {
-                                        widget.workout.activities[index].updateRest(newRest);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateWeight: (double newWeight) {
-                                      // Update the weight of the original instance in the ActivityList
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateWeight(newWeight);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateTime: (Duration newTime) {
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateTime(newTime);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateActivityName:
-                                        (String newActivityType) {
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateActivityType(
-                                                newActivityType);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateStopwatchUsed:
-                                        (bool newStopwatchUsed) {
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateStopwatchBool(
-                                                newStopwatchUsed);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          if (numberOfActivities > 1)
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.workout.activities.length,
+                itemBuilder: (context, index) {
+                  Activity activity = widget.workout.activities[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Card(
+                      color: cardColor,
+                      child: ListTile(
+                        title: Text(activity.activityName),
+                        subtitle: Text(widget.workout.activities[index].activityType == 'Reps' ? 'Sets: ${widget.workout.activities[index].sets} | Reps: ${widget.workout.activities[index].reps} | ${widget.workout.activities[index].weights}Kg'  : 'Activity type: ${widget.workout.activities[index].activityType}'),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                             IconButton(
+                              icon: Icon(Icons.edit_rounded),
                               onPressed: () {
-                                setState(() {
-                                  widget.workout.activities.removeAt(index);
-                                  changesMade = true;
-                                  activityIDsDeleted.add(activity.activityID);
-                                  numberOfActivities = numberOfActivities - 1;
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => editActivity(
+                                      activity: widget.workout.activities[index],
+                                      onUpdateReps: (int newReps) {
+                                        // Update the reps of the original instance in the ActivityList
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateReps(newReps);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateSets: (int newSets) {
+                                        setState(() {
+                                          widget.workout.activities[index].updateSets(newSets);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateRest: (Duration newRest) {
+                                        setState(() {
+                                          widget.workout.activities[index].updateRest(newRest);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateWeight: (double newWeight) {
+                                        // Update the weight of the original instance in the ActivityList
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateWeight(newWeight);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateTime: (Duration newTime) {
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateTime(newTime);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateActivityName:
+                                          (String newActivityType) {
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateActivityType(
+                                                  newActivityType);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateStopwatchUsed:
+                                          (bool newStopwatchUsed) {
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateStopwatchBool(
+                                                  newStopwatchUsed);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
                               },
-                              icon: Icon(Icons.delete_rounded),
                             ),
-                        ],
+                            if (numberOfActivities > 1)
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    widget.workout.activities.removeAt(index);
+                                    changesMade = true;
+                                    activityIDsDeleted.add(activity.activityID);
+                                    numberOfActivities = numberOfActivities - 1;
+                                  });
+                                },
+                                icon: Icon(Icons.delete_rounded),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
