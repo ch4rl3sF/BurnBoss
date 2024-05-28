@@ -1,4 +1,6 @@
 
+import 'dart:async';
+
 import 'package:burnboss/models/user.dart' as UserModel;
 import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -64,10 +66,30 @@ class AuthService{
   }
 
 
+  Future updateEmail(newEmail) async {
+    try{
+      FirebaseAuth.instance.currentUser!.verifyBeforeUpdateEmail(newEmail);
+      print('email changed');
+    } catch(e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+
   //sign out
   Future signOut() async {
     try{
       return await _auth.signOut();
+    } catch(e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+  Future deleteAccount() async {
+    try {
+      return await FirebaseAuth.instance.currentUser!.delete();
     } catch(e) {
       print(e.toString());
       return null;

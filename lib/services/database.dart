@@ -1,4 +1,5 @@
 import 'package:burnboss/models/user.dart';
+import 'package:burnboss/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/models/activity.dart';
@@ -41,6 +42,26 @@ class DatabaseService {
     await userDocument.set(userData);
   }
 
+  Future updateUserEmail(String newEmail) async {
+    await AuthService().updateEmail(newEmail);
+    usersCollection
+        .doc(uid)
+        .collection('Details')
+        .doc('details')
+        .update({'email': newEmail}).then((value) => print("Email updated!"),
+            onError: (e) => print('Email not updated, error: $e'));
+  }
+
+  Future updateUsername(String newUsername) async {
+    return usersCollection
+        .doc(uid)
+        .collection('Details')
+        .doc('details')
+        .update({'username': newUsername}).then(
+            (value) => print("Username updated!"),
+            onError: (e) => print('Username not updated, error: $e'));
+  }
+
   Future<CustomUser?> getUserData() async {
     DocumentSnapshot<Map<String, dynamic>> snapshot = await usersCollection
         .doc(uid)
@@ -48,7 +69,7 @@ class DatabaseService {
         .doc('details')
         .get();
 
-    if(snapshot.exists) {
+    if (snapshot.exists) {
       CustomUser customUser = CustomUser.fromMap(snapshot.data());
       return customUser;
     } else {

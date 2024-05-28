@@ -1,5 +1,7 @@
+import '../services/database.dart';
+
 class CustomUser {
-  final String? uid;
+  final String uid;
   String? email;
   String? username;
 
@@ -25,12 +27,19 @@ class CustomUser {
     );
   }
 
-  void updateEmail(String newEmail) {
+  // Method to update the email in the database
+  Future<void> updateEmail(String newEmail) async {
     email = newEmail;
+    // Update email in the database
+    await DatabaseService(uid: uid!).updateUserEmail(newEmail);
   }
 
-  void updateUsername(String newUsername) {
-    username = newUsername;
+
+  // Method to update the email in the database
+  Future<void> updateUsername(String newUsername) async {
+    print('username is $newUsername');
+    // Update email in the database
+    await DatabaseService(uid: uid!).updateUsername(newUsername);
   }
 
 }

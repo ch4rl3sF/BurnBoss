@@ -24,8 +24,7 @@ class _SettingsPageState extends State<SettingsPage> {
   Uint8List? _profilePic;
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  String? username;
-  String? email;
+  CustomUser? customUser;
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -42,14 +41,22 @@ class _SettingsPageState extends State<SettingsPage> {
 
   void _updateUsername(String newUsername) {
     setState(() {
-      username = newUsername;
+      customUser?.username = newUsername;
+      usernameController.text = newUsername;
+      CustomUser(uid: FirebaseAuth.instance.currentUser!.uid).updateUsername(newUsername);
     });
   }
 
   void _updateEmail(String newEmail) {
-    setState(() {
-      email = newEmail;
-    });
+    if (customUser != null) {
+      customUser!.updateEmail(newEmail).then((_) {
+        setState(() {
+          customUser?.email = newEmail;
+          emailController.text = newEmail;
+          CustomUser(uid: FirebaseAuth.instance.currentUser!.uid).updateEmail(newEmail);
+        });
+      });
+    }
   }
 
   @override
@@ -62,8 +69,7 @@ class _SettingsPageState extends State<SettingsPage> {
     CustomUser? user = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserData();
     if (user != null) {
       setState(() {
-        username = user.username;
-        email = user.email;
+        customUser = user;
         usernameController.text = user.username!;
         emailController.text = user.email!;
       });
@@ -161,8 +167,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),
                 ),
               ),
-              title: Text(username ?? 'Loading...'),
-              subtitle: Text('Email: ${email ?? 'Loading...'}'),
+              title: Text(customUser?.username ?? 'Loading...'),
+              subtitle: Text('${customUser?.email ?? 'Loading...'}'),
               trailing: IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
@@ -174,7 +180,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           return AlertDialog(
                             title: Text('Edit details'),
                             content: SizedBox(
-                              height: 200,
+                              height: 250,
                               child: Column(
                                 children: [
                                   Stack(
@@ -215,6 +221,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       border: OutlineInputBorder(),
                                     ),
                                   ),
+                                  SizedBox(height: 15),
                                   TextFormField(
                                     controller: emailController,
                                     decoration: const InputDecoration(
@@ -262,6 +269,22 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               onPressed: () async {
                 await _auth.signOut();
+                Navigator.pushReplacementNamed(context, '/');
+              },
+            ),
+            SizedBox(height: 25,),
+            TextButton.icon(
+              icon: Icon(
+                Icons.delete_rounded,
+                color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY,
+              ),
+              label: Text(
+                'Delete account',
+                style: TextStyle(
+                    color: isLightTheme ? COLOR_PRIMARY : DARK_COLOR_PRIMARY),
+              ),
+              onPressed: () async {
+                await _auth.deleteAccount();
                 Navigator.pushReplacementNamed(context, '/');
               },
             ),
