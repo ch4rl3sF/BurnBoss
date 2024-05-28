@@ -4,9 +4,35 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
 
-class NavDrawerWidget extends StatelessWidget {
+import '../services/database.dart';
+
+class NavDrawerWidget extends StatefulWidget {
   final String currentRoute;
   const NavDrawerWidget({Key? key, required this.currentRoute}) : super(key: key);
+
+  @override
+  State<NavDrawerWidget> createState() => _NavDrawerWidgetState();
+}
+
+class _NavDrawerWidgetState extends State<NavDrawerWidget> {
+  CustomUser? customUser;
+
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserData();
+  }
+
+  Future<void> loadUserData() async {
+    CustomUser? user = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserData();
+    if (user != null) {
+      setState(() {
+        customUser = user;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +44,7 @@ class NavDrawerWidget extends StatelessWidget {
 
     var email = FirebaseAuth.instance.currentUser!.email.toString();
 
-    //function to trim the email to before the @ symbol to use as the username
-    Future<String> _getUsername() async {
-      var email = FirebaseAuth.instance.currentUser!.email.toString();
-      var username = email.split('@')[0];
-      return username;
-    }
+
 
     return Drawer(
       child: ListView(
@@ -31,27 +52,9 @@ class NavDrawerWidget extends StatelessWidget {
           UserAccountsDrawerHeader(
             decoration: BoxDecoration(
                 color: isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY),
-            accountName: FutureBuilder<String>(
-              future: _getUsername(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text('Loading...');
-                } else if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (snapshot.data == null) {
-                  return Text('Guest');
-                } else {
-                  return Text(
-                    snapshot.data ?? 'No Username',
-                    style: TextStyle(
-                      color: isLightTheme ? Colors.white : Colors.black,
-                    ),
-                  );
-                }
-              },
-            ),
+            accountName: Text(customUser?.username ?? 'Loading...'),
             accountEmail: Text(
-              email,
+              customUser?.email ?? 'Loading',
               style:
                   TextStyle(color: isLightTheme ? Colors.white : Colors.black),
             ),
@@ -63,35 +66,35 @@ class NavDrawerWidget extends StatelessWidget {
           buildNavBarItem(
               label: 'Home',
               featureIcon: Icons.home_filled,
-              isSelected: currentRoute == '/',
+              isSelected: widget.currentRoute == '/',
               action: () {
                 Navigator.pushNamed(context, '/');
               }),
           buildNavBarItem(
               label: 'Creator',
               featureIcon: Icons.add,
-              isSelected: currentRoute == '/Creator',
+              isSelected: widget.currentRoute == '/Creator',
               action: () {
                 Navigator.pushNamed(context, '/Creator');
               }),
           buildNavBarItem(
               label: 'Select',
               featureIcon: Icons.play_arrow_outlined,
-              isSelected: currentRoute == '/Select',
+              isSelected: widget.currentRoute == '/Select',
               action: () {
                 Navigator.pushNamed(context, '/Select');
               }),
           buildNavBarItem(
               label: 'Calendar',
               featureIcon: Icons.calendar_month_outlined,
-              isSelected: currentRoute == '/Calendar',
+              isSelected: widget.currentRoute == '/Calendar',
               action: () {
                 Navigator.pushNamed(context, '/Calendar');
               }),
           buildNavBarItem(
               label: 'Stopwatch',
               featureIcon: Icons.alarm,
-              isSelected: currentRoute == '/Stopwatch',
+              isSelected: widget.currentRoute == '/Stopwatch',
               action: () {
                 Navigator.pushNamed(context, '/Stopwatch');
               }),
@@ -104,7 +107,7 @@ class NavDrawerWidget extends StatelessWidget {
           buildNavBarItem(
               label: 'Settings',
               featureIcon: Icons.settings_outlined,
-              isSelected: currentRoute == '/Settings',
+              isSelected: widget.currentRoute == '/Settings',
               action: () {
                 Navigator.pushNamed(context, '/Settings');
               }),

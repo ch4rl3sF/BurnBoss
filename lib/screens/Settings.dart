@@ -25,6 +25,8 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   CustomUser? customUser;
+  bool usernameUpdated = false;
+  late bool emailUpdated = false;
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -43,7 +45,8 @@ class _SettingsPageState extends State<SettingsPage> {
     setState(() {
       customUser?.username = newUsername;
       usernameController.text = newUsername;
-      CustomUser(uid: FirebaseAuth.instance.currentUser!.uid).updateUsername(newUsername);
+      CustomUser(uid: FirebaseAuth.instance.currentUser!.uid)
+          .updateUsername(newUsername);
     });
   }
 
@@ -53,7 +56,8 @@ class _SettingsPageState extends State<SettingsPage> {
         setState(() {
           customUser?.email = newEmail;
           emailController.text = newEmail;
-          CustomUser(uid: FirebaseAuth.instance.currentUser!.uid).updateEmail(newEmail);
+          CustomUser(uid: FirebaseAuth.instance.currentUser!.uid)
+              .updateEmail(newEmail);
         });
       });
     }
@@ -66,7 +70,9 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadUserData() async {
-    CustomUser? user = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserData();
+    CustomUser? user =
+        await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+            .getUserData();
     if (user != null) {
       setState(() {
         customUser = user;
@@ -122,7 +128,7 @@ class _SettingsPageState extends State<SettingsPage> {
               activeColor: DARK_COLOR_PRIMARY,
               onChanged: (bool switchIsOn) {
                 setState(
-                      () {
+                  () {
                     print('Switch changed to $switchIsOn');
                     widget.themeManager.setThemeToDark(switchIsOn);
                     DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
@@ -159,13 +165,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 width: 88,
                 child: _profilePic != null
                     ? CircleAvatar(
-                  radius: 44,
-                  backgroundImage: MemoryImage(_profilePic!),
-                )
+                        radius: 44,
+                        backgroundImage: MemoryImage(_profilePic!),
+                      )
                     : const CircleAvatar(
-                  radius: 44,
-                  backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),
-                ),
+                        radius: 44,
+                        backgroundImage: AssetImage(
+                            'assets/images/defaultProfilePicture.png'),
+                      ),
               ),
               title: Text(customUser?.username ?? 'Loading...'),
               subtitle: Text('${customUser?.email ?? 'Loading...'}'),
@@ -187,19 +194,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                     children: [
                                       _profilePic != null
                                           ? CircleAvatar(
-                                        radius: 44,
-                                        backgroundImage: MemoryImage(_profilePic!),
-                                      )
+                                              radius: 44,
+                                              backgroundImage:
+                                                  MemoryImage(_profilePic!),
+                                            )
                                           : const CircleAvatar(
-                                        radius: 44,
-                                        backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),
-                                      ),
+                                              radius: 44,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/defaultProfilePicture.png'),
+                                            ),
                                       Positioned(
                                         bottom: -5,
                                         left: 45,
                                         child: IconButton(
                                           onPressed: () async {
-                                            Uint8List img = await pickImage(ImageSource.gallery);
+                                            Uint8List img = await pickImage(
+                                                ImageSource.gallery);
                                             setState(() {
                                               _updateProfilePic(img);
                                             });
@@ -220,6 +230,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                       contentPadding: EdgeInsets.all(10),
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (username) {
+                                      if (usernameController.text.isNotEmpty) {
+                                        setState(() {
+                                          usernameUpdated = true;
+                                        });
+                                      }
+                                    },
                                   ),
                                   SizedBox(height: 15),
                                   TextFormField(
@@ -229,6 +246,13 @@ class _SettingsPageState extends State<SettingsPage> {
                                       contentPadding: EdgeInsets.all(10),
                                       border: OutlineInputBorder(),
                                     ),
+                                    onChanged: (email) {
+                                      if (emailController.text.isNotEmpty) {
+                                        setState(() {
+                                          emailUpdated = true;
+                                        });
+                                      }
+                                    },
                                   ),
                                 ],
                               ),
@@ -243,8 +267,12 @@ class _SettingsPageState extends State<SettingsPage> {
                               TextButton(
                                 child: Text('Save'),
                                 onPressed: () {
-                                  _updateUsername(usernameController.text);
-                                  _updateEmail(emailController.text);
+                                  if (usernameUpdated == true) {
+                                    _updateUsername(usernameController.text);
+                                  }
+                                  if (emailUpdated == true) {
+                                    _updateEmail(emailController.text);
+                                  }
                                   Navigator.of(context).pop();
                                 },
                               ),
@@ -272,7 +300,9 @@ class _SettingsPageState extends State<SettingsPage> {
                 Navigator.pushReplacementNamed(context, '/');
               },
             ),
-            SizedBox(height: 25,),
+            SizedBox(
+              height: 25,
+            ),
             TextButton.icon(
               icon: Icon(
                 Icons.delete_rounded,
