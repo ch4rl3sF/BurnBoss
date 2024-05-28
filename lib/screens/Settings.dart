@@ -1,5 +1,5 @@
 import 'dart:typed_data';
-
+import 'package:burnboss/models/user.dart';
 import 'package:burnboss/services/auth.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:burnboss/services/imagePicker.dart';
@@ -9,8 +9,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:image_picker/image_picker.dart';
-
-import '../models/user.dart';
 
 class SettingsPage extends StatefulWidget {
   final ThemeManager themeManager;
@@ -26,8 +24,8 @@ class _SettingsPageState extends State<SettingsPage> {
   Uint8List? _profilePic;
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
-  late String username;
-  late String email;
+  String? username;
+  String? email;
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
@@ -45,22 +43,29 @@ class _SettingsPageState extends State<SettingsPage> {
   void _updateUsername(String newUsername) {
     setState(() {
       username = newUsername;
-      
+    });
+  }
+
+  void _updateEmail(String newEmail) {
+    setState(() {
+      email = newEmail;
     });
   }
 
   @override
-  void initState() async {
+  void initState() {
     super.initState();
-    fetchUserData();
+    _loadUserData();
   }
 
-  Future<void> fetchUserData() async {
-    CustomUser? customUser = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserData();
-    if (customUser != null) {
+  Future<void> _loadUserData() async {
+    CustomUser? user = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserData();
+    if (user != null) {
       setState(() {
-        username = customUser.username!;
-        email = customUser.email!;
+        username = user.username;
+        email = user.email;
+        usernameController.text = user.username!;
+        emailController.text = user.email!;
       });
     }
   }
@@ -76,7 +81,7 @@ class _SettingsPageState extends State<SettingsPage> {
         centerTitle: true,
         toolbarHeight: 125,
         title: const Text(
-          'Select',
+          'Settings',
           style: TextStyle(
             fontSize: 55,
             fontWeight: FontWeight.bold,
@@ -156,8 +161,8 @@ class _SettingsPageState extends State<SettingsPage> {
                   backgroundImage: AssetImage('assets/images/defaultProfilePicture.png'),
                 ),
               ),
-              title: Text(username),
-              subtitle: Text('Email: $email'),
+              title: Text(username ?? 'Loading...'),
+              subtitle: Text('Email: ${email ?? 'Loading...'}'),
               trailing: IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
@@ -213,7 +218,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                   TextFormField(
                                     controller: emailController,
                                     decoration: const InputDecoration(
-                                      hintText: 'Username',
+                                      hintText: 'Email',
                                       contentPadding: EdgeInsets.all(10),
                                       border: OutlineInputBorder(),
                                     ),
@@ -221,6 +226,22 @@ class _SettingsPageState extends State<SettingsPage> {
                                 ],
                               ),
                             ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('Cancel'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                              TextButton(
+                                child: Text('Save'),
+                                onPressed: () {
+                                  _updateUsername(usernameController.text);
+                                  _updateEmail(emailController.text);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
                           );
                         },
                       );
