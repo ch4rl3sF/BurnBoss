@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:burnboss/services/auth.dart';
 
 import '../services/database.dart';
+import 'dart:typed_data';
 
 class NavDrawerWidget extends StatefulWidget {
   final String currentRoute;
-  const NavDrawerWidget({Key? key, required this.currentRoute}) : super(key: key);
+
+  const NavDrawerWidget({Key? key, required this.currentRoute})
+      : super(key: key);
 
   @override
   State<NavDrawerWidget> createState() => _NavDrawerWidgetState();
@@ -16,16 +19,19 @@ class NavDrawerWidget extends StatefulWidget {
 
 class _NavDrawerWidgetState extends State<NavDrawerWidget> {
   CustomUser? customUser;
-
+  Uint8List? _profilePic;
 
   @override
   void initState() {
     super.initState();
     loadUserData();
+    _loadProfilePic();
   }
 
   Future<void> loadUserData() async {
-    CustomUser? user = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).getUserData();
+    CustomUser? user =
+        await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+            .getUserData();
     if (user != null) {
       setState(() {
         customUser = user;
@@ -33,6 +39,16 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
     }
   }
 
+  Future<void> _loadProfilePic() async {
+    Uint8List? image =
+        await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+            .getProfilePic();
+    if (image != null) {
+      setState(() {
+        _profilePic = image;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,10 +57,6 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
 
     // Determine if the theme is light
     bool isLightTheme = theme.brightness == Brightness.light;
-
-    var email = FirebaseAuth.instance.currentUser!.email.toString();
-
-
 
     return Drawer(
       child: ListView(
@@ -58,10 +70,16 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
               style:
                   TextStyle(color: isLightTheme ? Colors.white : Colors.black),
             ),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage:
-                  AssetImage('assets/images/defaultProfilePicture.png'),
-            ),
+            currentAccountPicture: _profilePic != null
+                ? CircleAvatar(
+                    radius: 44,
+                    backgroundImage: MemoryImage(_profilePic!),
+                  )
+                : const CircleAvatar(
+                    radius: 44,
+                    backgroundImage:
+                        AssetImage('assets/images/defaultProfilePicture.png'),
+                  ),
           ),
           buildNavBarItem(
               label: 'Home',
@@ -148,13 +166,13 @@ class _NavDrawerWidgetState extends State<NavDrawerWidget> {
       leading: Icon(
         featureIcon,
         size: 30,
-        color: isSelected? Colors.grey : null,
+        color: isSelected ? Colors.grey : null,
       ),
       title: Text(
         label,
         style: TextStyle(
           fontSize: 18,
-          color: isSelected? Colors.grey : null,
+          color: isSelected ? Colors.grey : null,
         ),
       ),
       onTap: isSelected ? null : action,

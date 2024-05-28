@@ -1,8 +1,16 @@
+import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:burnboss/models/user.dart';
 import 'package:burnboss/services/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/models/activity.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+
+final FirebaseStorage _storage = FirebaseStorage.instance;
 
 class DatabaseService {
   final String uid;
@@ -22,16 +30,51 @@ class DatabaseService {
   final CollectionReference usersCollection =
       FirebaseFirestore.instance.collection('users');
 
-  //gets a reference to the document and updates it with the user details
-  // Future updateUserData(String email,) async {
-  //   return await usersCollection
-  //       .doc(uid)
-  //       .collection('Details')
-  //       .doc('details')
-  //       .set({
-  //     'email': email,
-  //   });
-  // }
+  Future<String> uploadImageToStorage(String childName, Uint8List file) async {
+    Reference ref = _storage.ref().child(childName);
+
+    UploadTask uploadTask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadURL = await snapshot.ref.getDownloadURL();
+    return downloadURL;
+  }
+
+  Future<String> saveProfilePic({
+    required Uint8List file,
+  }) async {
+    String resp = 'Some error occurred';
+    try {
+      String imageURL = await uploadImageToStorage('ProfileImage', file);
+      await usersCollection
+          .doc(uid)
+          .collection('ProfilePic')
+          .add({'imageLink': imageURL});
+      resp = 'Success saving image';
+    } catch (e) {
+      resp = e.toString();
+    }
+    return resp;
+  }
+
+  Future<Uint8List?> getProfilePic() async {
+    try {
+      QuerySnapshot snapshot = await usersCollection
+          .doc(uid)
+          .collection('ProfilePic')
+          .limit(1)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        String imageURL = snapshot.docs.first.get('imageLink');
+        http.Response response = await http.get(Uri.parse(imageURL));
+        if (response.statusCode == 200) {
+          return response.bodyBytes;
+        }
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
 
   Future updateUserData(CustomUser customUser) async {
     DocumentReference userDocument =

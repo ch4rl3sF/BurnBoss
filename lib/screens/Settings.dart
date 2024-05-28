@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class SettingsPage extends StatefulWidget {
   final ThemeManager themeManager;
@@ -26,13 +27,18 @@ class _SettingsPageState extends State<SettingsPage> {
   TextEditingController emailController = TextEditingController();
   CustomUser? customUser;
   bool usernameUpdated = false;
-  late bool emailUpdated = false;
+  bool emailUpdated = false;
+  bool profilePicUpdated = false;
 
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
     setState(() {
       _profilePic = img;
     });
+  }
+
+  void saveImage() async {
+    await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid).saveProfilePic(file: _profilePic!);
   }
 
   void _updateProfilePic(Uint8List newPic) {
@@ -67,6 +73,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _loadUserData();
+    _loadProfilePic();
   }
 
   Future<void> _loadUserData() async {
@@ -81,6 +88,17 @@ class _SettingsPageState extends State<SettingsPage> {
       });
     }
   }
+
+  Future<void> _loadProfilePic() async {
+    Uint8List? image = await DatabaseService(uid: FirebaseAuth.instance.currentUser!.uid)
+        .getProfilePic();
+    if (image != null) {
+      setState(() {
+        _profilePic = image;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -212,6 +230,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 ImageSource.gallery);
                                             setState(() {
                                               _updateProfilePic(img);
+                                              profilePicUpdated = true;
                                             });
                                           },
                                           icon: const Icon(
@@ -272,6 +291,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                   }
                                   if (emailUpdated == true) {
                                     _updateEmail(emailController.text);
+                                  }
+                                  if (profilePicUpdated == true) {
+                                    saveImage();
+                                    print('button working');
                                   }
                                   Navigator.of(context).pop();
                                 },
