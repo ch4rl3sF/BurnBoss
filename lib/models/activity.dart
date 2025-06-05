@@ -11,11 +11,11 @@ class Activity {
   String activityType;
   bool stopwatchUsed;
 
-  Activity({required
-this.activityID,
-  required this.activityName,
+  Activity({
+    required this.activityID,
+    required this.activityName,
     this.reps = 0,
-    this.sets = 0,
+    this.sets = 1,
     this.rest = const Duration(),
     this.weights = 0,
     this.time = const Duration(),
@@ -28,7 +28,7 @@ this.activityID,
       'activityID': activityID,
       'activityName': activityName,
       'reps': reps,
-      'sets' : sets,
+      'sets': sets,
       'rest': rest,
       'weights': weights,
       'time': time,
@@ -39,16 +39,15 @@ this.activityID,
 
   factory Activity.fromMap(Map<String, dynamic> map) {
     return Activity(
-      activityID: map['activityID'],
-      activityName: map['activityName'],
-      reps: map['reps'],
-      sets: map['sets'],
-      rest: Duration(milliseconds: map['rest']),
-      weights: map['weights'],
-      time: Duration(milliseconds: map['time']),
-      activityType: map['activityType'],
-      stopwatchUsed: map['stopwatchUsed']
-    );
+        activityID: map['activityID'],
+        activityName: map['activityName'],
+        reps: map['reps'],
+        sets: map['sets'],
+        rest: Duration(milliseconds: map['rest']),
+        weights: map['weights'],
+        time: Duration(milliseconds: map['time']),
+        activityType: map['activityType'],
+        stopwatchUsed: map['stopwatchUsed']);
   }
 
   void updateReps(int newReps) {
@@ -59,7 +58,7 @@ this.activityID,
     sets = newSets;
   }
 
-  void updateRest (Duration newRest) {
+  void updateRest(Duration newRest) {
     rest = newRest;
   }
 
@@ -75,7 +74,7 @@ this.activityID,
     activityType = newActivityType;
   }
 
-  void updateStopwatchBool(bool newStopwatchUsed){
+  void updateStopwatchBool(bool newStopwatchUsed) {
     stopwatchUsed = newStopwatchUsed;
   }
 }
@@ -85,10 +84,11 @@ class ActivityCard extends StatefulWidget {
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
-  ActivityCard({required this.activity,
-    required this.onEdit,
-    required this.onDelete,
-    required ValueKey<String> key});
+  const ActivityCard(
+      {required this.activity,
+      required this.onEdit,
+      required this.onDelete,
+      required ValueKey<String> key});
 
   @override
   _ActivityCardState createState() => _ActivityCardState();
@@ -109,16 +109,19 @@ class _ActivityCardState extends State<ActivityCard> {
     return Card(
       key: ValueKey(widget.activity.activityName),
       color: cardColor,
-      margin: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: ListTile(
         title: Text(widget.activity.activityName),
-        subtitle: Text(widget.activity.activityType == 'Reps' ? 'Sets: ${widget.activity.sets} | Reps: ${widget.activity.reps} | ${widget.activity.weights}Kg'  : 'Activity type: ${widget.activity.activityType}'),
+        subtitle: Text(widget.activity.activityType == 'Reps'
+            ? 'Sets: ${widget.activity.sets} | Reps: ${widget.activity.reps} | ${widget.activity.weights}Kg'
+            : 'Activity type: ${widget.activity.activityType}'),
         // Use widget.activity here
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(onPressed: widget.onEdit, icon: Icon(Icons.edit)),
-            IconButton(onPressed: widget.onDelete, icon: Icon(Icons.delete)),
+            IconButton(onPressed: widget.onEdit, icon: const Icon(Icons.edit)),
+            IconButton(
+                onPressed: widget.onDelete, icon: const Icon(Icons.delete)),
           ],
         ),
       ),

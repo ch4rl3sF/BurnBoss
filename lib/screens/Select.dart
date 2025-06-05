@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SelectPage extends StatefulWidget {
+  const SelectPage({super.key});
+
   @override
   _SelectPageState createState() => _SelectPageState();
 }
@@ -105,7 +107,7 @@ class _SelectPageState extends State<SelectPage> {
                                                       snapshot.data![index],
                                                 )));
                                   },
-                                  icon: Icon(
+                                  icon: const Icon(
                                     Icons.edit_rounded,
                                     size: 25,
                                   ),

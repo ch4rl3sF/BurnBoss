@@ -14,8 +14,8 @@ class editActivity extends StatefulWidget {
   final Function(String) onUpdateActivityName;
   final Function(bool) onUpdateStopwatchUsed;
 
-  editActivity({
-    Key? key,
+  const editActivity({
+    super.key,
     required this.activity,
     required this.onUpdateReps,
     required this.onUpdateSets,
@@ -24,7 +24,7 @@ class editActivity extends StatefulWidget {
     required this.onUpdateTime,
     required this.onUpdateActivityName,
     required this.onUpdateStopwatchUsed,
-  }) : super(key: key);
+  });
 
   @override
   State<editActivity> createState() => _editActivityState();
@@ -92,6 +92,7 @@ class _editActivityState extends State<editActivity> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     // Access the current theme
     ThemeData theme = Theme.of(context);
@@ -103,13 +104,20 @@ class _editActivityState extends State<editActivity> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             setValues();
             Navigator.pop(context);
           },
         ),
         title: Text(widget.activity.activityName),
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(Icons.save)),
+        ],
       ),
       body: Column(
         children: [
@@ -119,7 +127,7 @@ class _editActivityState extends State<editActivity> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Activity Type:',
                   style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
                 ),
@@ -129,7 +137,7 @@ class _editActivityState extends State<editActivity> {
                       .map((activityOption) => DropdownMenuItem(
                           value: activityOption,
                           child: Text(activityOption,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontFamily: 'Bebas', fontSize: 20))))
                       .toList(),
                   onChanged: (activityOption) {
@@ -146,7 +154,7 @@ class _editActivityState extends State<editActivity> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Card(
-                  color: isLightTheme ? Colors.white : Color(0xFF0E0F0F),
+                  color: isLightTheme ? Colors.white : const Color(0xFF0E0F0F),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10.0, vertical: 10),
@@ -160,7 +168,7 @@ class _editActivityState extends State<editActivity> {
                               child: TextFormField(
                                 controller: setsController,
                                 keyboardType: TextInputType.number,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10)),
@@ -255,8 +263,9 @@ class _editActivityState extends State<editActivity> {
                               width: 70,
                               child: TextFormField(
                                 controller: weightsController,
-                                keyboardType: TextInputType.numberWithOptions(
-                                    decimal: true),
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
                                 decoration: const InputDecoration(
                                   border: OutlineInputBorder(
                                       borderRadius: BorderRadius.all(
@@ -297,8 +306,8 @@ class _editActivityState extends State<editActivity> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('Rest between sets?'),
-                            SizedBox(width: 20),
+                            const Text('Rest between sets?'),
+                            const SizedBox(width: 20),
                             AbsorbPointer(
                               absorbing: numberOfSets <= 1 ||
                                   widget.activity.sets <= 1 ||
@@ -347,8 +356,8 @@ class _editActivityState extends State<editActivity> {
             ),
           if (activityOptionSelected == 'Timer')
             //Time text
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
               child: Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -380,14 +389,14 @@ class _editActivityState extends State<editActivity> {
               padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               child: Column(
                 children: [
-                  Text(
+                  const Text(
                     'Using a stopwatch?',
                     style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(
+                      const Text(
                         'Off',
                         style: TextStyle(fontFamily: 'Bebas', fontSize: 20),
                       ),
@@ -401,7 +410,7 @@ class _editActivityState extends State<editActivity> {
                           });
                         },
                       ),
-                      Text(
+                      const Text(
                         'On',
                         style: TextStyle(fontFamily: 'Bebas', fontSize: 20),
                       )

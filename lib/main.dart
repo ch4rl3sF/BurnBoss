@@ -1,4 +1,3 @@
-import 'package:burnboss/models/stopwatch.dart';
 import 'package:burnboss/screens/Calendar.dart';
 import 'package:burnboss/screens/Creator.dart';
 import 'package:burnboss/screens/Select.dart';
@@ -13,20 +12,21 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:provider/provider.dart';
-import 'package:burnboss/services/auth.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(BurnBoss());
+  runApp(const BurnBoss());
   // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
   //   statusBarColor: Colors.black,
   // ));
 }
 
 class BurnBoss extends StatefulWidget {
+  const BurnBoss({super.key});
+
   @override
   State<StatefulWidget> createState() => _BurnBossState();
 }
@@ -53,10 +53,10 @@ class _BurnBossState extends State<BurnBoss> {
         initialRoute: '/',
         //sets the initial page to be this home page
         routes: {
-          '/': (context) => Wrapper(),
-          '/Calendar': (context) => CalendarPage(),
-          '/Creator': (context) => CreatePage(),
-          '/Select': (context) => SelectPage(),
+          '/': (context) => const Wrapper(),
+          '/Calendar': (context) => const CalendarPage(),
+          '/Creator': (context) => const CreatePage(),
+          '/Select': (context) => const SelectPage(),
           '/Stopwatch': (context) => StopwatchPage(),
           '/Settings': (context) => SettingsPage(_themeManager),
         }, //sets the routes to the different pages

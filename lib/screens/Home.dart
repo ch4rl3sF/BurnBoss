@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:burnboss/screens/NavDrawer.dart';
 
 class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,13 @@ class Home extends StatelessWidget {
         ),
         leading: Builder(
           builder: (context) => IconButton(
-            padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            icon: Icon(Icons.menu_rounded, size: 30,),
+            padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+            icon: const Icon(Icons.menu_rounded, size: 30,),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
       ),
-      drawer: NavDrawerWidget(currentRoute: '/'),
+      drawer: const NavDrawerWidget(currentRoute: '/'),
       body: Align(
         alignment: Alignment.topCenter,
         child: Padding(
@@ -98,7 +98,7 @@ class Home extends StatelessWidget {
       // color: Color(0xff292929),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.grey, width: 0.5)),
+          side: const BorderSide(color: Colors.grey, width: 0.5)),
       child: InkWell(
         onTap: action,
         child: SizedBox(
@@ -118,7 +118,7 @@ class Home extends StatelessWidget {
                 ),
                 Text(
                   label,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ],
             ),

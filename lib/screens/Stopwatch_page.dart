@@ -1,11 +1,10 @@
-import 'dart:async';
 import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:flutter/material.dart';
 import 'package:burnboss/models/stopwatch.dart';
 
 class StopwatchPage extends StatefulWidget {
   final ActivityStopwatch _activityStopwatch = ActivityStopwatch();
-  StopwatchPage({Key? key}) : super(key: key);
+  StopwatchPage({super.key});
 
   @override
   State<StopwatchPage> createState() => _StopwatchPageState();
@@ -29,8 +28,8 @@ class _StopwatchPageState extends State<StopwatchPage> {
         ),
         leading: Builder(
           builder: (context) => IconButton(
-            padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            icon: Icon(Icons.menu_rounded, size: 30),
+            padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+            icon: const Icon(Icons.menu_rounded, size: 30),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
@@ -38,7 +37,7 @@ class _StopwatchPageState extends State<StopwatchPage> {
       body: Center(
         child: widget._activityStopwatch,
       ),
-      drawer: NavDrawerWidget(currentRoute: '/Stopwatch'),
+      drawer: const NavDrawerWidget(currentRoute: '/Stopwatch'),
     );
   }
 }

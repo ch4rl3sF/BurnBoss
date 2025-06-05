@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 
 class CreatePage extends StatelessWidget {
-  const CreatePage({Key? key}) : super(key: key);
+  const CreatePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,8 @@ class CreatePage extends StatelessWidget {
         ),
         leading: Builder(
           builder: (context) => IconButton(
-            padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            icon: Icon(
+            padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+            icon: const Icon(
               Icons.menu_rounded,
               size: 30,
             ),
@@ -37,7 +37,7 @@ class CreatePage extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 80,
             ),
             buildCreateCard(
@@ -47,11 +47,11 @@ class CreatePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => NewWorkoutPage()),
+                      builder: (context) => const NewWorkoutPage()),
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 30,
             ),
             buildCreateCard(
@@ -61,14 +61,14 @@ class CreatePage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => EditWorkoutPage()),
+                      builder: (context) => const EditWorkoutPage()),
                 );
               },
             ),
           ],
         ),
       ),
-      drawer: NavDrawerWidget(currentRoute: '/Creator'),
+      drawer: const NavDrawerWidget(currentRoute: '/Creator'),
     );
   }
 
@@ -81,7 +81,7 @@ class CreatePage extends StatelessWidget {
       // color: Color(0xff292929),
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.grey, width: 0.5)),
+          side: const BorderSide(color: Colors.grey, width: 0.5)),
       child: InkWell(
         onTap: action,
         child: SizedBox(
@@ -101,7 +101,7 @@ class CreatePage extends StatelessWidget {
                 ),
                 Text(
                   label,
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ],
             ),

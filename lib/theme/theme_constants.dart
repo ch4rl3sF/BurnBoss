@@ -9,29 +9,28 @@ ThemeData lightTheme = ThemeData(
   primaryColor: COLOR_PRIMARY,
   useMaterial3: true,
   appBarTheme: const AppBarTheme(color: COLOR_PRIMARY),
-  cardTheme: CardTheme(color: COLOR_PRIMARY),
-  iconTheme: IconThemeData(color: Colors.black),
+  cardTheme: const CardThemeData(color: COLOR_PRIMARY),
+  iconTheme: const IconThemeData(color: Colors.black),
   tabBarTheme:
-      TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
+      const TabBarThemeData(labelColor: Colors.black, unselectedLabelColor: Colors.white),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         foregroundColor: Colors.white, backgroundColor: COLOR_PRIMARY),
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      primary: Colors.black,
-      side: BorderSide(width: 0.5, color: Colors.black12),
+      foregroundColor: Colors.black, side: const BorderSide(width: 0.5, color: Colors.black12),
     ),
   ),
 );
 
 ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
-  primaryColor: Color(0xff1DE6C9),
-  iconTheme: IconThemeData(color: Colors.white),
+  primaryColor: const Color(0xff1DE6C9),
+  iconTheme: const IconThemeData(color: Colors.white),
   useMaterial3: true,
   tabBarTheme:
-      TabBarTheme(labelColor: Colors.black, unselectedLabelColor: Colors.white),
+      const TabBarThemeData(labelColor: Colors.black, unselectedLabelColor: Colors.white),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
         foregroundColor: Colors.black, backgroundColor: DARK_COLOR_PRIMARY),

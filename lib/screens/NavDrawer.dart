@@ -1,12 +1,10 @@
-import 'package:burnboss/models/user.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:burnboss/services/auth.dart';
 
 class NavDrawerWidget extends StatelessWidget {
   final String currentRoute;
-  const NavDrawerWidget({Key? key, required this.currentRoute}) : super(key: key);
+  const NavDrawerWidget({super.key, required this.currentRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +17,7 @@ class NavDrawerWidget extends StatelessWidget {
     var email = FirebaseAuth.instance.currentUser!.email.toString();
 
     //function to trim the email to before the @ symbol to use as the username
-    Future<String> _getUsername() async {
+    Future<String> getUsername() async {
       var email = FirebaseAuth.instance.currentUser!.email.toString();
       var username = email.split('@')[0];
       return username;
@@ -32,14 +30,14 @@ class NavDrawerWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 color: isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY),
             accountName: FutureBuilder<String>(
-              future: _getUsername(),
+              future: getUsername(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text('Loading...');
+                  return const Text('Loading...');
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else if (snapshot.data == null) {
-                  return Text('Guest');
+                  return const Text('Guest');
                 } else {
                   return Text(
                     snapshot.data ?? 'No Username',
@@ -55,7 +53,7 @@ class NavDrawerWidget extends StatelessWidget {
               style:
                   TextStyle(color: isLightTheme ? Colors.white : Colors.black),
             ),
-            currentAccountPicture: CircleAvatar(
+            currentAccountPicture: const CircleAvatar(
               backgroundImage:
                   AssetImage('assets/images/defaultProfilePicture.png'),
             ),
@@ -108,7 +106,7 @@ class NavDrawerWidget extends StatelessWidget {
               action: () {
                 Navigator.pushNamed(context, '/Settings');
               }),
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           InkWell(
@@ -120,7 +118,7 @@ class NavDrawerWidget extends StatelessWidget {
               radius: 20,
               backgroundColor:
                   isLightTheme ? COLOR_SECONDARY : DARK_COLOR_PRIMARY,
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 radius: 19,
                 backgroundColor: Color(0xff292929),
                 child: Icon(

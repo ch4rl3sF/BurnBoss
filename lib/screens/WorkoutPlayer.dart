@@ -1,10 +1,7 @@
-import 'package:burnboss/models/activity.dart';
-import 'package:burnboss/models/stopwatch.dart';
 import 'package:burnboss/models/workout.dart';
 import 'package:burnboss/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:burnboss/models/timer_activity_player.dart';
 
 import '../models/activityPage.dart';
 
@@ -12,7 +9,7 @@ class WorkoutPlayer extends StatefulWidget {
   final Workout workout;
   final Function(int) onUpdatePage;
 
-  WorkoutPlayer({required this.workout, required this.onUpdatePage});
+  const WorkoutPlayer({super.key, required this.workout, required this.onUpdatePage});
 
   @override
   State<WorkoutPlayer> createState() => _WorkoutPlayerState();
@@ -41,11 +38,12 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             showDialog(
                 context: context,
@@ -78,7 +76,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
         toolbarHeight: 125,
         title: Text(
           widget.workout.workoutName,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 55,
             fontWeight: FontWeight.bold,
             letterSpacing: 2.0,
@@ -106,7 +104,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
               return buildFinishPage();
             }
           },
-          physics: ClampingScrollPhysics(),
+          physics: const ClampingScrollPhysics(),
           onPageChanged: (int page) {
             setState(() {
               //change the value of the current page to whichever page the user is on
@@ -117,7 +115,7 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -126,12 +124,12 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
                         0 //only allows previous page if on any other page than the first
                     ? () {
                         _pageController.previousPage(
-                            duration: Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 500),
                             curve: Curves
                                 .ease); //to perform and customise the switch between pages
                       }
                     : null,
-                child: Text('Previous'),
+                child: const Text('Previous'),
               ),
 
               if (_currentPage + 1 <= widget.workout.activities.length)
@@ -143,14 +141,14 @@ class _WorkoutPlayerState extends State<WorkoutPlayer>
                 onPressed: () async {
                   if (_currentPage + 1 < widget.workout.activities.length) {
                     _pageController.nextPage(
-                      duration: Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
                   } else if (_currentPage + 1 ==
                       widget.workout.activities.length) {
                     // Handle Finish button action
                     _pageController.nextPage(
-                      duration: Duration(milliseconds: 500),
+                      duration: const Duration(milliseconds: 500),
                       curve: Curves.ease,
                     );
                   } else {

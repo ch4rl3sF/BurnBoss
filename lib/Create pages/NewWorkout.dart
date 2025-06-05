@@ -6,6 +6,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:burnboss/models/workout.dart';
 
 class NewWorkoutPage extends StatefulWidget {
+  const NewWorkoutPage({super.key});
+
   @override
   State<NewWorkoutPage> createState() => _NewWorkoutPageState();
 }
@@ -31,7 +33,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
           title: Form(
             key: _formKey,
             child: TextFormField(
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Workout name',
               ),
               controller: workoutNameAdd,
@@ -54,7 +56,8 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                         'Your workout either has no name or no activities!'),
                     actions: [
                       TextButton(
-                        onPressed: () => Navigator.pushNamed(context, '/Creator'),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/Creator'),
                         child: const Text('Abandon'),
                       ),
                       TextButton(
@@ -106,7 +109,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(savingSnackBar);
                           },
-                          child: Text('Save')),
+                          child: const Text('Save')),
                       TextButton(
                         onPressed: () {
                           Navigator.pushNamed(context, '/Creator');
@@ -123,7 +126,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                 );
               }
             },
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
           ),
           actions: [
             IconButton(
@@ -167,17 +170,17 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                             var savingSnackBar = SnackBar(
                               content: const Center(
                                   child: Text(
-                                    'Saving...',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontFamily: 'Bebas',
-                                        color: Colors.white),
-                                  )),
+                                'Saving...',
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Bebas',
+                                    color: Colors.white),
+                              )),
                               duration: const Duration(milliseconds: 2000),
                               width: 180.0,
                               padding: const EdgeInsets.symmetric(
                                 horizontal:
-                                8.0, // Inner padding for SnackBar content.
+                                    8.0, // Inner padding for SnackBar content.
                               ),
                               behavior: SnackBarBehavior.floating,
                               shape: RoundedRectangleBorder(
@@ -194,7 +197,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
                   );
                 }
               },
-              icon: Icon(Icons.save),
+              icon: const Icon(Icons.save),
             )
           ],
           bottom: const TabBar(
@@ -212,7 +215,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
         body: TabBarView(
           children: [
             Column(children: [
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
               Expanded(
@@ -224,24 +227,25 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Muscles Targeted: ',
                       style: TextStyle(fontFamily: 'Bebas', fontSize: 30),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     Text('Number of steps: ${activities.length}',
-                        style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
-                    SizedBox(
+                        style:
+                            const TextStyle(fontFamily: 'Bebas', fontSize: 30)),
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text('Equipment used: ',
+                    const Text('Equipment used: ',
                         style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text('Days set: ',
+                    const Text('Days set: ',
                         style: TextStyle(fontFamily: 'Bebas', fontSize: 30)),
                   ]),
             ),
@@ -255,7 +259,7 @@ class _NewWorkoutPageState extends State<NewWorkoutPage> {
 class ActivityList extends StatefulWidget {
   final List<Activity> activities;
 
-  ActivityList({required this.activities});
+  const ActivityList({super.key, required this.activities});
 
   @override
   _ActivityListState createState() => _ActivityListState();
@@ -267,10 +271,11 @@ class _ActivityListState extends State<ActivityList> {
   addActivityItem(String activityName) {
     //ADD IN: record time when workout was created
     setState(() {
-
-      widget.activities.add(Activity(
-          activityID: '', activityName: activityName));
+      widget.activities
+          .add(Activity(activityID: '', activityName: activityName));
     });
+
+    editActivityItem(widget.activities.length - 1);
   }
 
   void editActivityItem(int index) {
@@ -334,10 +339,10 @@ class _ActivityListState extends State<ActivityList> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
           child: TextField(
             controller: activityNameController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Activity Name',
               border: OutlineInputBorder(),
             ),
@@ -351,9 +356,9 @@ class _ActivityListState extends State<ActivityList> {
               activityNameController.clear();
             }
           },
-          child: Text('Add activity'),
+          child: const Text('Add activity'),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Expanded(

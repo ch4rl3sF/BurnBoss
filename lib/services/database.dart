@@ -60,7 +60,7 @@ class DatabaseService {
   //function to create a workout
   Future createWorkout(Workout workout) async {
     // Add the workout to Firestore
-    DocumentReference workoutDocument = await WorkoutsCollection.doc();
+    DocumentReference workoutDocument = WorkoutsCollection.doc();
 
     // Set the workout data, including the workout name
     Map<String, dynamic> workoutData = {
@@ -78,7 +78,7 @@ class DatabaseService {
       Activity activity = workout.activities[i];
       // Use the position in the list as the ordering criteria
 
-      DocumentReference activityDocument = await activitiesCollection.doc();
+      DocumentReference activityDocument = activitiesCollection.doc();
 
       Map<String, dynamic> activityData = {
         'activityID': activityDocument.id,

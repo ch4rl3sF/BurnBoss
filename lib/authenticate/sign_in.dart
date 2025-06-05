@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class SignIn extends StatefulWidget {
   final Function toggleView;
 
-  SignIn({required this.toggleView});
+  const SignIn({super.key, required this.toggleView});
 
   @override
   State<SignIn> createState() => _SignInState();
@@ -24,7 +24,7 @@ class _SignInState extends State<SignIn> {
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Loading()
+        ? const Loading()
         : Scaffold(
             resizeToAvoidBottomInset: false,
             appBar: AppBar(
@@ -42,13 +42,13 @@ class _SignInState extends State<SignIn> {
               ),
             ),
             body: Container(
-              padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50),
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
               child: Form(
                 key: _formKey, //tracks state of form and helps validate it
                 child: Column(
                   children: [
                     TextFormField(
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         hintText: 'Email',
                       ),
                       keyboardType: TextInputType.emailAddress,
@@ -58,7 +58,7 @@ class _SignInState extends State<SignIn> {
                         setState(() => email = val);
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextFormField(
                       decoration: InputDecoration(
                           hintText: 'Password',
@@ -80,9 +80,9 @@ class _SignInState extends State<SignIn> {
                         setState(() => password = val);
                       },
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
-                      child: Text('Sign in'),
+                      child: const Text('Sign in'),
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           setState(() {
@@ -98,23 +98,23 @@ class _SignInState extends State<SignIn> {
                         }
                       },
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
                       error,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         TextButton.icon(
-                          icon: Icon(Icons.person_add_alt_1),
-                          label: Text('Register'),
+                          icon: const Icon(Icons.person_add_alt_1),
+                          label: const Text('Register'),
                           onPressed: () {
                             widget.toggleView();
                           },
                         ),
                         TextButton(
-                            child: Text('Sign in as Guest?'),
+                            child: const Text('Sign in as Guest?'),
                             onPressed: () {
                               showDialog<String>(
                                 context: context,

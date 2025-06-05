@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class EditWorkoutPage extends StatefulWidget {
-  EditWorkoutPage({Key? key}) : super(key: key);
+  const EditWorkoutPage({super.key});
 
   @override
   State<EditWorkoutPage> createState() => _EditWorkoutPageState();
@@ -62,7 +62,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
             future: futureWorkouts,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: SpinKitDualRing(
                     color: COLOR_PRIMARY,
                     size: 50.0,
@@ -123,7 +123,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                                         snapshot.data![index],
                                                   )));
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.edit_rounded,
                                       size: 30,
                                     ),
@@ -148,7 +148,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                                         await _refreshWorkoutsList();
                                                         Navigator.pop(context, 'Delete');
                                                       },
-                                                      child: Text('Delete')),
+                                                      child: const Text('Delete')),
 
                                                   TextButton(
                                                       onPressed: () {
@@ -161,7 +161,7 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                               ));
 
                                     },
-                                    icon: Icon(
+                                    icon: const Icon(
                                       Icons.delete_rounded,
                                       size: 30,
                                     ),

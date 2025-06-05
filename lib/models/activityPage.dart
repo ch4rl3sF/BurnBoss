@@ -7,8 +7,8 @@ class ActivityPage extends StatefulWidget {
   final Activity activity;
   final ValueChanged<bool> onSetPageViewInteraction;
 
-  ActivityPage(
-      {required this.activity, required this.onSetPageViewInteraction});
+  const ActivityPage(
+      {super.key, required this.activity, required this.onSetPageViewInteraction});
 
   @override
   _ActivityPageState createState() => _ActivityPageState();
@@ -59,7 +59,7 @@ class _ActivityPageState extends State<ActivityPage>
                 fit: BoxFit.fitWidth,
                 child: Text(
                   widget.activity.activityName,
-                  style: TextStyle(fontFamily: 'Bebas', fontSize: 50),
+                  style: const TextStyle(fontFamily: 'Bebas', fontSize: 50),
                 ),
               ),
             ),
@@ -78,7 +78,7 @@ class _ActivityPageState extends State<ActivityPage>
                   color: cardColor,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
-                    side: BorderSide(color: Colors.grey, width: 0.5),
+                    side: const BorderSide(color: Colors.grey, width: 0.5),
                   ),
                   child: SizedBox(
                     height: 250,
@@ -133,9 +133,9 @@ class _ActivityPageState extends State<ActivityPage>
               padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
               child: ActivityStopwatch(),
             ),
-          Expanded(
+          const Expanded(
             flex: 2,
-            child: const SizedBox(),
+            child: SizedBox(),
           )
         ],
       ),
@@ -145,7 +145,7 @@ class _ActivityPageState extends State<ActivityPage>
   Widget setCard(Activity activity, int setIndex) {
     ThemeData theme = Theme.of(context);
     bool isLightTheme = theme.brightness == Brightness.light;
-    Color textColor = isLightTheme ? Color(0xffF0A897) : Color(0xff0D99A9);
+    Color textColor = isLightTheme ? const Color(0xffF0A897) : const Color(0xff0D99A9);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -166,7 +166,7 @@ class _ActivityPageState extends State<ActivityPage>
                 ),
                 TextSpan(
                   text: '${widget.activity.reps}',
-                  style: TextStyle(fontFamily: 'Bebas', fontSize: 45),
+                  style: const TextStyle(fontFamily: 'Bebas', fontSize: 45),
                 )
               ])),
               Text.rich(
@@ -178,7 +178,7 @@ class _ActivityPageState extends State<ActivityPage>
                     ),
                     TextSpan(
                       text: '${widget.activity.weights}',
-                      style: TextStyle(fontFamily: 'Bebas', fontSize: 45),
+                      style: const TextStyle(fontFamily: 'Bebas', fontSize: 45),
                     ),
                     const TextSpan(
                       text: ' Kg',
@@ -197,7 +197,7 @@ class _ActivityPageState extends State<ActivityPage>
   Widget restCard(Activity activity) {
     ThemeData theme = Theme.of(context);
     bool isLightTheme = theme.brightness == Brightness.light;
-    Color textColor = isLightTheme ? Color(0xffF0A897) : Color(0xff0D99A9);
+    Color textColor = isLightTheme ? const Color(0xffF0A897) : const Color(0xff0D99A9);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -209,7 +209,7 @@ class _ActivityPageState extends State<ActivityPage>
               style: TextStyle(fontFamily: 'Bebas', fontSize: 30, color: textColor),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 30,
           ),
           ActivityTimer(

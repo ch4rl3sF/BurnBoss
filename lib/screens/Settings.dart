@@ -13,7 +13,7 @@ import 'package:image_picker/image_picker.dart';
 class SettingsPage extends StatefulWidget {
   final ThemeManager themeManager;
 
-  SettingsPage(this.themeManager, {Key? key}) : super(key: key);
+  const SettingsPage(this.themeManager, {super.key});
 
   @override
   _SettingsPageState createState() => _SettingsPageState();
@@ -53,18 +53,18 @@ class _SettingsPageState extends State<SettingsPage> {
         ),
         leading: Builder(
           builder: (context) => IconButton(
-            padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            icon: Icon(Icons.menu_rounded, size: 30),
+            padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+            icon: const Icon(Icons.menu_rounded, size: 30),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
       ),
       body: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Text(
             'Theme:',
             style: TextStyle(fontSize: 20),
@@ -73,8 +73,8 @@ class _SettingsPageState extends State<SettingsPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.sunny),
-            SizedBox(
+            const Icon(Icons.sunny),
+            const SizedBox(
               width: 20,
             ),
             Switch(
@@ -93,23 +93,23 @@ class _SettingsPageState extends State<SettingsPage> {
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
-            Icon(Icons.nightlight)
+            const Icon(Icons.nightlight)
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 15, 20),
-          child: const Divider(
+        const Padding(
+          padding: EdgeInsets.fromLTRB(15, 20, 15, 20),
+          child: Divider(
             thickness: 1,
             color: Colors.grey,
             indent: 20,
             endIndent: 20,
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+        const Padding(
+          padding: EdgeInsets.fromLTRB(15, 10, 15, 10),
           child: Text(
             'Account:',
             style: TextStyle(fontSize: 20),
@@ -166,7 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ),
         ),
       ]),
-      drawer: NavDrawerWidget(currentRoute: '/Settings'),
+      drawer: const NavDrawerWidget(currentRoute: '/Settings'),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:burnboss/screens/NavDrawer.dart';
 import 'package:flutter/material.dart';
 
 class CalendarPage extends StatelessWidget {
-  const CalendarPage({Key? key}) : super(key: key);
+  const CalendarPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,14 +11,14 @@ class CalendarPage extends StatelessWidget {
         title: const Text('Calendar'),
         leading: Builder(
           builder: (context) => IconButton(
-            padding: EdgeInsets.fromLTRB(20.0, 0, 0, 0),
-            icon: Icon(Icons.menu_rounded, size: 30),
+            padding: const EdgeInsets.fromLTRB(20.0, 0, 0, 0),
+            icon: const Icon(Icons.menu_rounded, size: 30),
             onPressed: () => Scaffold.of(context).openDrawer(),
           ),
         ),
       ),
-      body: Text('Calendar'),
-      drawer: NavDrawerWidget(currentRoute: '/Calendar',),
+      body: const Text('Calendar'),
+      drawer: const NavDrawerWidget(currentRoute: '/Calendar',),
     );
   }
 }

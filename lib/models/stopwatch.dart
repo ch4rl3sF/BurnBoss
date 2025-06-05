@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 class ActivityStopwatch extends StatefulWidget {
   // Create a static instance of the class
-  static final ActivityStopwatch _instance = ActivityStopwatch._internal();
+  static const ActivityStopwatch _instance = ActivityStopwatch._internal();
 
   // Provide a factory constructor to return the instance
   factory ActivityStopwatch({Key? key}) {
     return _instance;
   }
 
-  ActivityStopwatch._internal({Key? key}) : super(key: key);
+  const ActivityStopwatch._internal();
 
   @override
   State<ActivityStopwatch> createState() => ActivityStopwatchState();
@@ -41,7 +41,7 @@ class ActivityStopwatchState extends State<ActivityStopwatch> {
         _stopwatchTimer.cancel();
         _stopwatch.stop();
       } else {
-        _stopwatchTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        _stopwatchTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
           if (mounted) {
             setState(() {
               _stopwatchResult =
@@ -70,6 +70,7 @@ class ActivityStopwatchState extends State<ActivityStopwatch> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return
             Center(
@@ -78,9 +79,9 @@ class ActivityStopwatchState extends State<ActivityStopwatch> {
                 children: [
                   Text(
                     _stopwatchResult,
-                    style: TextStyle(fontSize: 50.0),
+                    style: const TextStyle(fontSize: 50.0),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Row(
@@ -95,7 +96,7 @@ class ActivityStopwatchState extends State<ActivityStopwatch> {
                       //Reset button
                       ElevatedButton(
                           onPressed: _resetStopwatch,
-                          child: Text('Reset')),
+                          child: const Text('Reset')),
                     ],
                   )
                 ],

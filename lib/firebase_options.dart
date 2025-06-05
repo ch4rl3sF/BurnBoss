@@ -57,7 +57,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBkvgGXgOhnrwAWyAL9Rgzo7DCqJTQYxio',
-    appId: '1:864045743277:android:dbb369976b6540eea91a24',
+    appId: '1:864045743277:androidbackup:dbb369976b6540eea91a24',
     messagingSenderId: '864045743277',
     projectId: 'burnboss-ddb5b',
     storageBucket: 'burnboss-ddb5b.appspot.com',

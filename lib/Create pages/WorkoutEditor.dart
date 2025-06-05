@@ -4,13 +4,12 @@ import 'package:burnboss/services/database.dart';
 import 'package:burnboss/theme/theme_constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'editActivity.dart';
 
 class WorkoutEditorPage extends StatefulWidget {
   final Workout workout;
 
-  WorkoutEditorPage({Key? key, required this.workout}) : super(key: key);
+  const WorkoutEditorPage({super.key, required this.workout});
 
   @override
   State<WorkoutEditorPage> createState() => _WorkoutEditorPageState();
@@ -29,6 +28,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
 
   late int numberOfActivities;
 
+  @override
   void initState() {
     setState(() {
       numberOfActivities = widget.workout.activities.length;
@@ -102,7 +102,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                       flex: 6,
                       child: TextField(
                         controller: workoutNameAdd,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Workout Name',
                         ),
                       ),
@@ -115,19 +115,19 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                             widget.workout.workoutName = workoutNameAdd.text;
                           });
                         },
-                        icon: Icon(Icons.done)),
+                        icon: const Icon(Icons.done)),
                     IconButton(
                         onPressed: () {
                           setState(() {
                             editingTitle = !editingTitle;
                           });
                         },
-                        icon: Icon(Icons.close)),
+                        icon: const Icon(Icons.close)),
                   ],
                 )
               : Text(
                   widget.workout.workoutName,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 45,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 2.0,
@@ -150,7 +150,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                           Navigator.pushNamed(context, '/Creator');
                           saveChanges();
                           var savingSnackBar = SnackBar(
-                            content: Center(
+                            content: const Center(
                                 child: Text(
                               'Saving...',
                               style: TextStyle(
@@ -158,9 +158,9 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                                   fontFamily: 'Bebas',
                                   color: Colors.white),
                             )),
-                            duration: Duration(milliseconds: 2000),
+                            duration: const Duration(milliseconds: 2000),
                             width: 180.0,
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal:
                                   8.0, // Inner padding for SnackBar content.
                             ),
@@ -173,7 +173,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(savingSnackBar);
                         },
-                        child: Text('Save'),
+                        child: const Text('Save'),
                       ),
                     TextButton(
                       onPressed: () {
@@ -189,7 +189,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                 ),
               );
             },
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
           ),
           actions: [
             if (!editingTitle)
@@ -201,7 +201,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                       editingTitle = !editingTitle;
                     });
                   },
-                  icon: Icon(Icons.edit_rounded),
+                  icon: const Icon(Icons.edit_rounded),
                   color: Colors.black,
                 ),
               )
@@ -209,7 +209,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
       body: Center(
         child: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 4,
             ),
             if (addingActivity)
@@ -221,7 +221,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         controller: activityNameController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Activity Name',
                           border: OutlineInputBorder(),
                         ),
@@ -250,7 +250,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                             }
                           });
                         },
-                        icon: Icon(Icons.add_rounded),
+                        icon: const Icon(Icons.add_rounded),
                         style: IconButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
@@ -271,7 +271,7 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                             addingActivity = !addingActivity;
                           });
                         },
-                        icon: Icon(Icons.close),
+                        icon: const Icon(Icons.close),
                         style: IconButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12)),
@@ -283,132 +283,137 @@ class _WorkoutEditorPageState extends State<WorkoutEditorPage> {
                   ),
                 ],
               ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: widget.workout.activities.length,
-              itemBuilder: (context, index) {
-                Activity activity = widget.workout.activities[index];
-                return Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Card(
-                    color: cardColor,
-                    child: ListTile(
-                      title: Text(activity.activityName),
-                      subtitle: Text(widget.workout.activities[index].activityType == 'Reps' ? 'Sets: ${widget.workout.activities[index].sets} | Reps: ${widget.workout.activities[index].reps} | ${widget.workout.activities[index].weights}Kg'  : 'Activity type: ${widget.workout.activities[index].activityType}'),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit_rounded),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => editActivity(
-                                    activity: widget.workout.activities[index],
-                                    onUpdateReps: (int newReps) {
-                                      // Update the reps of the original instance in the ActivityList
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateReps(newReps);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateSets: (int newSets) {
-                                      setState(() {
-                                        widget.workout.activities[index].updateSets(newSets);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateRest: (Duration newRest) {
-                                      setState(() {
-                                        widget.workout.activities[index].updateRest(newRest);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateWeight: (double newWeight) {
-                                      // Update the weight of the original instance in the ActivityList
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateWeight(newWeight);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateTime: (Duration newTime) {
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateTime(newTime);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateActivityName:
-                                        (String newActivityType) {
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateActivityType(
-                                                newActivityType);
-                                        changesMade = true;
-                                      });
-                                    },
-                                    onUpdateStopwatchUsed:
-                                        (bool newStopwatchUsed) {
-                                      setState(() {
-                                        widget.workout.activities[index]
-                                            .updateStopwatchBool(
-                                                newStopwatchUsed);
-                                      });
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          if (numberOfActivities > 1)
+            Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: widget.workout.activities.length,
+                itemBuilder: (context, index) {
+                  Activity activity = widget.workout.activities[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Card(
+                      color: cardColor,
+                      child: ListTile(
+                        title: Text(activity.activityName),
+                        subtitle: Text(widget.workout.activities[index].activityType == 'Reps' ? 'Sets: ${widget.workout.activities[index].sets} | Reps: ${widget.workout.activities[index].reps} | ${widget.workout.activities[index].weights}Kg'  : 'Activity type: ${widget.workout.activities[index].activityType}'),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                             IconButton(
+                              icon: const Icon(Icons.edit_rounded),
                               onPressed: () {
-                                setState(() {
-                                  widget.workout.activities.removeAt(index);
-                                  changesMade = true;
-                                  activityIDsDeleted.add(activity.activityID);
-                                  numberOfActivities = numberOfActivities - 1;
-                                });
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => editActivity(
+                                      activity: widget.workout.activities[index],
+                                      onUpdateReps: (int newReps) {
+                                        // Update the reps of the original instance in the ActivityList
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateReps(newReps);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateSets: (int newSets) {
+                                        setState(() {
+                                          widget.workout.activities[index].updateSets(newSets);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateRest: (Duration newRest) {
+                                        setState(() {
+                                          widget.workout.activities[index].updateRest(newRest);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateWeight: (double newWeight) {
+                                        // Update the weight of the original instance in the ActivityList
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateWeight(newWeight);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateTime: (Duration newTime) {
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateTime(newTime);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateActivityName:
+                                          (String newActivityType) {
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateActivityType(
+                                                  newActivityType);
+                                          changesMade = true;
+                                        });
+                                      },
+                                      onUpdateStopwatchUsed:
+                                          (bool newStopwatchUsed) {
+                                        setState(() {
+                                          widget.workout.activities[index]
+                                              .updateStopwatchBool(
+                                                  newStopwatchUsed);
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                );
                               },
-                              icon: Icon(Icons.delete_rounded),
                             ),
-                        ],
+                            if (numberOfActivities > 1)
+                              IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    widget.workout.activities.removeAt(index);
+                                    changesMade = true;
+                                    activityIDsDeleted.add(activity.activityID);
+                                    numberOfActivities = numberOfActivities - 1;
+                                  });
+                                },
+                                icon: const Icon(Icons.delete_rounded),
+                              ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                if (!addingActivity)
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        changesMade = true;
-                        addingActivity = true;
-                      });
-                    },
-                    child: Icon(
-                      Icons.add_rounded,
-                      size: 30,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  if (!addingActivity)
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          changesMade = true;
+                          addingActivity = true;
+                        });
+                      },
+                      child: const Icon(
+                        Icons.add_rounded,
+                        size: 30,
+                      ),
                     ),
-                  ),
-                if (changesMade)
-                  ElevatedButton(
-                    onPressed: () {
-                      saveChanges();
-                    },
-                    child: Text(
-                      'Save changes',
-                      style: TextStyle(fontFamily: 'Bebas', fontSize: 20),
+                  if (changesMade)
+                    ElevatedButton(
+                      onPressed: () {
+                        saveChanges();
+                      },
+                      child: const Text(
+                        'Save changes',
+                        style: TextStyle(fontFamily: 'Bebas', fontSize: 20),
+                      ),
                     ),
-                  ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
