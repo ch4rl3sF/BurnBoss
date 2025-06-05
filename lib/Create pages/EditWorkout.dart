@@ -108,7 +108,13 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: ListTile(
-                              title: Text(workout.workoutName),
+                              title: Text(
+                                workout.workoutName,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Bebas',
+                                ),
+                              ),
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -142,14 +148,19 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                                   TextButton(
                                                       onPressed: () async {
                                                         await DatabaseService(
-                                                            uid: FirebaseAuth
-                                                                .instance.currentUser!.uid)
-                                                            .deleteWorkout(workout.workoutID);
+                                                                uid: FirebaseAuth
+                                                                    .instance
+                                                                    .currentUser!
+                                                                    .uid)
+                                                            .deleteWorkout(
+                                                                workout
+                                                                    .workoutID);
                                                         await _refreshWorkoutsList();
-                                                        Navigator.pop(context, 'Delete');
+                                                        Navigator.pop(
+                                                            context, 'Delete');
                                                       },
-                                                      child: const Text('Delete')),
-
+                                                      child:
+                                                          const Text('Delete')),
                                                   TextButton(
                                                       onPressed: () {
                                                         Navigator.pop(
@@ -159,7 +170,6 @@ class _EditWorkoutPageState extends State<EditWorkoutPage> {
                                                           const Text('Cancel'))
                                                 ],
                                               ));
-
                                     },
                                     icon: const Icon(
                                       Icons.delete_rounded,
